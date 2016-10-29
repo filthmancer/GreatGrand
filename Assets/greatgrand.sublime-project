@@ -1,0 +1,37 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.dll",
+				"*.meta"
+			],
+			"folder_exclude_patterns":
+			[
+				"Generator",
+				"Utilities"
+			],
+			"name": "Mains",
+			"path": "Scripts"
+		},
+		{
+			"file_exclude_patterns":
+			[
+				"*.dll",
+				"*.meta"
+			],
+			"name": "Utilities",
+			"path": "Scripts/Utilities"
+		},
+		{
+			"file_exclude_patterns":
+			[
+				"*.dll",
+				"*.meta"
+			],
+			"name": "Generator",
+			"path": "Scripts/Generator"
+		}
+	]
+}

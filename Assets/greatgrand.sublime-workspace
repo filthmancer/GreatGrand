@@ -1,0 +1,1191 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Anc",
+				"anchoredPosition"
+			],
+			[
+				"Grea",
+				"GreatGrand_FaceObj"
+			],
+			[
+				"Face_Hai",
+				"Face_Hair_Male"
+			],
+			[
+				"High",
+				"HighlightTween"
+			],
+			[
+				"Drag",
+				"DragDistanceThreshold"
+			],
+			[
+				"Colours",
+				"Colours_Random"
+			],
+			[
+				"Names_m",
+				"Names_Male_Random"
+			],
+			[
+				"Quick",
+				"QuickCrawlOverride"
+			],
+			[
+				"Horizon",
+				"HorizontalOrVerticalLayoutGroupEditor"
+			],
+			[
+				"HorizontalLayout",
+				"HorizontalLayoutGroup.SetLayoutHorizontal()"
+			],
+			[
+				"Resum",
+				"ResumeWaveCurrent"
+			],
+			[
+				"Diffi",
+				"DifficultyMode"
+			],
+			[
+				"DiffMo",
+				"DifficultyMode"
+			],
+			[
+				"find",
+				"find_prev"
+			],
+			[
+				"XP_Req",
+				"XP_RequiredArray"
+			],
+			[
+				"XP_Requi",
+				"XP_Required"
+			],
+			[
+				"Seri",
+				"Serializable"
+			],
+			[
+				"Patrol",
+				"PatrolVelocity"
+			],
+			[
+				"Stone",
+				"StoneformTime_current"
+			],
+			[
+				"Stonefo",
+				"StoneformTime"
+			],
+			[
+				"MEth",
+				"MethType"
+			],
+			[
+				"ONMatch",
+				"OnMatchUpgrade"
+			],
+			[
+				"TurnEf",
+				"Turn_Effects"
+			],
+			[
+				"AudioClip",
+				"AudioClipProperties"
+			],
+			[
+				"clos",
+				"closest_dist"
+			],
+			[
+				"_border",
+				"_Border"
+			],
+			[
+				"Seria",
+				"SerializeField"
+			],
+			[
+				"Instan",
+				"InstantiateTileObj"
+			],
+			[
+				"prefa",
+				"prefabs_per_spec"
+			],
+			[
+				"Meter",
+				"MeterDecay_soft"
+			],
+			[
+				"Mask",
+				"MaskScreen"
+			],
+			[
+				"warden",
+				"warden_actual_health"
+			],
+			[
+				"MeterDea",
+				"MeterDecay_soft"
+			],
+			[
+				"Dest",
+				"DestroyIfWaveEnd"
+			],
+			[
+				"MeterDecay",
+				"MeterDecay"
+			],
+			[
+				"MeterDeca",
+				"MeterDecayInit"
+			],
+			[
+				"Met",
+				"MeterDecayLvl3"
+			],
+			[
+				"MeterDe",
+				"MeterDecayLvl1"
+			],
+			[
+				"Gradien",
+				"GRADIENT"
+			],
+			[
+				"ManaPowerDe",
+				"ManaPowerDecay"
+			],
+			[
+				"Mana",
+				"ManaPowerDecay_soft"
+			],
+			[
+				"ManaPowerDeca",
+				"ManaPowerDecayInc"
+			],
+			[
+				"WaveTile",
+				"WaveTileSpawn"
+			],
+			[
+				"Tick",
+				"TickTime_init"
+			],
+			[
+				"StartGen",
+				"StartGenus_Override_String"
+			],
+			[
+				"Start",
+				"StartGenus_Override_String"
+			],
+			[
+				"Up",
+				"UpgradeChanceTotal"
+			],
+			[
+				"orthogra",
+				"Camera.orthographicSize"
+			],
+			[
+				"_health",
+				"_HealthMax"
+			],
+			[
+				"Damag",
+				"DamageBuff_AttackInc"
+			],
+			[
+				"DamageBuf",
+				"DamageBuff_Duration"
+			],
+			[
+				"Attack",
+				"AttackPipParent"
+			],
+			[
+				"Descrip",
+				"Description"
+			],
+			[
+				"Description",
+				"Description_Tooltip"
+			],
+			[
+				"Hide",
+				"HideInInspector"
+			],
+			[
+				"GENS",
+				"GENUSToResourceString"
+			],
+			[
+				"Tile",
+				"TileEffect"
+			],
+			[
+				"upgrade",
+				"upgrade_extra_turns"
+			],
+			[
+				"upgra",
+				"upgrade_extra_turns"
+			],
+			[
+				"Number",
+				"NumberUpgrade"
+			],
+			[
+				"new",
+				"new_tiles_start"
+			],
+			[
+				"_Genus",
+				"_GenusTypes"
+			],
+			[
+				"all",
+				"alllevelinfo"
+			],
+			[
+				"_defaul",
+				"_defaultCooldown"
+			],
+			[
+				"Ability",
+				"Ability_UpgradeInfo"
+			],
+			[
+				"LoadAsse",
+				"LoadAssets_Routine"
+			],
+			[
+				"Armour",
+				"ArmourReductionRate"
+			],
+			[
+				"Class",
+				"ClassMenu"
+			],
+			[
+				"Reroll",
+				"RerollCost"
+			],
+			[
+				"Cur",
+				"CursorLockMode"
+			],
+			[
+				"prefi",
+				"prefix_value"
+			],
+			[
+				"Upgrade",
+				"UpgradeData"
+			],
+			[
+				"Item",
+				"ItemContainerData"
+			],
+			[
+				"StatData",
+				"StatContainerData"
+			],
+			[
+				"Sprite",
+				"SpriteImpossible"
+			],
+			[
+				"curren",
+				"current_hunds"
+			],
+			[
+				"current_t",
+				"current_tens"
+			],
+			[
+				"CollectMatc",
+				"CollectMatchesRoutine"
+			],
+			[
+				"Match",
+				"MatchContainer"
+			],
+			[
+				"upgr",
+				"upgrade_health"
+			],
+			[
+				"will",
+				"willstack"
+			],
+			[
+				"valu",
+				"valueMultiplier"
+			],
+			[
+				"class",
+				"class_buttons"
+			],
+			[
+				"data",
+				"datapath"
+			],
+			[
+				"Diff",
+				"DiffText"
+			],
+			[
+				"Level",
+				"LevelUpOnEnd"
+			],
+			[
+				"Poin",
+				"PointsPerTurn"
+			],
+			[
+				"POin",
+				"PointsPerEnemy"
+			],
+			[
+				"Spe",
+				"Species"
+			],
+			[
+				"SetCoun",
+				"SetCounterText"
+			],
+			[
+				"Res",
+				"ResMultiplier"
+			],
+			[
+				"fill",
+				"fillrate_timer_init"
+			],
+			[
+				"int",
+				"init_buytick"
+			],
+			[
+				"_defu",
+				"_defaultCooldown"
+			],
+			[
+				"All",
+				"AllColourMulti"
+			],
+			[
+				"Repla",
+				"ReplaceItem"
+			],
+			[
+				"MAX",
+				"MAX_UPGRADES"
+			],
+			[
+				"Purch",
+				"PurchaseName"
+			],
+			[
+				"Purchas",
+				"PurchaseSkills"
+			],
+			[
+				"Swipe",
+				"SwipeDir"
+			],
+			[
+				"Bonus",
+				"BonusParent"
+			],
+			[
+				"Spawn",
+				"SpawnableTileContainer"
+			],
+			[
+				"OVerFlow",
+				"OverflowThisTurn"
+			],
+			[
+				"OVer",
+				"OverflowThisTurn"
+			],
+			[
+				"health",
+				"healthPerTile"
+			],
+			[
+				"Ite",
+				"ItemNameContainer"
+			],
+			[
+				"heal",
+				"health_divide"
+			],
+			[
+				"MAST",
+				"MasterTimeAud"
+			],
+			[
+				"Add",
+				"addInput"
+			],
+			[
+				"Maste",
+				"MasterTimeAud"
+			],
+			[
+				"ShiftT",
+				"Shift_Type"
+			],
+			[
+				"timer_",
+				"timer_after_match"
+			],
+			[
+				"attac",
+				"attack_match"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Scripts/Generator/Generator.cs",
+			"settings":
+			{
+				"buffer_size": 3930,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/Generator/FaceObj.cs",
+			"settings":
+			{
+				"buffer_size": 3018,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/Generator/GreatGrand.cs",
+			"settings":
+			{
+				"buffer_size": 4436,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/GameManager.cs",
+			"settings":
+			{
+				"buffer_size": 4425,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/UIManager.cs",
+			"settings":
+			{
+				"buffer_size": 812,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/UIObj.cs",
+			"settings":
+			{
+				"buffer_size": 8309,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/InputController.cs",
+			"settings":
+			{
+				"buffer_size": 1043,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/Processing B.sublime-build",
+	"command_palette":
+	{
+		"height": 146.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 536.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/GameManager.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/greatgrand.sublime-project",
+		"/Users/Matt/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/GameData.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/GameManager.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/InputController.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/GreatGrand.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/GameData.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UIManager.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/TileMaster.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Tile.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/GrumpObj.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/InputTarget.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/TableManager.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/EasyTween.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/UIManager.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/UIObj.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/PlayerControl.cs",
+		"/Users/Matt/Downloads/install-2.php",
+		"/Users/Matt/Downloads/install.php",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/ObjectPoolerReference.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/ObjectPooler.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/UITween.cs",
+		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/ReferencedFrom.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Enemy.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Mana.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Neutral/Altar.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Status/Spawning.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UI/UIObj.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Blob.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Player.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveEffect.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveTileEndOnTileDestroy.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveTile.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Powerups/Lullaby.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Guard.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Powerups/Powerup.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Mimic.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/AudioManager.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Lightning.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Flame.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Bomb.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Cross.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Harp.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UI/UIGear.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Class.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Chicken.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UI/MiniAlertUI.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Scumworks.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Utilities/GridInfo.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Zone.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UI/UIMenu.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/Tutorial.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Status/Giant.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/GromWave.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Status/Sleep.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Status/TileEffect.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Powerups/Calldown.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Utilities/CameraUtility.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/TileTypes.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Classes/Barbarian.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Classes/Warden.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Tiles/Neutral/ItemTile.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Units/Wave/GiantTerrorsWave.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/UI/UIKillScreen.cs",
+		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/Powerups/ColourSwap.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIMenu.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Bomb.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UIManager.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/GameData.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/WardenBattle.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveTile.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Force.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIKillScreen.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Flame.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/WardenIntro.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Class.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/StoryModeZone_A.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Slots/Items/ModContainer.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIObjTweener.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Neutral/ItemTile.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/Velocitizer.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/ThrowKnives.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Firestorm.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Lullaby.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Slash.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Zone.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/GameManager.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Powerup.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Slots/Abilities/Actives/SlashOld.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/Tutorial.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Maturation.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Blob.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Player.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/TileMaster.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Enemy.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/Heal.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIClassButton.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIGear.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/StoryModeZone_A_Wave1.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/TileTypes.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/Utility.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Chicken.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Tile.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Stat.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Lightning.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Arcane.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Spells/Cross.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIObj.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/MiniAlertUI.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Classes/Warden.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveTileEndOnTileDestroy.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Wave/WaveEffect.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Classes/Farmer.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Classes/Wizard.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/CameraUtility.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIAbilityButton.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Status/Charm.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/WaveGroup.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Status/Roaming.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Minion.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/CreateBombs.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/Juice.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIObjects.cs",
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Mana.cs",
+		"/A/Projects/matchima/Matchima!/Assets/TextMesh Pro/Scripts/TextMeshProUGUI.cs"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets",
+			"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts",
+			"A:\\Projects\\matchima\\Matchima!\\Assets\\Scripts\\",
+			"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts",
+			"A:\\Projects\\matchima\\Matchima!\\Assets\\Scripts",
+			"C:\\Program Files (x86)\\R.G. Mechanics\\Freelancer\\DATA",
+			"C:\\Program Files (x86)\\R.G. Mechanics\\Freelancer\\DLLS",
+			"C:\\Program Files (x86)\\R.G. Mechanics\\Freelancer",
+			"C:\\Program Files (x86)\\R.G. Mechanics\\Freelancer\\EXE",
+			"A:\\Projects\\matchima\\Matchima!\\Assets\\Scripts",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\TextMesh Pro",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts\\Classes\\Abilities",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts\\",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts\\Tiles",
+			"C:\\Users\\MaxerJ\\Desktop\\Matchima!\\Assets\\Scripts",
+			"D:\\Projects\\Pending\\Matchima!\\Assets\\Scripts",
+			"D:\\Projects\\SSRPG-editor\\SuperSaganRPG\\Assets\\Scripts",
+			"D:\\Projects\\Pending\\Matchima!\\Assets\\Scripts",
+			"D:\\Projects\\Matchima!\\Assets\\Scripts",
+			"D:\\Projects\\MidiControllerTest"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"Skin",
+			"skin",
+			"Brow",
+			"base",
+			"AnimTriggers",
+			"init",
+			"Anchors",
+			"Child",
+			"(FaceObj)p",
+			"trans",
+			"final.transform",
+			"AddChild",
+			";\n",
+			"_base",
+			"_base.Child[0]",
+			"Eyes",
+			"Face_Eyes_Male",
+			"left",
+			"SkinCol",
+			"_left",
+			"_base",
+			"GreatGrand_FaceObj",
+			"transform",
+			"Transform",
+			"FaceParent",
+			"SetFaceObj",
+			"Sprite",
+			"GreatGrand_DataData",
+			"GreatGrand_Info",
+			"//",
+			"Load(",
+			"ItemUI",
+			";\n",
+			"EnemiesAttackin",
+			"DestroyThyself",
+			"DestroyTile",
+			"TurnRoutine",
+			"Instantiate",
+			"GameData",
+			"Grumps",
+			"SitAt",
+			"while",
+			"Transform",
+			"rectTransform",
+			"n",
+			"Vector2",
+			"cursor",
+			"distance",
+			"InputPos",
+			"hastarg",
+			"SitPoint",
+			"_GrumpTarget",
+			"Male",
+			"Enemies",
+			"GrowthRate_Normal",
+			"ReplaceTile",
+			"1.0F",
+			"Match(",
+			"CollectThyself",
+			"Match(",
+			"Match",
+			"QuickCrawl",
+			"GetAttack",
+			"GetAttack()",
+			"isActive",
+			"CollectResourcesRoutine",
+			"MatchRoutine",
+			"NONE",
+			"column_attackers",
+			"child",
+			"EnemyTurnRoutine",
+			"Time.deltaTime * 45",
+			"HasAttackedThisTurn",
+			"CanAttack",
+			"HasAttackedThisTurn",
+			"AttackedThisTurn",
+			"Reset",
+			"HasAtta",
+			"Reset",
+			"				\n",
+			"Animate",
+			"EnemyTurnRoutine",
+			"GetEffects",
+			"Setup",
+			"AddEffect",
+			"Load()",
+			"GetIOSPath",
+			"ShowPlayerLvl",
+			"//",
+			"true",
+			"FullVersion",
+			"AdAlertMini",
+			"WaveEffectType",
+			"UseInGeneration",
+			"ZoneBracket",
+			"GetZone",
+			"QuickMode",
+			"Scale",
+			"Type",
+			"SpawnType",
+			"TotalToSpawn",
+			"_SpawnStyles",
+			"SpawnStyles",
+			"SpawnFactorField",
+			"Factor",
+			"SpawnFactorField",
+			"FinalValue",
+			"SpawnType",
+			"Cheats",
+			"GetWaveRandom",
+			"Repeat",
+			"PlayEndlessMode",
+			"Zone",
+			"Random",
+			"EnderAd",
+			"InitMod",
+			"UIManager.instance.AdAlert",
+			"AdAlert",
+			"LoadGame",
+			"StarterAd",
+			"Killed(",
+			"Killed",
+			"ResetStats",
+			"showingad",
+			"});\n",
+			"StarterAd",
+			"Cheat",
+			"ShowEnderAd"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"ShowPlayerLvl",
+			"UpdatePlayerLvl",
+			"UIManager.ClassButtons.GetClass(Parent.Index)",
+			"AfterTurn",
+			"GENUS.OMG",
+			"TileMaster.Tiles",
+			"protected override void Setup()",
+			"Description_Simple",
+			"Player.Classes",
+			"InitStats",
+			"return new StCon[]{new StCon(",
+			"return new StCon[]",
+			"public override StCon [] Description",
+			"EffectManager.instance.PlayEffect",
+			"Shift",
+			"IsGenus",
+			"SPECIES type = child.Type;",
+			"Type.isEnemy",
+			"ModStats",
+			"AddStatMod",
+			"Type.isEnemy",
+			"Genus",
+			"GENUS.ALL",
+			"GENUS.GRY",
+			"GENUS.PRP",
+			"GENUS.NONE",
+			"GENUS",
+			"new_part.GetComponent<ParticleSystem>().startColor = GameData.instance.GetModColour(child.Genus);",
+			"GameData.instance.GetModColour(GENUS.PRP",
+			"child.Info.isEnemy",
+			"(int)child.Info.Genus",
+			"PlayerControl.matchingTile != null",
+			"PlayerControl.matchingTile",
+			"Spawner2.",
+			"child.Spec.",
+			"child.Spec",
+			"(int)child.Genus",
+			"IsType(",
+			"Spec.IsType(",
+			"override IEnumerator AfterTurnRoutine()",
+			"override IEnumerator AfterTurn()",
+			"bool UPGRADEOLD2()",
+			"public string OLDUPGRADE",
+			".Stats.isNew",
+			"Stats.isNew",
+			"Stats.Hits",
+			"Random.value",
+			".Stats.Value",
+			"TileMaster.Types",
+			"Mod"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Scripts/Generator/Generator.cs",
+					"settings":
+					{
+						"buffer_size": 3930,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1469,
+								1469
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Scripts/Generator/FaceObj.cs",
+					"settings":
+					{
+						"buffer_size": 3018,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2055,
+								2055
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1072.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Scripts/Generator/GreatGrand.cs",
+					"settings":
+					{
+						"buffer_size": 4436,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2024,
+								2024
+							],
+							[
+								2059,
+								2059
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 399.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Scripts/GameManager.cs",
+					"settings":
+					{
+						"buffer_size": 4425,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1372,
+								1372
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Scripts/UIManager.cs",
+					"settings":
+					{
+						"buffer_size": 812,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								394,
+								394
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Scripts/UIObj.cs",
+					"settings":
+					{
+						"buffer_size": 8309,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1451,
+								1451
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Scripts/InputController.cs",
+					"settings":
+					{
+						"buffer_size": 1043,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.astyle_error_message":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 193.0
+	},
+	"replace":
+	{
+		"height": 72.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"tile",
+				"Tiles/Tile.cs"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 175.0,
+	"status_bar_visible": true
+}
