@@ -50,6 +50,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		if(Txt.Length == 0 && GetComponent<TextMeshProUGUI>()) Txt = new TextMeshProUGUI[]{GetComponent<TextMeshProUGUI>()};
 		for(int i = 0; i < Child.Length; i++)
 		{
+			if(Child[i] == null) continue;
 			Child[i].Index = i;
 			Child[i].ParentObj = this;
 		}

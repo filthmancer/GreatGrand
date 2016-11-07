@@ -12,6 +12,9 @@ public class Generator : MonoBehaviour {
 	public FaceObj [] Face_Brow_Male, Face_Brow_Female;
 	public FaceObj [] Face_Ears_Male, Face_Ears_Female;
 
+	public FaceObj [] Face_Jaw;
+	public FaceObj [] Face_Hair;
+
 	public Color [] SkinTones;
 	public Color [] HairTones;
 
@@ -56,14 +59,23 @@ public class Generator : MonoBehaviour {
 
 		(_base.Child[0] as FaceObj).CreateAnchor(2, _ear);
 
-		CreateFaceHalf(_base, (FaceObj)_base.Child[0]);
+		FaceObj otherside = CreateFaceHalf(_base, (FaceObj)_base.Child[0]);
+
+
+		FaceObj _jaw = Face_Jaw[Random.Range(0, Face_Jaw.Length)];
+		otherside.CreateAnchor(3, _jaw);
+
+		FaceObj _hair = Face_Hair[Random.Range(0, Face_Hair.Length)];
+		otherside.CreateAnchor(4, _hair);
 
 		_base.AddAnimTrigger("Blink", new Vector2(4.0F, 7.0F), _base[0][0][0].GetComponent<Animator>(), _base[1][0][0].GetComponent<Animator>());
 		_base.AddAnimTrigger("Raise", new Vector2(6.0F, 8.0F), _base[0][1][0].GetComponent<Animator>(), _base[1][1][0].GetComponent<Animator>());
 		
 
 		_base.SetActive(false);
+		_base.transform.localScale = Vector3.one * 1.5F;
 		final.SetFace(_base);
+
 
 		return final;
 	}
