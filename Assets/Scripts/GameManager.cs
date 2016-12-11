@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour {
 		Data = this.GetComponent<GameData>();
 		Table.Init();
 		Input.Init();
+		GGGen.LoadElements();
 		CreateGame();
 	}
 	
@@ -71,9 +72,9 @@ public class GameManager : MonoBehaviour {
 		{
 			GG[i] = GGGen.Generate(i);//(GreatGrand) Instantiate(GGObj);
 			GG[i].transform.SetParent(this.transform);
+			GG[i].Face.SetActive(false);
 		}
 
-		print(GG[0].Face.Child[0].isActive);
 
 		for(int i = 0; i < GG_num; i+=2)
 		{

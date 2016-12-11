@@ -19,7 +19,7 @@ public class FaceObj : UIObj {
 
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
-	private FaceObjInfoContainer Info;
+	public FaceObjInfoContainer Info;
 	public Image Shadow;
 
 	public void CheckAnims()
@@ -191,7 +191,6 @@ public class FaceObj : UIObj {
 			}
 			if( _Image) 
 			{
-
 				for(int i = 0; i < Img.Length; i++) 
 				{
 					if(Info.Current._Sprite != null) Img[i].sprite = Info.Current._Sprite;
@@ -202,9 +201,11 @@ public class FaceObj : UIObj {
 			if(Shadow != null)
 			{
 				Shadow.transform.SetParent(Img[0].transform.parent);
+				Shadow.GetComponent<RectTransform>().anchorMax = Vector3.one;
+				Shadow.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 				Shadow.transform.position = Img[0].transform.position;
 				Shadow.transform.rotation = Img[0].transform.rotation;
-				Shadow.transform.localScale = Img[0].transform.localScale * 1.07F;
+				Shadow.transform.localScale = Img[0].transform.localScale * 1.12F;
 				Shadow.sprite = Img[0].sprite;
 				Shadow.color = Color.black;
 				Shadow.transform.SetParent(FaceParent[9].transform);
