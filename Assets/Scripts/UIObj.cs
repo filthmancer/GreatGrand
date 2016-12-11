@@ -10,7 +10,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	public string _Name;
 	[HideInInspector]
 	public int Index = 100;
-	[HideInInspector]
+	//[HideInInspector]
 	public UIObj ParentObj;
 	public Image [] Img;
 	public TextMeshProUGUI [] Txt;

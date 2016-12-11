@@ -460,35 +460,35 @@
 	"buffers":
 	[
 		{
-			"file": "Scripts/Generator/Generator.cs",
+			"file": "Editor/GrandGen.cs",
 			"settings":
 			{
-				"buffer_size": 3930,
+				"buffer_size": 6362,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scripts/Generator/FaceObj.cs",
+			"file": "Generator/Generator.cs",
 			"settings":
 			{
-				"buffer_size": 3018,
-				"line_ending": "Unix"
+				"buffer_size": 4261,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/Generator/GreatGrand.cs",
+			"file": "Generator/FaceObj.cs",
 			"settings":
 			{
-				"buffer_size": 4436,
-				"line_ending": "Unix"
+				"buffer_size": 4733,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/GameManager.cs",
+			"file": "Editor/Tester.cs",
 			"settings":
 			{
-				"buffer_size": 4425,
-				"line_ending": "Unix"
+				"buffer_size": 0,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -496,23 +496,23 @@
 			"settings":
 			{
 				"buffer_size": 812,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/GameManager.cs",
+			"settings":
+			{
+				"buffer_size": 4425,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "Scripts/UIObj.cs",
 			"settings":
 			{
-				"buffer_size": 8309,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scripts/InputController.cs",
-			"settings":
-			{
-				"buffer_size": 1043,
-				"line_ending": "Unix"
+				"buffer_size": 8343,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -556,6 +556,14 @@
 	},
 	"file_history":
 	[
+		"/A/Projects/matchima/Matchima!/Assets/Editor/RoomEditor.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/GameManager.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/UIManager.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/UIObj.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/InputController.cs",
+		"/A/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/Users/Matt/Desktop/matchima/Matchima!/Assets/Scripts/GameManager.cs",
 		"/Users/Matt/Desktop/greatgrand/GreatGrand/Assets/greatgrand.sublime-project",
 		"/Users/Matt/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
@@ -675,15 +683,7 @@
 		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/Classes/Wizard.cs",
 		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/CameraUtility.cs",
 		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIAbilityButton.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Status/Charm.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Units/WaveGroup.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Status/Roaming.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Enemies/Minion.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Powerups/CreateBombs.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Utilities/Juice.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/UI/UIObjects.cs",
-		"/A/Projects/matchima/Matchima!/Assets/Scripts/Tiles/Mana.cs",
-		"/A/Projects/matchima/Matchima!/Assets/TextMesh Pro/Scripts/TextMeshProUGUI.cs"
+		"/A/Projects/matchima/Matchima!/Assets/Scripts/Status/Charm.cs"
 	],
 	"find":
 	{
@@ -724,6 +724,53 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"GrandGen",
+			"transform.position",
+			"gameObject",
+			"o",
+			"CreateAnchor",
+			"_obj",
+			"face",
+			"FaceObj face",
+			"Rotation",
+			"_Position",
+			"final.ToArray();",
+			"Base",
+			"EditorGUILayout.BeginHorizontal();",
+			"EditorGUILayout",
+			"List<GameObject>",
+			"GameObject",
+			"final.Add(g);",
+			"GameObject",
+			"Position",
+			"(g == null)",
+			"new List<Object>();",
+			"List<Object>",
+			",",
+			"_eye",
+			"_hair",
+			"_eye",
+			"base",
+			" _base[i]",
+			"GameObject",
+			"Object",
+			"prefab_",
+			"Prefabs",
+			"Grand Generator",
+			"EditorGUILayout",
+			"case",
+			"Hair",
+			"bool",
+			"GUILayout",
+			"Active",
+			"Label",
+			"(Object[])",
+			"GameObject",
+			"Eye",
+			"Eyes",
+			"Eye",
+			"Base",
+			"s,",
 			"Skin",
 			"skin",
 			"Brow",
@@ -804,54 +851,7 @@
 			"HasAtta",
 			"Reset",
 			"				\n",
-			"Animate",
-			"EnemyTurnRoutine",
-			"GetEffects",
-			"Setup",
-			"AddEffect",
-			"Load()",
-			"GetIOSPath",
-			"ShowPlayerLvl",
-			"//",
-			"true",
-			"FullVersion",
-			"AdAlertMini",
-			"WaveEffectType",
-			"UseInGeneration",
-			"ZoneBracket",
-			"GetZone",
-			"QuickMode",
-			"Scale",
-			"Type",
-			"SpawnType",
-			"TotalToSpawn",
-			"_SpawnStyles",
-			"SpawnStyles",
-			"SpawnFactorField",
-			"Factor",
-			"SpawnFactorField",
-			"FinalValue",
-			"SpawnType",
-			"Cheats",
-			"GetWaveRandom",
-			"Repeat",
-			"PlayEndlessMode",
-			"Zone",
-			"Random",
-			"EnderAd",
-			"InitMod",
-			"UIManager.instance.AdAlert",
-			"AdAlert",
-			"LoadGame",
-			"StarterAd",
-			"Killed(",
-			"Killed",
-			"ResetStats",
-			"showingad",
-			"});\n",
-			"StarterAd",
-			"Cheat",
-			"ShowEnderAd"
+			"Animate"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -919,113 +919,302 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scripts/Generator/Generator.cs",
+					"file": "Editor/GrandGen.cs",
 					"settings":
 					{
-						"buffer_size": 3930,
+						"buffer_size": 6362,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1469,
-								1469
+								2952,
+								2952
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2376.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scripts/Generator/FaceObj.cs",
+					"file": "Generator/Generator.cs",
 					"settings":
 					{
-						"buffer_size": 3018,
+						"buffer_size": 4261,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2055,
-								2055
+								1413,
+								1414
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1072.0,
+						"translation.y": 288.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Scripts/Generator/GreatGrand.cs",
+					"file": "Generator/FaceObj.cs",
 					"settings":
 					{
-						"buffer_size": 4436,
+						"buffer_size": 4733,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2024,
-								2024
-							],
-							[
-								2059,
-								2059
+								1979,
+								1979
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 399.0,
+						"translation.y": 810.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Scripts/GameManager.cs",
+					"file": "Editor/Tester.cs",
 					"settings":
 					{
-						"buffer_size": 4425,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1372,
-								1372
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -1046,13 +1235,61 @@
 						"selection":
 						[
 							[
-								394,
-								394
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -1063,37 +1300,10 @@
 				},
 				{
 					"buffer": 5,
-					"file": "Scripts/UIObj.cs",
+					"file": "Scripts/GameManager.cs",
 					"settings":
 					{
-						"buffer_size": 8309,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1451,
-								1451
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "Scripts/InputController.cs",
-					"settings":
-					{
-						"buffer_size": 1043,
+						"buffer_size": 4425,
 						"regions":
 						{
 						},
@@ -1106,7 +1316,130 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Scripts/UIObj.cs",
+					"settings":
+					{
+						"buffer_size": 8343,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -1186,6 +1519,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 175.0,
+	"side_bar_width": 105.0,
 	"status_bar_visible": true
 }

@@ -1,20 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum ColorType
+{
+	Skin, Hair, Offset, Feature
+}
+
 public class FaceObj : UIObj {
 
-	//public RectTransform [] Anchors;
-
 	public FaceObj FaceParent;
-	public bool GetSkinColor, GetHairColor;
-
+	
+    public ColorType Colour = ColorType.Skin;
 	private RectTransform _anchorpoint;
 	private FaceObj [] _obj;
 	private RectTransform trans;
 
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
+	private FaceObjInfoContainer Info;
+	public Image Shadow;
 
 	public void CheckAnims()
 	{
@@ -45,49 +51,173 @@ public class FaceObj : UIObj {
 		_obj[num].SetAnchorPoint(Child[num] as FaceObj);
 	}
 
-	public void CreateAnchor(int num, FaceObjInfo o)
-	{
-		if(_obj == null || _obj.Length == 0) _obj = new FaceObj[Child.Length];
-
-		if(_obj[num] != null) DestroyImmediate(_obj[num].gameObject);
-
-		GameObject f = Instantiate(o.Prefab);
-		FaceObj fin = f.GetComponent<FaceObj>();
-		f.transform.position = Child[num].transform.position + o._Position;
-		f.transform.Rotate(o._Rotation);
-		f.transform.localScale = o._Scale;
-
-		fin.Index = o.Index;
-
-		_obj[num] = fin;
-		_obj[num].SetAnchorPoint(Child[num] as FaceObj);
-	}
-
-
 	public void SetAnchorPoint(FaceObj t)
 	{
 		SetParent(t);
 
 		_anchorpoint = t.transform as RectTransform;
-
-		if(!trans) trans = this.transform as RectTransform;
-
-		trans.anchorMax = Vector2.one;//_anchorpoint.anchorMax;
-		trans.anchorMin = Vector2.zero;//_anchorpoint.anchorMin;
-		trans.anchoredPosition = Vector2.zero;//_anchorpoint.anchoredPosition;
-		trans.localScale = Vector3.one;
-		trans.sizeDelta = Vector2.zero;//_anchorpoint.sizeDelta;
 	}
 
 	public FaceObj GetObj(int num) {return _obj[num];}
 
-	public void GetInfo(int num, FaceObjInfo f)
+	public void Setup(FaceObj p, FaceObjInfoContainer f = null, bool side = true)
 	{
-		if(_obj[num].Index != f.Index) CreateAnchor(num, f);
+		FaceParent = p;
+		Reset(f, side);
+	}
 
-		_obj[num].transform.position = Child[num].transform.position + f._Position;
-		_obj[num].transform.rotation = Quaternion.Euler(f._Rotation);
-		_obj[num].transform.localScale = f._Scale;
+	public void SetupObj(FaceObj p, FaceObjInfoContainer f = null, bool side =true)
+	{
+		FaceParent = p;
+		GetObjInfo(f, side);
+	}
+
+	private FaceObj Element;
+
+	public void GetObjInfo(FaceObjInfoContainer f = null, bool side = true)
+	{
+		if(f!=null)
+		{
+			if(Element == null || Index != f.Current.Index)
+			{
+				if(Element != null) DestroyImmediate(Element.gameObject);
+				Element = Instantiate(f.Current.Prefab).GetComponent<FaceObj>();
+				Element.transform.SetParent(this.transform);
+				Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
+				Element.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+				Child = new UIObj[1];
+				Child[0] = Element;
+				Index = f.Current.Index;
+			}
+			Info = f;
+		}
+	
+			Element.transform.localPosition = Info._Position;
+			Element.transform.rotation = Quaternion.Euler(Info._Rotation);
+			Element.transform.localScale = Info._Scale;
+	
+			if(Info.Symm)
+			{		
+				Element.transform.position += Vector3.right * Info.Symm_Distance * (side ? 1 : -1);
+				Element.transform.localScale += Vector3.up * Info.Symm_ScaleDiff * (side ? 1 : -1);
+			}
+	
+			if(FaceParent != null && Info != null)
+			{
+				Color final = Color.white;
+	
+				switch(Info.Colour)
+				{
+					case ColorType.Skin:
+						final = FaceParent.SkinCol;
+					break;
+					case ColorType.Hair:
+						final = FaceParent.HairCol;
+					break;
+					case ColorType.Offset:
+						final = FaceParent.SkinCol + FaceParent.OffsetCol;
+					break;
+					case ColorType.Feature:
+						final = Color.black;
+					break;
+				}
+				if( Element._Image) 
+				{
+	
+					for(int i = 0; i < Element.Img.Length; i++) 
+					{
+						if(Info.Current._Sprite != null) Element.Img[i].sprite = Info.Current._Sprite;
+						Element.Img[i].color = final;
+					}
+				}
+	
+				/*if(Shadow != null)
+				{
+					Shadow.transform.SetParent(Img[0].transform.parent);
+					Shadow.transform.position = Img[0].transform.position;
+					Shadow.transform.rotation = Img[0].transform.rotation;
+					Shadow.transform.localScale = Img[0].transform.localScale * 1.07F;
+					Shadow.sprite = Img[0].sprite;
+					Shadow.color = Color.black;
+					Shadow.transform.SetParent(FaceParent[9].transform);
+				}*/
+	
+				for(int i = 0; i < Child.Length; i++)
+				{
+					if(Child[i] is FaceObj)
+					{
+						(Child[i] as FaceObj).FaceParent = FaceParent;
+					}
+				}
+			}
+
+	}
+
+	public void Reset(FaceObjInfoContainer f = null, bool side = true)
+	{
+		if(f != null) 
+		{
+			 Info = f;
+		}
+
+		transform.localPosition = Info._Position;
+		transform.rotation = Quaternion.Euler(Info._Rotation);
+		transform.localScale = Info._Scale;
+
+		if(Info.Symm)
+		{		
+			transform.position += Vector3.right * Info.Symm_Distance * (side ? 1 : -1);
+			transform.localScale += Vector3.up * Info.Symm_ScaleDiff * (side ? 1 : -1);
+		}
+
+		if(FaceParent != null && Info != null)
+		{
+			Color final = Color.white;
+
+			switch(Info.Colour)
+			{
+				case ColorType.Skin:
+					final = FaceParent.SkinCol;
+				break;
+				case ColorType.Hair:
+					final = FaceParent.HairCol;
+				break;
+				case ColorType.Offset:
+					final = FaceParent.SkinCol + FaceParent.OffsetCol;
+				break;
+				case ColorType.Feature:
+					final = Color.black;
+				break;
+			}
+			if( _Image) 
+			{
+
+				for(int i = 0; i < Img.Length; i++) 
+				{
+					if(Info.Current._Sprite != null) Img[i].sprite = Info.Current._Sprite;
+					Img[i].color = final;
+				}
+			}
+
+			if(Shadow != null)
+			{
+				Shadow.transform.SetParent(Img[0].transform.parent);
+				Shadow.transform.position = Img[0].transform.position;
+				Shadow.transform.rotation = Img[0].transform.rotation;
+				Shadow.transform.localScale = Img[0].transform.localScale * 1.07F;
+				Shadow.sprite = Img[0].sprite;
+				Shadow.color = Color.black;
+				Shadow.transform.SetParent(FaceParent[9].transform);
+			}
+
+			for(int i = 0; i < Child.Length; i++)
+			{
+				if(Child[i] is FaceObj)
+				{
+					(Child[i] as FaceObj).FaceParent = FaceParent;
+				}
+			}
+		}
 	}
 
 	private Color	_skincol;
@@ -106,11 +236,28 @@ public class FaceObj : UIObj {
 		_haircol = c;
 	}
 
+	private Color _offsetcol;
+	public Color OffsetCol
+	{
+		get{return _offsetcol;}
+	}
+	public void SetOffsetColor(Color c)
+	{
+		_offsetcol = c;
+	}
+
 	public override void SetParent(UIObj p)
 	{
 		ParentObj = p;
 		transform.SetParent(p.transform);
 		p.AddChild(this);
+
+		if(!trans) trans = this.transform as RectTransform;
+
+		trans.anchorMax = Vector2.one;//_anchorpoint.anchorMax;
+		trans.anchorMin = Vector2.zero;//_anchorpoint.anchorMin;
+		trans.anchoredPosition = Vector2.zero;//_anchorpoint.anchoredPosition;
+		trans.sizeDelta = Vector2.zero;//_anchorpoint.sizeDelta;
 
 		if(p is FaceObj)
 		{
@@ -125,16 +272,7 @@ public class FaceObj : UIObj {
 	public void SetFaceParent(FaceObj f)
 	{
 		FaceParent = f;
-		if(GetSkinColor && _Image) _Image.color = FaceParent.SkinCol;
-		if(GetHairColor && _Image) _Image.color = FaceParent.HairCol;
-
-		for(int i = 0; i < Child.Length; i++)
-		{
-			if(Child[i] is FaceObj)
-			{
-				(Child[i] as FaceObj).SetFaceParent(FaceParent);
-			}
-		}
+		Reset();
 	}
 
 	public void AddAnimTrigger(string title, Vector2 times, params Animator [] anims)
@@ -207,25 +345,66 @@ public class FaceObjInfoContainer
 		Objs = f;
 		_index = 0;
 	}
+
+	public Vector3 _Position;
+	public Vector3 _Rotation;
+	public Vector3 _Scale = Vector3.one;
+	public ColorType Colour = ColorType.Skin;
+
+	public bool Symm;
+	public float Symm_Distance;
+	public float Symm_ScaleDiff;
+
+	public void RandomIndex()
+	{
+		_index = Random.Range(0, Objs.Length-1);
+	}
+
+	public void Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
+	{
+		RandomIndex();
+		_Position = Utility.RandomVectorInclusive(pos, pos);
+		_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
+		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc, sc);
+	}
 }
 
 public class FaceObjInfo
 {
 	public int Index;
 	public GameObject Prefab;
+	public Sprite _Sprite;
 
-	public Vector3 _Position;
-	public Vector3 _Rotation;
-	public Vector3 _Scale;
 
-	public FaceObjInfo(int ind, GameObject p)
+
+	public FaceObjInfo(int ind, Sprite s)
 	{
 		Index = ind;
-		Prefab = p;
-		_Position = Vector3.zero;
-		_Rotation = Vector3.zero;
-		_Scale = Vector3.one;
+		_Sprite = s;
 	}
 
-	public string Name{get{return Prefab.name;}}
+	public FaceObjInfo(int ind, GameObject s)
+	{
+		Index = ind;
+		Prefab = s;
+	}
+
+	public string Name{get{if(_Sprite) return _Sprite.name;
+							if(Prefab) return Prefab.name;
+							return "";}}
+
+
+}
+
+public class ValueContainer
+{
+	public float Value;
+	public string Name;
+	public Vector2 Field;
+	public ValueContainer(string n, float v = 1.0F)
+	{
+		Value = v;
+		Name = n;
+		Field = new Vector2(0.0F, 1.0F);
+	}
 }
