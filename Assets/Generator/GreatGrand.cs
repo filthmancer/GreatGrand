@@ -27,8 +27,8 @@ public class GreatGrand : GrumpObj {
 	public override void Drag(Vector3 pos)
 	{
 		base.Drag(pos);
-		MiniFace.transform.position = transform.position;
-		MiniFace.transform.localRotation = Quaternion.Euler(0,0,0);
+		Face.transform.position = transform.position;
+		Face.transform.localRotation = Quaternion.Euler(0,0,0);
 		if(isDragging)
 		{
 			if(drag_targ == null) drag_targ = Seat;
@@ -60,7 +60,6 @@ public class GreatGrand : GrumpObj {
 	{
 		base.Tap();
 		ShowGrumpLines();
-		GameManager.UI.ShowFace(Face, !Face.isActive);
 	}
 
 	bool lines_show = false;
@@ -100,8 +99,8 @@ public class GreatGrand : GrumpObj {
 		Vector3 sitpos = Seat.Object.transform.position;
 		sitpos.y = 0.5F;
 		transform.position = sitpos;
-		MiniFace.transform.position = transform.position;
-		MiniFace.transform.localRotation = Quaternion.Euler(0,0,0);
+		Face.transform.position = transform.position;
+		Face.transform.rotation = Seat.Object.transform.rotation * Quaternion.Euler(90, 0,0);
 		GameManager.instance.CheckGrumps();
 	}
 
@@ -112,33 +111,36 @@ public class GreatGrand : GrumpObj {
 	}
 
 	public FaceObj Face;
-	private FaceObj MiniFace;
+	//private FaceObj MiniFace;
+
+	public void ResetFace()
+	{
+
+	}
+
 	public void SetFace(FaceObj f)
 	{
 		Face = f;
-		MiniFace = (FaceObj) Instantiate(Face);
-		MiniFace.transform.SetParent(GameManager.UI.Canvas.transform);
-		MiniFace.GetComponent<RectTransform>().anchorMax = Vector2.one;
-		MiniFace.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 
-		MiniFace.SetSkinColor(Face.SkinCol);
-		MiniFace.SetHairColor(Face.HairCol);
-		MiniFace.SetOffsetColor(Face.OffsetCol);
+		Face.transform.SetParent(GameManager.GetCanvas());
+		Face.GetComponent<RectTransform>().anchorMax = Vector2.one;
+		Face.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 
-		MiniFace.Reset((Face as FaceObj).Info);
-		(MiniFace[0] as FaceObj).GetObjInfo((Face[0] as FaceObj).Info);
-		(MiniFace[1] as FaceObj).GetObjInfo((Face[1] as FaceObj).Info);
-		(MiniFace[2][0] as FaceObj).Reset((Face[2][0] as FaceObj).Info);
-		(MiniFace[3][0] as FaceObj).Reset((Face[3][0] as FaceObj).Info);
-		(MiniFace[4][0] as FaceObj).Reset((Face[4][0] as FaceObj).Info);
-		(MiniFace[5][0] as FaceObj).Reset((Face[5][0] as FaceObj).Info);
-		(MiniFace[6][0] as FaceObj).Reset((Face[6][0] as FaceObj).Info);
-		(MiniFace[7][0] as FaceObj).Reset((Face[7][0] as FaceObj).Info);
-		(MiniFace[8][0] as FaceObj).Reset((Face[8][0] as FaceObj).Info);
+		Face.Start();
+		Face.Reset(Info.Base);
+		(Face[0] as FaceObj).SetInfo(Info.EyeLeft);
+		(Face[1] as FaceObj).SetInfo((Info.EyeRight));
+		(Face[2][0] as FaceObj).Reset((Info.EarLeft));
+		(Face[3][0] as FaceObj).Reset((Info.EarRight));
+		(Face[4][0] as FaceObj).Reset((Info.BrowLeft));
+		(Face[5][0] as FaceObj).Reset((Info.BrowRight));
+		(Face[6][0] as FaceObj).Reset((Info.Hair));
+		(Face[8][0] as FaceObj).Reset((Info.Nose));
+		(Face[7][0] as FaceObj).Reset((Info.Jaw));
 
-		MiniFace.transform.position = Emotion.transform.position;
-		MiniFace.transform.localRotation = Quaternion.Euler(0,0,0);
-		MiniFace.transform.localScale = new Vector3(0.35F, 0.2F, 0.2F);
+		Face.transform.position = Emotion.transform.position;
+		Face.transform.localRotation = Quaternion.Euler(0,0,0);
+		Face.transform.localScale = new Vector3(0.35F, 0.2F, 0.2F);
 	}
 
 
@@ -211,7 +213,7 @@ public class GreatGrand : GrumpObj {
 		}
 
 		Info.Military = Random.value > 0.95F;
-
+		transform.name = Info.Name;
 		//Emotion.color = GameManager.Data.GG_Colours[Index];
 	}
 

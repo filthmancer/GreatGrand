@@ -3,12 +3,12 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GrandGen : EditorWindow {
+public class GrandGenerator : EditorWindow {
 
 	[MenuItem("Custom/Grand Generator")]
 	static void Init()
 	{
-		GrandGen window = (GrandGen)EditorWindow.GetWindow(typeof(GrandGen));
+		GrandGenerator window = (GrandGenerator)EditorWindow.GetWindow(typeof(GrandGenerator));
 		window.Show();
 	}
 
@@ -62,9 +62,6 @@ public class GrandGen : EditorWindow {
 			Gen = GameObject.Find("Generator").GetComponent<Generator>();
 			if(Gen) Gen.LoadElements();
 		}
-
-		GameObject f = GameObject.Find("FaceParent");
-		if(f && Gen != null && Gen.FaceParent == null) Gen.FaceParent = f.transform;
 		
 		GUILayout.Label("Generator", EditorStyles.boldLabel);
 		if(GUILayout.Button("Get Elements"))
@@ -76,6 +73,7 @@ public class GrandGen : EditorWindow {
 		if(GUILayout.Button("Generate"))
 		{
 			Gen.TargetGrand = Gen.Generate(0);
+			Gen.GenerateFace(Gen.TargetGrand);
 		}
 		GUI.color = Color.white;
 

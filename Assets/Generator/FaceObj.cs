@@ -19,7 +19,7 @@ public class FaceObj : UIObj {
 
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
-	public FaceObjInfoContainer Info;
+	public FaceObjInfo Info;
 	public Image Shadow;
 
 	public void CheckAnims()
@@ -60,7 +60,7 @@ public class FaceObj : UIObj {
 
 	public FaceObj GetObj(int num) {return _obj[num];}
 
-	public void Setup(FaceObj p, FaceObjInfoContainer f = null, bool side = true)
+	public void Setup(FaceObj p, FaceObjInfo f = null, bool side = true)
 	{
 		FaceParent = p;
 		Reset(f, side);
@@ -89,12 +89,30 @@ public class FaceObj : UIObj {
 				Child[0] = Element;
 				Index = f.Current.Index;
 			}
-			Info = f;
+			//Info = f;
+
+			SetInfo(f.Current, side);
 		}
-	
-			Element.transform.localPosition = Info._Position;
-			Element.transform.rotation = Quaternion.Euler(Info._Rotation);
-			Element.transform.localScale = Info._Scale;
+	}
+
+	public void SetInfo(FaceObjInfo f, bool side = true)
+	{
+		Info = f;
+		if(Element == null || Index != f.Index)
+		{
+			if(Element != null) DestroyImmediate(Element.gameObject);
+			Element = Instantiate(f.Prefab).GetComponent<FaceObj>();
+			Element.transform.SetParent(this.transform);
+			Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
+			Element.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+			Child = new UIObj[1];
+			Child[0] = Element;
+			Index = f.Index;
+		}
+
+		Element.transform.localPosition = Info._Position;
+		Element.transform.rotation = Quaternion.Euler(Info._Rotation);
+		Element.transform.localScale = Info._Scale;
 	
 			if(Info.Symm)
 			{		
@@ -123,10 +141,9 @@ public class FaceObj : UIObj {
 				}
 				if( Element._Image) 
 				{
-	
 					for(int i = 0; i < Element.Img.Length; i++) 
 					{
-						if(Info.Current._Sprite != null) Element.Img[i].sprite = Info.Current._Sprite;
+						if(Info._Sprite != null) Element.Img[i].sprite = Info._Sprite;
 						Element.Img[i].color = final;
 					}
 				}
@@ -150,14 +167,13 @@ public class FaceObj : UIObj {
 					}
 				}
 			}
-
 	}
 
-	public void Reset(FaceObjInfoContainer f = null, bool side = true)
+	public void Reset(FaceObjInfo f = null, bool side = true)
 	{
 		if(f != null) 
 		{
-			 Info = f;
+			Info = f;
 		}
 
 		transform.localPosition = Info._Position;
@@ -193,7 +209,7 @@ public class FaceObj : UIObj {
 			{
 				for(int i = 0; i < Img.Length; i++) 
 				{
-					if(Info.Current._Sprite != null) Img[i].sprite = Info.Current._Sprite;
+					if(Info._Sprite != null) Img[i].sprite = Info._Sprite;
 					Img[i].color = final;
 				}
 			}
@@ -361,12 +377,14 @@ public class FaceObjInfoContainer
 		_index = Random.Range(0, Objs.Length-1);
 	}
 
-	public void Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
+
+	public FaceObjInfo Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
 	{
 		RandomIndex();
-		_Position = Utility.RandomVectorInclusive(pos, pos);
-		_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
-		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc, sc);
+
+		FaceObjInfo final = new FaceObjInfo(Current);
+		final.Randomise(pos, rot, sc);
+		return final;
 	}
 }
 
@@ -376,7 +394,14 @@ public class FaceObjInfo
 	public GameObject Prefab;
 	public Sprite _Sprite;
 
+	public Vector3 _Position = Vector3.zero;
+	public Vector3 _Rotation = Vector3.zero;
+	public Vector3 _Scale = Vector3.one;
+	public ColorType Colour = ColorType.Skin;
 
+	public bool Symm;
+	public float Symm_Distance;
+	public float Symm_ScaleDiff;
 
 	public FaceObjInfo(int ind, Sprite s)
 	{
@@ -390,11 +415,34 @@ public class FaceObjInfo
 		Prefab = s;
 	}
 
+	public FaceObjInfo(FaceObjInfo old)
+	{
+		Index = old.Index;
+		Prefab = old.Prefab;
+		_Sprite = old._Sprite;
+		Colour = old.Colour;
+	}
+
+
 	public string Name{get{if(_Sprite) return _Sprite.name;
 							if(Prefab) return Prefab.name;
 							return "";}}
 
+	public void Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
+	{
+		_Position = Utility.RandomVectorInclusive(pos, pos);
+		_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
+		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc, sc);
+	}
 
+	public FaceObjInfo Clone()
+	{
+		FaceObjInfo fin = new FaceObjInfo(this);
+		fin._Position = _Position;
+		fin._Rotation = _Rotation;
+		fin._Scale = _Scale;
+		return fin;
+	}
 }
 
 public class ValueContainer

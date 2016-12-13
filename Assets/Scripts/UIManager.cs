@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour {
 	public UIObj WinMenu;
 
 	public Transform Canvas;
-	public UIObj FaceParent;
 
 	public void ShowEndGame(bool active)
 	{
@@ -30,17 +29,4 @@ public class UIManager : MonoBehaviour {
 
 	public FaceObj ActiveFace;
 
-	public void ShowFace(FaceObj f, bool? active = null)
-	{
-		bool actual = active ?? !f.isActive;
-		ActiveFace = actual ? f : null;
-		for(int i = 0; i < FaceParent.Length; i++)
-		{
-			if(FaceParent[i] == f) 
-			{
-				FaceParent[i].SetActive(actual);
-			}
-			else FaceParent[i].SetActive(false);
-		}
-	}
 }

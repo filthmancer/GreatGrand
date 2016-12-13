@@ -9,9 +9,15 @@ public class GameManager : MonoBehaviour {
 	public static UIManager UI;
 	public UIManager _UIManager;
 
+	public static Transform GetCanvas()
+	{
+		if(UI != null) return UI.Canvas.transform;
+		else return GameObject.Find("Canvas").transform;
+	}
+
 	public static GameData Data;
 
-	public InputController Input;
+	public InputController _Input;
 	public GreatGrand [] GG;
 
 	public static int GG_num = 8;
@@ -54,14 +60,14 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		Data = this.GetComponent<GameData>();
 		Table.Init();
-		Input.Init();
+		_Input.Init();
 		GGGen.LoadElements();
 		CreateGame();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(Input.GetKeyUp(KeyCode.W)) GGGen.GenerateFace(GG[0]);
 	}
 
 	public void CreateGame()
@@ -71,8 +77,9 @@ public class GameManager : MonoBehaviour {
 		for(int i = 0; i < GG_num; i++)
 		{
 			GG[i] = GGGen.Generate(i);//(GreatGrand) Instantiate(GGObj);
+			GGGen.GenerateFace(GG[i]);
 			GG[i].transform.SetParent(this.transform);
-			GG[i].Face.SetActive(false);
+			//GG[i].Face.SetActive(false);
 		}
 
 
@@ -87,7 +94,7 @@ public class GameManager : MonoBehaviour {
 
 		for(int i = 0; i < GG_num; i++)
 		{
-			GG[i].Generate(i);
+			//GG[i].Generate(i);
 			GG[i].SitAt(Table.Seat[i]);
 		}
 

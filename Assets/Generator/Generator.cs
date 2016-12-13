@@ -43,9 +43,23 @@ public class Generator : MonoBehaviour {
 		GreatGrand final = (GreatGrand) Instantiate(GGObj);
 		final.Generate(num);
 
-		FaceObj _base = RandomiseFace(final);
-		final.SetFace(_base);
-		TitleObj.text = final.Info.Name + "\nAge " + final.Info.Age;
+		final.Info.Color_Hair = RandomHair();
+		final.Info.Color_Offset = Random.ColorHSV();
+		final.Info.Color_Skin = RandomSkin();
+
+		final.Info.Base = Base.Randomise();
+
+		final.Info.EyeLeft = Eye.Randomise();
+		final.Info.EyeRight = final.Info.EyeLeft.Clone();
+		final.Info.EarLeft = Ear.Randomise();
+		final.Info.EarRight = final.Info.EarLeft.Clone();
+		final.Info.BrowLeft = Brow.Randomise();
+		final.Info.BrowRight = final.Info.BrowLeft.Clone();
+
+		final.Info.Hair = Hair.Randomise();
+		final.Info.Jaw = Jaw.Randomise();
+		final.Info.Nose = Nose.Randomise();
+
 		return final;
 	}
 
@@ -69,36 +83,37 @@ public class Generator : MonoBehaviour {
 								Hair,
 								Ear,
 								Jaw;
-		
-	public Transform FaceParent;
+
 	public GreatGrand TargetGrand;
 	public FaceObj GenerateFace(GreatGrand targ)
 	{
 		Destroy();
 
-		GameObject _base = (GameObject) Instantiate(Base.Current.Prefab);
-		_base.transform.SetParent(FaceParent.transform);
+		GameObject _base = (GameObject) Instantiate(targ.Info.Base.Prefab);
 
 		FaceObj final = _base.GetComponent<FaceObj>();
 
-		final.SetSkinColor(Skin);
-		final.SetHairColor(HairCol);
-		final.SetOffsetColor(Offset);
+		final.SetSkinColor(targ.Info.Color_Skin);
+		final.SetHairColor(targ.Info.Color_Hair);
+		final.SetOffsetColor(targ.Info.Color_Offset);
 
-		final.Reset(Base);
+		targ.SetFace(final);
+
+		/*final.Reset(targ.Info.Base);
 		final.Start();
-		(final[0] as FaceObj).SetupObj(final, Eye);
-		(final[1] as FaceObj).SetupObj(final, Eye);
-		(final[2][0] as FaceObj).Setup(final, Ear);
-		(final[3][0] as FaceObj).Setup(final, Ear);
-		(final[4][0] as FaceObj).Setup(final, Brow);
-		(final[5][0] as FaceObj).Setup(final, Brow);
-		(final[6][0] as FaceObj).Setup(final, Hair);
-		(final[7][0] as FaceObj).Setup(final, Jaw);
-		(final[8][0] as FaceObj).Setup(final, Nose);
+		(final[0] as FaceObj).SetupObj(final, targ.Info.Eye);
+		(final[1] as FaceObj).SetupObj(final, targ.Info.Eye);
+		(final[2][0] as FaceObj).Setup(final, targ.Info.Ear);
+		(final[3][0] as FaceObj).Setup(final, targ.Info.Ear);
+		(final[4][0] as FaceObj).Setup(final, targ.Info.Brow);
+		(final[5][0] as FaceObj).Setup(final, targ.Info.Brow);
+		(final[6][0] as FaceObj).Setup(final, targ.Info.Hair);
+		(final[7][0] as FaceObj).Setup(final, targ.Info.Jaw);
+		(final[8][0] as FaceObj).Setup(final, targ.Info.Nose);*/
 
 		_base.name = targ.Info.Name;
-		_base.transform.localScale = Vector3.one;
+		_base.transform.localScale = new Vector3(0.3F, 0.15F, 0.3F);
+		//targ.SetFace(final);
 		return final;
 	}
 
@@ -118,7 +133,7 @@ public class Generator : MonoBehaviour {
 		f[9].Img[4].sprite = Hair.Current._Sprite;
 		f[9].Img[5].sprite = Jaw.Current._Sprite;
 
-		f.Reset(Base);
+		/*f.Reset(Base);
 		(f[0] as FaceObj).GetObjInfo(Eye);
 		(f[1] as FaceObj).GetObjInfo(Eye, false);
 		(f[2][0] as FaceObj).Reset(Ear);
@@ -127,9 +142,7 @@ public class Generator : MonoBehaviour {
 		(f[5][0] as FaceObj).Reset(Brow);
 		(f[6][0] as FaceObj).Reset(Hair);
 		(f[7][0] as FaceObj).Reset(Jaw);
-		(f[8][0] as FaceObj).Reset(Nose);
-
-		
+		(f[8][0] as FaceObj).Reset(Nose);*/
 	}
 
 	public FaceObj RandomiseFace(GreatGrand f)
@@ -156,7 +169,7 @@ public class Generator : MonoBehaviour {
 		if(TargetGrand != null) 
 		{
 			DestroyImmediate(TargetGrand.gameObject);
-			DestroyImmediate(TargetGrand.Face.gameObject);
+			if(TargetGrand.Face != null) DestroyImmediate(TargetGrand.Face.gameObject);
 		}
 	}
 	bool elements_loaded = false;
@@ -185,6 +198,7 @@ public class Generator : MonoBehaviour {
 			if((g != null) && g.transform.root == g.transform)
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
+				f.Colour = ColorType.Offset;
 				final.Add(f);
 			}
 		}
@@ -217,7 +231,7 @@ public class Generator : MonoBehaviour {
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
-				
+				f.Colour = ColorType.Hair;
 				final.Add(f);
 			}
 		}
@@ -235,7 +249,7 @@ public class Generator : MonoBehaviour {
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
-				
+				f.Colour = ColorType.Hair;
 				final.Add(f);
 			}
 		}
@@ -252,7 +266,7 @@ public class Generator : MonoBehaviour {
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
-				
+				f.Colour = ColorType.Offset;
 				final.Add(f);
 			}
 		}
@@ -270,6 +284,7 @@ public class Generator : MonoBehaviour {
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
+				f.Colour = ColorType.Offset;
 				final.Add(f);
 			}
 		}
@@ -324,4 +339,12 @@ public class Generator : MonoBehaviour {
 		{
 			get{return Names_Female[Random.Range(0, Names_Female.Length)];}
 		}
+
+		public FaceObjInfo  EyeLeft, EyeRight,
+							EarLeft, EarRight,
+							BrowLeft, BrowRight,
+							Base, Hair, Jaw, Nose;
+
+		public Color Color_Skin, Color_Hair, Color_Offset;
+
 	}
