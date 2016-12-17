@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class TableManager : MonoBehaviour {
+	public Transform TableObj;
 	public _Seat [] Seat;
-
 	public _Food [] Food;
 
 	public void Init()
@@ -92,15 +92,22 @@ public class _Seat
 	public GreatGrand Target;
 	public bool CanBeSwapped = true;
 
-	private bool highlighted = false;
+	public Vector3 Position
+	{
+		get{return Object.transform.position + Vector3.up*3;}
+	}
+	public Quaternion Rotation
+	{
+		get{return Object.transform.rotation;}
+	}
 
 	public Transform transform {get{return Object.transform;}}
 
+	private bool highlighted = false;
 
 	public void SetTarget(GreatGrand g)
 	{
 		Target = g;
-		//Target.SitAt(this);
 	}
 
 	public bool CanSeat(GreatGrand g)

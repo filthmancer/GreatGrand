@@ -87,8 +87,6 @@ public class Generator : MonoBehaviour {
 	public GreatGrand TargetGrand;
 	public FaceObj GenerateFace(GreatGrand targ)
 	{
-		Destroy();
-
 		GameObject _base = (GameObject) Instantiate(targ.Info.Base.Prefab);
 
 		FaceObj final = _base.GetComponent<FaceObj>();
@@ -99,21 +97,8 @@ public class Generator : MonoBehaviour {
 
 		targ.SetFace(final);
 
-		/*final.Reset(targ.Info.Base);
-		final.Start();
-		(final[0] as FaceObj).SetupObj(final, targ.Info.Eye);
-		(final[1] as FaceObj).SetupObj(final, targ.Info.Eye);
-		(final[2][0] as FaceObj).Setup(final, targ.Info.Ear);
-		(final[3][0] as FaceObj).Setup(final, targ.Info.Ear);
-		(final[4][0] as FaceObj).Setup(final, targ.Info.Brow);
-		(final[5][0] as FaceObj).Setup(final, targ.Info.Brow);
-		(final[6][0] as FaceObj).Setup(final, targ.Info.Hair);
-		(final[7][0] as FaceObj).Setup(final, targ.Info.Jaw);
-		(final[8][0] as FaceObj).Setup(final, targ.Info.Nose);*/
-
 		_base.name = targ.Info.Name;
-		_base.transform.localScale = new Vector3(0.3F, 0.15F, 0.3F);
-		//targ.SetFace(final);
+		//_base.transform.localScale = new Vector3(0.3F, 0.15F, 0.3F);
 		return final;
 	}
 
@@ -151,7 +136,7 @@ public class Generator : MonoBehaviour {
 		Brow.Randomise();
 		Ear.Randomise();
 		Jaw.Randomise(0.0F, 0.0F);
-		Hair.Randomise();
+		//Hair.Randomise();
 		Nose.Randomise();
 		Base.Randomise(0.0F, 0.0F, 0.15F);
 
@@ -298,53 +283,4 @@ public class Generator : MonoBehaviour {
 		elements_loaded = true;
 	}
 }
-	[System.Serializable]
-	public class GreatGrand_Data
-	{
-		public bool Gender;
-		public int Age;
-		public string Name;
-		public bool Military;
 
-		public MaritalStatus MStat;
-		public NationStatus Nationality;
-
-		public float GFactor = 0.75F;
-
-		public static string [] Names_Male = new string []
-		{
-			"Ralph",
-			"Wally",
-			"Ed",
-			"Thomas",
-			"Max",
-			"Luton"
-		};
-
-		public static string Names_Male_Random
-		{
-			get{return Names_Male[Random.Range(0, Names_Male.Length)];}
-		}
-
-		public static string [] Names_Female = new string [] 
-		{
-			"Lucille",
-			"Sandy",
-			"Meryl",
-			"Barb",
-			"Louise"
-		};
-
-		public static string Names_Female_Random
-		{
-			get{return Names_Female[Random.Range(0, Names_Female.Length)];}
-		}
-
-		public FaceObjInfo  EyeLeft, EyeRight,
-							EarLeft, EarRight,
-							BrowLeft, BrowRight,
-							Base, Hair, Jaw, Nose;
-
-		public Color Color_Skin, Color_Hair, Color_Offset;
-
-	}

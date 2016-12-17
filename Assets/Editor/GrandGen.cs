@@ -53,6 +53,16 @@ public class GrandGenerator : EditorWindow {
 		return Gen.Base;
 	}
 
+	float progress = 0.0F;
+	float time_per_face = 0.3F;
+	float time_init = 0.0F;
+	float time_total = 0.0F;
+
+	void OnInspectorUpdate()
+	{
+		Repaint();
+	}
+
 	void OnGUI()
 	{
 		
@@ -70,16 +80,36 @@ public class GrandGenerator : EditorWindow {
 		}
 		EditorGUILayout.BeginHorizontal();
 		GUI.color = Color.green;
+
+
+
 		if(GUILayout.Button("Generate"))
 		{
-			Gen.TargetGrand = Gen.Generate(0);
-			Gen.GenerateFace(Gen.TargetGrand);
+			int facenum = 30;
+			time_total = facenum * time_per_face;
+			time_init = (float) EditorApplication.timeSinceStartup;		
+			
 		}
+
+		if(progress < time_total)
+		{
+			EditorUtility.DisplayProgressBar("Simple", "Show", progress/time_total);
+			Gen.Destroy();
+			Gen.TargetGrand = Gen.Generate(0);
+			FaceObj f = Gen.GenerateFace(Gen.TargetGrand);
+			f.transform.localRotation = Quaternion.identity;
+			f.transform.localScale = new Vector3(1.0F, 0.6F, 1.0F);
+		}
+		else EditorUtility.ClearProgressBar();
+		progress = (float) (EditorApplication.timeSinceStartup - time_init);
+
+
 		GUI.color = Color.white;
 
 		GUI.color = Color.yellow;
 		if(GUILayout.Button("Randomise"))
 		{
+			Gen.Destroy();
 			Gen.TargetGrand = Gen.Randomise();
 		}
 		GUI.color = Color.white;

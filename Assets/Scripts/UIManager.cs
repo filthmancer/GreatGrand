@@ -3,10 +3,13 @@ using System.Collections;
 using TMPro;
 
 public class UIManager : MonoBehaviour {
+	public Transform Canvas;
 
 	public UIObj WinMenu;
-
-	public Transform Canvas;
+	public UIObj GrandUI;
+	public UIObj FaceParent;
+	
+	public FaceObj ActiveFace;
 
 	public void ShowEndGame(bool active)
 	{
@@ -27,6 +30,16 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
-	public FaceObj ActiveFace;
+	public void SetGrandUI(GreatGrand g)
+	{
+		UIObj info = GrandUI["info"];
+		UIObj face = GrandUI["face"];
+
+		info.Txt[0].text = g.Info.Name;
+		info.Txt[1].text = g.Info.Age+"";
+		info.Txt[2].text = "";
+	}
+
+	
 
 }

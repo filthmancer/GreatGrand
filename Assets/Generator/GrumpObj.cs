@@ -16,7 +16,7 @@ public class GrumpObj : InputTarget {
 
 	public virtual void Tap()
 	{
-		//print("I'M GRUMP");
+		
 	}
 
 	public override void Release()

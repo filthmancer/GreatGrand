@@ -14,6 +14,11 @@ public class GameManager : MonoBehaviour {
 		if(UI != null) return UI.Canvas.transform;
 		else return GameObject.Find("Canvas").transform;
 	}
+	public static UIObj GetFaceParent()
+	{
+		if(UI != null) return UI.FaceParent;
+		else return GameObject.Find("FaceParent").GetComponent<UIObj>();
+	}
 
 	public static GameData Data;
 
@@ -69,6 +74,7 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		if(Input.GetKeyUp(KeyCode.W)) GGGen.GenerateFace(GG[0]);
 	}
+
 
 	public void CreateGame()
 	{
@@ -224,6 +230,11 @@ public class GameManager : MonoBehaviour {
 	public GreatGrand GetNonNeighbourGG(GreatGrand g)
 	{
 		return Table.GetNonNeighbourSeat(g.Seat).Target;
+	}
+
+	public void FocusOn(InputTarget t)
+	{
+		if(t is GreatGrand) UI.SetGrandUI(t as GreatGrand);
 	}
 }
 

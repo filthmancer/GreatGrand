@@ -27,10 +27,13 @@ public class GreatGrand : GrumpObj {
 	public override void Drag(Vector3 pos)
 	{
 		base.Drag(pos);
-		Face.transform.position = transform.position;
-		Face.transform.localRotation = Quaternion.Euler(0,0,0);
+		GameManager.instance.FocusOn(this);
 		if(isDragging)
 		{
+			Vector3 targetPos = new Vector3(pos.x, Face.transform.position.y, pos.z);
+			Face.transform.position = Vector3.Lerp(Face.transform.position, targetPos, Time.deltaTime * 15);
+			Face.transform.LookAt(GameManager.Table.TableObj.position, Vector3.down);
+
 			if(drag_targ == null) drag_targ = Seat;
 			_Seat n = GameManager.Table.NearestSeat(this.transform.position);
 
@@ -41,6 +44,11 @@ public class GreatGrand : GrumpObj {
 				drag_targ.Highlight(true);	
 			}
 			ShowGrumpLines(); 
+		}
+		else 
+		{
+			Face.transform.position = Seat.Position;
+			Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
 		}
 	}
 
@@ -60,6 +68,7 @@ public class GreatGrand : GrumpObj {
 	{
 		base.Tap();
 		ShowGrumpLines();
+		GameManager.instance.FocusOn(this);
 	}
 
 	bool lines_show = false;
@@ -96,11 +105,14 @@ public class GreatGrand : GrumpObj {
 		}
 		Seat = s;
 		Seat.SetTarget(this);
-		Vector3 sitpos = Seat.Object.transform.position;
+		Vector3 sitpos = Seat.transform.position;
 		sitpos.y = 0.5F;
 		transform.position = sitpos;
-		Face.transform.position = transform.position;
-		Face.transform.rotation = Seat.Object.transform.rotation * Quaternion.Euler(90, 0,0);
+
+		Face.transform.position = Seat.Position;
+		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
+		Face.transform.localScale = new Vector3(0.47F, 0.22F, 1.0F);
+
 		GameManager.instance.CheckGrumps();
 	}
 
@@ -122,9 +134,7 @@ public class GreatGrand : GrumpObj {
 	{
 		Face = f;
 
-		Face.transform.SetParent(GameManager.GetCanvas());
-		Face.GetComponent<RectTransform>().anchorMax = Vector2.one;
-		Face.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+		GameManager.GetFaceParent().AddChild(Face);
 
 		Face.Start();
 		Face.Reset(Info.Base);
@@ -138,9 +148,7 @@ public class GreatGrand : GrumpObj {
 		(Face[8][0] as FaceObj).Reset((Info.Nose));
 		(Face[7][0] as FaceObj).Reset((Info.Jaw));
 
-		Face.transform.position = Emotion.transform.position;
-		Face.transform.localRotation = Quaternion.Euler(0,0,0);
-		Face.transform.localScale = new Vector3(0.35F, 0.2F, 0.2F);
+
 	}
 
 
@@ -233,3 +241,53 @@ public class GreatGrand : GrumpObj {
 		Australian, British, American, Japanese, Sudanese, Chinese, Greek, Vietnamese
 	}
 
+	[System.Serializable]
+	public class GreatGrand_Data
+	{
+		public bool Gender;
+		public int Age;
+		public string Name;
+		public bool Military;
+
+		public MaritalStatus MStat;
+		public NationStatus Nationality;
+
+		public float GFactor = 0.75F;
+
+		public static string [] Names_Male = new string []
+		{
+			"Ralph",
+			"Wally",
+			"Ed",
+			"Thomas",
+			"Max",
+			"Luton"
+		};
+
+		public static string Names_Male_Random
+		{
+			get{return Names_Male[Random.Range(0, Names_Male.Length)];}
+		}
+
+		public static string [] Names_Female = new string [] 
+		{
+			"Lucille",
+			"Sandy",
+			"Meryl",
+			"Barb",
+			"Louise"
+		};
+
+		public static string Names_Female_Random
+		{
+			get{return Names_Female[Random.Range(0, Names_Female.Length)];}
+		}
+
+		public FaceObjInfo  EyeLeft, EyeRight,
+							EarLeft, EarRight,
+							BrowLeft, BrowRight,
+							Base, Hair, Jaw, Nose;
+
+		public Color Color_Skin, Color_Hair, Color_Offset;
+
+	}
