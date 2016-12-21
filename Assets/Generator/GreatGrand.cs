@@ -125,9 +125,22 @@ public class GreatGrand : GrumpObj {
 	public FaceObj Face;
 	//private FaceObj MiniFace;
 
-	public void ResetFace()
+	public void ResetFace(FaceObj f)
 	{
+		f.SetSkinColor(Info.Color_Skin);
+		f.SetHairColor(Info.Color_Hair);
+		f.SetOffsetColor(Info.Color_Offset);
 
+		f.Reset(Info.Base);
+		(f[0] as FaceObj).SetInfo(Info.EyeLeft);
+		(f[1] as FaceObj).SetInfo((Info.EyeRight));
+		(f[2][0] as FaceObj).Reset((Info.EarLeft));
+		(f[3][0] as FaceObj).Reset((Info.EarRight));
+		(f[4][0] as FaceObj).Reset((Info.BrowLeft));
+		(f[5][0] as FaceObj).Reset((Info.BrowRight));
+		(f[6][0] as FaceObj).Reset((Info.Hair));
+		(f[8][0] as FaceObj).Reset((Info.Nose));
+		(f[7][0] as FaceObj).Reset((Info.Jaw));
 	}
 
 	public void SetFace(FaceObj f)
@@ -150,6 +163,30 @@ public class GreatGrand : GrumpObj {
 
 
 	}
+
+	public FaceObj CloneFace()
+	{
+		FaceObj final = (FaceObj) Instantiate(Face);
+
+		final.Start();
+
+		final.SetSkinColor(Info.Color_Skin);
+		final.SetHairColor(Info.Color_Hair);
+		final.SetOffsetColor(Info.Color_Offset);
+
+		final.Reset(Info.Base);
+		(final[0] as FaceObj).SetInfo(Info.EyeLeft);
+		(final[1] as FaceObj).SetInfo((Info.EyeRight));
+		(final[2][0] as FaceObj).Reset((Info.EarLeft));
+		(final[3][0] as FaceObj).Reset((Info.EarRight));
+		(final[4][0] as FaceObj).Reset((Info.BrowLeft));
+		(final[5][0] as FaceObj).Reset((Info.BrowRight));
+		(final[6][0] as FaceObj).Reset((Info.Hair));
+		(final[8][0] as FaceObj).Reset((Info.Nose));
+		(final[7][0] as FaceObj).Reset((Info.Jaw));
+		return final;
+	}
+
 
 
 	private LineRenderer [] GrumpLines;

@@ -38,6 +38,21 @@ public class UIManager : MonoBehaviour {
 		info.Txt[0].text = g.Info.Name;
 		info.Txt[1].text = g.Info.Age+"";
 		info.Txt[2].text = "";
+
+		if(ActiveFace != null) Destroy(ActiveFace.gameObject);
+
+		if(g.Face != null)
+		{
+			ActiveFace = g.CloneFace();
+			
+			face.AddChild(ActiveFace);
+			g.ResetFace(ActiveFace);
+			ActiveFace.transform.localPosition = Vector3.zero;
+			ActiveFace.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+			ActiveFace.transform.localRotation = Quaternion.Euler(0,0,0);
+			ActiveFace.GetComponent<Animator>().enabled = false;
+			
+		}
 	}
 
 	

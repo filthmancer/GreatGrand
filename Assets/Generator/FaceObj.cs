@@ -169,6 +169,18 @@ public class FaceObj : UIObj {
 			}
 	}
 
+	public void ResetAll()
+	{
+		Reset();
+		for(int i = 0; i < Child.Length; i++)
+		{
+			if(Child[i] is FaceObj)
+			{
+				(Child[i] as FaceObj).ResetAll();
+			}
+		}
+	}
+
 	public void Reset(FaceObjInfo f = null, bool side = true)
 	{
 		if(f != null) 
