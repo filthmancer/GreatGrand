@@ -47,18 +47,18 @@ public class Generator : MonoBehaviour {
 		final.Info.Color_Offset = Random.ColorHSV();
 		final.Info.Color_Skin = RandomSkin();
 
-		final.Info.Base = Base.Randomise();
+		final.Info.Base = Base.Randomise(Vector3.zero);
 
-		final.Info.EyeLeft = Eye.Randomise();
+		final.Info.EyeLeft = Eye.Randomise(new Vector3(0,0.3F));
 		final.Info.EyeRight = final.Info.EyeLeft.Clone();
-		final.Info.EarLeft = Ear.Randomise();
+		final.Info.EarLeft = Ear.Randomise(new Vector3(0,0.4F));
 		final.Info.EarRight = final.Info.EarLeft.Clone();
-		final.Info.BrowLeft = Brow.Randomise();
+		final.Info.BrowLeft = Brow.Randomise(new Vector3(0,0.6F));
 		final.Info.BrowRight = final.Info.BrowLeft.Clone();
 
-		final.Info.Hair = Hair.Randomise();
-		final.Info.Jaw = Jaw.Randomise();
-		final.Info.Nose = Nose.Randomise();
+		final.Info.Hair = Hair.Randomise(Vector3.zero);
+		final.Info.Jaw = Jaw.Randomise(Vector3.zero);
+		final.Info.Nose = Nose.Randomise(new Vector3(0,0.1F));
 
 		return final;
 	}
@@ -132,13 +132,13 @@ public class Generator : MonoBehaviour {
 
 	public FaceObj RandomiseFace(GreatGrand f)
 	{
-		Eye.Randomise();
-		Brow.Randomise();
-		Ear.Randomise();
-		Jaw.Randomise(0.0F, 0.0F);
+		Eye.Randomise(Vector3.zero);
+		Brow.Randomise(Vector3.zero);
+		Ear.Randomise(Vector3.zero);
+		Jaw.Randomise(Vector3.zero, 0.0F);
 		//Hair.Randomise();
-		Nose.Randomise();
-		Base.Randomise(0.0F, 0.0F, 0.15F);
+		Nose.Randomise(Vector3.zero);
+		Base.Randomise(Vector3.zero, 0.0F, 0.15F);
 
 		Skin = RandomSkin();
 		HairCol = RandomHair();
@@ -197,7 +197,7 @@ public class Generator : MonoBehaviour {
 		_nose.AddRange(Resources.LoadAll("Objects/Nose", typeof(Object)));
 		for(int i =0 ; i < _nose.Count; i++)
 		{
-			Sprite g = _nose[i] as Sprite;
+			GameObject g = _nose[i] as GameObject;
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
@@ -212,7 +212,7 @@ public class Generator : MonoBehaviour {
 		_brow.AddRange(Resources.LoadAll("Objects/Brow", typeof(Object)));
 		for(int i =0 ; i < _brow.Count; i++)
 		{
-			Sprite g = _brow[i] as Sprite;
+			GameObject g = _brow[i] as GameObject;
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
@@ -230,7 +230,7 @@ public class Generator : MonoBehaviour {
 		_hair.AddRange(Resources.LoadAll("Objects/Hair", typeof(Object)));
 		for(int i =0 ; i < _hair.Count; i++)
 		{
-			Sprite g = _hair[i] as Sprite;
+			GameObject g = _hair[i] as GameObject;
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
@@ -247,7 +247,7 @@ public class Generator : MonoBehaviour {
 		_ear.AddRange(Resources.LoadAll("Objects/Ear", typeof(Object)));
 		for(int i =0 ; i < _ear.Count; i++)
 		{
-			Sprite g = _ear[i] as Sprite;
+			GameObject g = _ear[i] as GameObject;
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);
@@ -265,7 +265,7 @@ public class Generator : MonoBehaviour {
 		_jaw.AddRange(Resources.LoadAll("Objects/Jaw", typeof(Object)));
 		for(int i =0 ; i < _jaw.Count; i++)
 		{
-			Sprite g = _jaw[i] as Sprite;
+			GameObject g = _jaw[i] as GameObject;
 			if((g != null))
 			{
 				FaceObjInfo f = new FaceObjInfo(i, g);

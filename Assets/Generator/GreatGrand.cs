@@ -153,13 +153,13 @@ public class GreatGrand : GrumpObj {
 		Face.Reset(Info.Base);
 		(Face[0] as FaceObj).SetInfo(Info.EyeLeft);
 		(Face[1] as FaceObj).SetInfo((Info.EyeRight));
-		(Face[2][0] as FaceObj).Reset((Info.EarLeft));
-		(Face[3][0] as FaceObj).Reset((Info.EarRight));
-		(Face[4][0] as FaceObj).Reset((Info.BrowLeft));
-		(Face[5][0] as FaceObj).Reset((Info.BrowRight));
-		(Face[6][0] as FaceObj).Reset((Info.Hair));
-		(Face[8][0] as FaceObj).Reset((Info.Nose));
-		(Face[7][0] as FaceObj).Reset((Info.Jaw));
+		(Face[2] as FaceObj).SetInfo((Info.EarLeft));
+		(Face[3] as FaceObj).SetInfo((Info.EarRight));
+		(Face[4] as FaceObj).SetInfo((Info.BrowLeft));
+		(Face[5] as FaceObj).SetInfo((Info.BrowRight));
+		(Face[6] as FaceObj).SetInfo((Info.Hair));
+		(Face[8] as FaceObj).SetInfo((Info.Nose));
+		(Face[7] as FaceObj).SetInfo((Info.Jaw));
 
 
 	}
@@ -177,13 +177,13 @@ public class GreatGrand : GrumpObj {
 		final.Reset(Info.Base);
 		(final[0] as FaceObj).SetInfo(Info.EyeLeft);
 		(final[1] as FaceObj).SetInfo((Info.EyeRight));
-		(final[2][0] as FaceObj).Reset((Info.EarLeft));
-		(final[3][0] as FaceObj).Reset((Info.EarRight));
-		(final[4][0] as FaceObj).Reset((Info.BrowLeft));
-		(final[5][0] as FaceObj).Reset((Info.BrowRight));
-		(final[6][0] as FaceObj).Reset((Info.Hair));
-		(final[8][0] as FaceObj).Reset((Info.Nose));
-		(final[7][0] as FaceObj).Reset((Info.Jaw));
+		(final[2] as FaceObj).SetInfo((Info.EarLeft));
+		(final[3] as FaceObj).SetInfo((Info.EarRight));
+		(final[4] as FaceObj).SetInfo((Info.BrowLeft));
+		(final[5] as FaceObj).SetInfo((Info.BrowRight));
+		(final[6] as FaceObj).SetInfo((Info.Hair));
+		(final[8] as FaceObj).SetInfo((Info.Nose));
+		(final[7] as FaceObj).SetInfo((Info.Jaw));
 		return final;
 	}
 

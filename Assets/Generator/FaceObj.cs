@@ -110,7 +110,13 @@ public class FaceObj : UIObj {
 			Index = f.Index;
 		}
 
-		Element.transform.localPosition = Info._Position;
+		Rect ele_rect = this.GetComponent<RectTransform>().rect;
+		Vector3 randomised_pos = Vector3.zero;
+		randomised_pos.x = Mathf.Lerp(ele_rect.xMin, ele_rect.xMax, 0.5F + Info._Position.x);
+		randomised_pos.y =  Mathf.Lerp(ele_rect.yMin, ele_rect.yMax, 0.5F + Info._Position.y);
+
+		Element.transform.localPosition = randomised_pos;
+
 		Element.transform.rotation = Quaternion.Euler(Info._Rotation);
 		Element.transform.localScale = Info._Scale;
 	
@@ -390,7 +396,7 @@ public class FaceObjInfoContainer
 	}
 
 
-	public FaceObjInfo Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
+	public FaceObjInfo Randomise(Vector3 pos, float rot = 0.2F, float sc = 0.05F)
 	{
 		RandomIndex();
 
@@ -440,10 +446,11 @@ public class FaceObjInfo
 							if(Prefab) return Prefab.name;
 							return "";}}
 
-	public void Randomise(float pos = 0.4F, float rot = 0.2F, float sc = 0.3F)
+	public void Randomise(Vector3 pos, float rot = 0.2F, float sc = 0.05F)
 	{
-		_Position = Utility.RandomVectorInclusive(pos, pos);
-		_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
+
+		_Position = Utility.RandomVectorInclusive(pos.x, pos.y);
+		//_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
 		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc, sc);
 	}
 
