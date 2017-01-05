@@ -136,7 +136,7 @@ public class Generator : MonoBehaviour {
 		Brow.Randomise(Vector3.zero);
 		Ear.Randomise(Vector3.zero);
 		Jaw.Randomise(Vector3.zero, 0.0F);
-		//Hair.Randomise();
+		Hair.Randomise(Vector3.zero, 0.0F, 0.0F);
 		Nose.Randomise(Vector3.zero);
 		Base.Randomise(Vector3.zero, 0.0F, 0.15F);
 

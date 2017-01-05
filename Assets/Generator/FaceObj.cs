@@ -83,8 +83,8 @@ public class FaceObj : UIObj {
 				if(Element != null) DestroyImmediate(Element.gameObject);
 				Element = Instantiate(f.Current.Prefab).GetComponent<FaceObj>();
 				Element.transform.SetParent(this.transform);
-				Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
-				Element.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+				//Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
+				//Element.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 				Child = new UIObj[1];
 				Child[0] = Element;
 				Index = f.Current.Index;
@@ -103,6 +103,7 @@ public class FaceObj : UIObj {
 			if(Element != null) DestroyImmediate(Element.gameObject);
 			Element = Instantiate(f.Prefab).GetComponent<FaceObj>();
 			Element.transform.SetParent(this.transform);
+			Element.GetComponent<RectTransform>().anchorMin = Vector3.zero;
 			Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
 			Element.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 			Child = new UIObj[1];

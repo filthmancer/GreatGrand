@@ -139,8 +139,9 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			newchild[i].Index = i;
 			newchild[i].ParentObj = this;
 			newchild[i].transform.SetParent(this.transform);
-			newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.one;
-			newchild[i].GetComponent<RectTransform>().sizeDelta = Vector3.zero;
+			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.zero;
+			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.one;
+			//newchild[i].GetComponent<RectTransform>().sizeDelta = Vector3.zero;
 			newchild[i].transform.localScale = Vector3.one;
 			x++;
 		}

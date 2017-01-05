@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Vectrosity;
 
 public class GreatGrand : GrumpObj {
 	public GreatGrand_Data Info;
@@ -9,8 +11,7 @@ public class GreatGrand : GrumpObj {
 
 	public GreatGrand Relation;
 
-	public SpriteRenderer Img, Emotion;
-	public Sprite Happy, Sad;
+	public SpriteRenderer Emotion;
 
 	public bool IsHappy
 	{
@@ -33,6 +34,7 @@ public class GreatGrand : GrumpObj {
 			Vector3 targetPos = new Vector3(pos.x, Face.transform.position.y, pos.z);
 			Face.transform.position = Vector3.Lerp(Face.transform.position, targetPos, Time.deltaTime * 15);
 			Face.transform.LookAt(GameManager.Table.TableObj.position, Vector3.down);
+			CheckEmotion();
 
 			if(drag_targ == null) drag_targ = Seat;
 			_Seat n = GameManager.Table.NearestSeat(this.transform.position);
@@ -49,6 +51,7 @@ public class GreatGrand : GrumpObj {
 		{
 			Face.transform.position = Seat.Position;
 			Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
+			CheckEmotion();
 		}
 	}
 
@@ -78,11 +81,12 @@ public class GreatGrand : GrumpObj {
 		if(lines_show)
 		{
 			lines_time -= Time.deltaTime;
-			for(int i = 0; i < GrumpLines.Length; i++)
+			for(int i = 0; i < GrumpL.Length; i++)
 			{
 				Color c = (Grumps[i].LikesIt ? Color.green : Color.red);
 				c.a = Mathf.Clamp01(lines_time);
-				GrumpLines[i].SetColors(c,c);
+				GrumpL[i].SetColor(c);
+				GrumpL[i].Draw();
 			}
 
 			if(lines_time <= 0.0F) lines_show = false;
@@ -111,15 +115,26 @@ public class GreatGrand : GrumpObj {
 
 		Face.transform.position = Seat.Position;
 		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-		Face.transform.localScale = new Vector3(0.47F, 0.22F, 1.0F);
+		Face.transform.localScale = new Vector3(0.45F, 0.45F, 1.0F);
+		CheckEmotion();
 
 		GameManager.instance.CheckGrumps();
 	}
 
 	public void CheckEmotion()
 	{
-		if(IsHappy) Emotion.sprite = Happy;
-		else Emotion.sprite = Sad;
+		if(IsHappy) 
+		{
+			Emotion.sprite = GameManager.UI.Happy;
+			Emotion.color = Color.green;
+		}
+		else 
+		{
+			Emotion.sprite = GameManager.UI.Angry;
+			Emotion.color = Color.red;
+		}
+
+		if(Face != null) Emotion.transform.position = Face.transform.position + Face.transform.up * 1.3F;
 	}
 
 	public FaceObj Face;
@@ -146,7 +161,6 @@ public class GreatGrand : GrumpObj {
 	public void SetFace(FaceObj f)
 	{
 		Face = f;
-
 		GameManager.GetFaceParent().AddChild(Face);
 
 		Face.Start();
@@ -161,6 +175,7 @@ public class GreatGrand : GrumpObj {
 		(Face[8] as FaceObj).SetInfo((Info.Nose));
 		(Face[7] as FaceObj).SetInfo((Info.Jaw));
 
+		Emotion.transform.position = Face.transform.position + Face.transform.up;
 
 	}
 
@@ -174,7 +189,7 @@ public class GreatGrand : GrumpObj {
 		final.SetHairColor(Info.Color_Hair);
 		final.SetOffsetColor(Info.Color_Offset);
 
-		final.Reset(Info.Base);
+		/*final.Reset(Info.Base);
 		(final[0] as FaceObj).SetInfo(Info.EyeLeft);
 		(final[1] as FaceObj).SetInfo((Info.EyeRight));
 		(final[2] as FaceObj).SetInfo((Info.EarLeft));
@@ -183,29 +198,36 @@ public class GreatGrand : GrumpObj {
 		(final[5] as FaceObj).SetInfo((Info.BrowRight));
 		(final[6] as FaceObj).SetInfo((Info.Hair));
 		(final[8] as FaceObj).SetInfo((Info.Nose));
-		(final[7] as FaceObj).SetInfo((Info.Jaw));
+		(final[7] as FaceObj).SetInfo((Info.Jaw));*/
 		return final;
 	}
 
 
 
-	private LineRenderer [] GrumpLines;
+	//private LineRenderer [] GrumpLines;
+	private VectorLine [] GrumpL;
 	public void CreateGrumpLines()
 	{
-		GrumpLines = new LineRenderer [Grumps.Length];
+		//GrumpLines = new LineRenderer [Grumps.Length];
+		GrumpL = new VectorLine[Grumps.Length];
 		for(int i = 0; i < Grumps.Length; i++)
 		{
-			GrumpLines[i] = (LineRenderer) Instantiate(GameManager.instance.GrumpLine);
-			GrumpLines[i].transform.SetParent(this.transform);
+			//GrumpLines[i] = (LineRenderer) Instantiate(GameManager.instance.GrumpLine);
+			//GrumpLines[i].transform.SetParent(this.transform);
+
+			GrumpL[i] = new VectorLine("Line", new List<Vector3>(), 7.0F, LineType.Discrete); //(VectorObject2D) Instantiate(GameManager.instance.GrumpLine);
 
 			Vector3 a = this.transform.position;
 			Vector3 b = Grumps[i].Target.transform.position;
-			GrumpLines[i].SetPosition(0, Vector3.Lerp(a,b,0.15F));
-			GrumpLines[i].SetPosition(1, Vector3.Lerp(b,a,0.15F));
 
-			Color c = (Grumps[i].LikesIt ? Color.green : Color.red);
-			GrumpLines[i].SetColors(c,c);
-			GrumpLines[i].gameObject.SetActive(false);
+			float d = Vector3.Distance(a,b);
+			int steps = (int) (d/0.3F);
+			
+				GrumpL[i].points3.Add(Vector3.Lerp(a, b, 0.15F));
+				GrumpL[i].points3.Add(Vector3.Lerp(a, b, 0.85F));
+
+
+			GrumpL[i].SetColor(new Color(0,0,0,0));
 		}
 
 	}
@@ -218,12 +240,15 @@ public class GreatGrand : GrumpObj {
 		{
 			Vector3 a = this.transform.position;
 			Vector3 b = Grumps[i].Target.transform.position;
-			GrumpLines[i].SetPosition(0, Vector3.Lerp(a,b,0.15F));
-			GrumpLines[i].SetPosition(1, Vector3.Lerp(b,a,0.15F));
+
+			float d = Vector3.Distance(a,b);
+			int steps = (int) (d/0.3F);
+
+			GrumpL[i].points3[0] = (Vector3.Lerp(a, b, 0.15F));
+			GrumpL[i].points3[1] = (Vector3.Lerp(a, b, 0.85F));
 
 			Color c = (Grumps[i].LikesIt ? Color.green : Color.red);
-			GrumpLines[i].SetColors(c,c);
-			GrumpLines[i].gameObject.SetActive(true);
+			GrumpL[i].SetColor(c);
 		}
 	}
 

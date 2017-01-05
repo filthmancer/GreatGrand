@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Vectrosity;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager instance;
+
+	public GameObject DinnerGame;
 	public static TableManager Table;
 	public TableManager _TableManager;
 	public static UIManager UI;
@@ -28,7 +31,9 @@ public class GameManager : MonoBehaviour {
 	public static int GG_num = 8;
 
 	public Generator GGGen;
-	public LineRenderer GrumpLine;
+	public VectorObject2D GrumpLine;
+
+	public bool loadDinner = false;
 
 	public bool Resolved
 	{
@@ -67,7 +72,10 @@ public class GameManager : MonoBehaviour {
 		Table.Init();
 		_Input.Init();
 		GGGen.LoadElements();
-		CreateGame();
+
+		UI.Init();
+
+		if(loadDinner) LoadMinigame("Dinner");
 	}
 	
 	// Update is called once per frame
@@ -75,8 +83,19 @@ public class GameManager : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.W)) GGGen.GenerateFace(GG[0]);
 	}
 
+	public void LoadMinigame(string n)
+	{
+		if(n == "Dinner")
+		{
+			 CreateDinnerGame();
+			 UI.Menu.SetActive(false);
+			 UI.DinnerUI.SetActive(true);
+			 DinnerGame.SetActive(true);
+			}
+	}
 
-	public void CreateGame()
+
+	public void CreateDinnerGame()
 	{
 		gameStart = false;
 		GG = new GreatGrand[GG_num];
@@ -135,7 +154,7 @@ public class GameManager : MonoBehaviour {
 			Destroy(GG[i].gameObject);
 		}
 		Table.Clear();
-		CreateGame();
+		CreateDinnerGame();
 
 	}
 
