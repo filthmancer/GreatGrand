@@ -42,8 +42,10 @@ public class GreatGrand : GrumpObj {
 				drag_targ.Highlight(true);	
 			}
 
-			if(Vector3.Distance(pos, drag_targ.transform.position) > 0.7F) GameManager.instance.TargetLine(this.transform.position, pos);
-			else GameManager.instance.TargetLine(this.transform.position, drag_targ.transform.position);
+			Vector3 dragpos = drag_targ.transform.position;
+			dragpos.y = pos.y;
+			if(Vector3.Distance(pos, dragpos) > 0.6F) GameManager.instance.TargetLine(this.transform.position, pos);
+			else GameManager.instance.TargetLine(this.transform.position, dragpos);
 
 			ShowGrumpLines(); 
 		}
@@ -63,7 +65,7 @@ public class GreatGrand : GrumpObj {
 			drag_targ = GameManager.Table.NearestSeat(pos);
 			if(drag_targ.CanSeat(this)) StartCoroutine(SitAt(drag_targ, true));
 			else StartCoroutine(SitAt(Seat));
-			lines_time = 0.01F;
+			//lines_time = 0.01F;
 			
 		}
 		base.Release(pos);
@@ -278,7 +280,7 @@ public class GreatGrand : GrumpObj {
 			//GrumpLines[i] = (LineRenderer) Instantiate(GameManager.instance.GrumpLine);
 			//GrumpLines[i].transform.SetParent(this.transform);
 
-			GrumpL[i] = new VectorLine("Grump: " + Grumps[i].Target, new List<Vector3>(), 7.0F, LineType.Discrete); //(VectorObject2D) Instantiate(GameManager.instance.GrumpLine);
+			GrumpL[i] = new VectorLine("Grump: " + Grumps[i].Target, new List<Vector3>(), 12.0F, LineType.Discrete); //(VectorObject2D) Instantiate(GameManager.instance.GrumpLine);
 
 			Vector3 a = this.transform.position;
 			Vector3 b = Grumps[i].Target.transform.position;

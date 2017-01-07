@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour {
 			ActiveFace.transform.localScale = Vector3.one * 0.35F;
 			
 			ActiveFace.transform.localRotation = Quaternion.Euler(0,0,0);
-			ActiveFace.GetComponent<Animator>().enabled = false;
+			//ActiveFace.GetComponent<Animator>().enabled = false;
 			
 		}
 	}

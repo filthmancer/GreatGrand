@@ -452,7 +452,7 @@ public class FaceObjInfo
 
 		_Position = Utility.RandomVectorInclusive(pos.x, pos.y);
 		//_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
-		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc, sc);
+		_Scale = Vector3.one;// + Utility.RandomVectorInclusive(sc, sc);
 	}
 
 	public FaceObjInfo Clone()
