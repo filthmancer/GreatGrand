@@ -83,6 +83,14 @@ public class GameManager : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.W)) GGGen.GenerateFace(GG[0]);
 	}
 
+
+	public void Clear()
+	{
+		for(int i = 0; i < GG.Length; i++)
+		{
+			GG[i].Destroy();
+		}
+	}
 	public void LoadMinigame(string n)
 	{
 		if(n == "Dinner")
@@ -91,7 +99,7 @@ public class GameManager : MonoBehaviour {
 			 UI.Menu.SetActive(false);
 			 UI.DinnerUI.SetActive(true);
 			 DinnerGame.SetActive(true);
-			}
+		}
 	}
 
 
@@ -120,7 +128,7 @@ public class GameManager : MonoBehaviour {
 		for(int i = 0; i < GG_num; i++)
 		{
 			//GG[i].Generate(i);
-			GG[i].SitAt(Table.Seat[i]);
+			GG[i].SitImmediate(Table.Seat[i]);
 		}
 
 		for(int i = 0; i < GG_num; i++)
@@ -153,6 +161,7 @@ public class GameManager : MonoBehaviour {
 		{
 			Destroy(GG[i].gameObject);
 		}
+		Clear();
 		Table.Clear();
 		CreateDinnerGame();
 
@@ -166,6 +175,23 @@ public class GameManager : MonoBehaviour {
 	public static void OnRelease()
 	{
 		Table.Reset();
+	}
+
+	VectorLine TLine;
+	[SerializeField]
+	private Color TLineColor;
+	public void TargetLine(Vector3 from, Vector3 to)
+	{
+		if(TLine == null)
+		{
+			TLine = new VectorLine("Targeter", new List<Vector3>(), 7.0F, LineType.Continuous);
+			TLine.points3.Add(from);
+			TLine.points3.Add(to);
+			TLine.SetColor(TLineColor);
+		}
+		TLine.points3[0] = from;
+		TLine.points3[1] = to;
+		TLine.Draw();
 	}
 
 	public void CheckGrumps()
@@ -234,7 +260,7 @@ public class GameManager : MonoBehaviour {
 				point = finalpos[num];
 			}
 
-			GG[i].SitAt(point);
+			GG[i].SitImmediate(point);
 			finalpos.RemoveAt(num);
 		}
 	}

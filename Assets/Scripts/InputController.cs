@@ -27,7 +27,6 @@ public class InputController : MonoBehaviour {
 		}
 		if(Input.GetMouseButtonDown(0))
 		{
-
 			if(Physics.Raycast(InputRay, out InputRay_hit, Mathf.Infinity))
 			{
 				Transform hit = InputRay_hit.transform;
@@ -47,7 +46,7 @@ public class InputController : MonoBehaviour {
 			}
 			else if(Input.GetMouseButtonUp(0))
 			{
-				Target.Release();
+				Target.Release(InputPos);
 				Target = null;
 
 				GameManager.OnRelease();

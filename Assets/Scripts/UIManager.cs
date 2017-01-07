@@ -11,17 +11,29 @@ public class UIManager : MonoBehaviour {
 	public UIObj WinMenu;
 	public UIObj GrandUI;
 	public UIObj FaceParent;
+	public UIObj WorldObjects;
 	
 	public FaceObj ActiveFace;
 	public Sprite Angry, Bored, Happy;
 
+	public ObjectContainer Sprites;
+
 	public void Init()
 	{
 		Menu.SetActive(true);
+
+		DinnerUI[1].AddAction(UIAction.MouseDown, () =>
+		{
+			for(int i = 0; i < GameManager.instance.GG.Length; i++)
+			{
+				GameManager.instance.GG[i].ShowGrumpLines();
+			}
+		});
 		DinnerUI.SetActive(false);
 		Menu[0].ClearActions();
 		Menu[0].AddAction(UIAction.MouseUp, () => 
 		{
+			GameManager.instance.Clear();
 			GameManager.instance.LoadMinigame("Dinner");
 		});
 	}
@@ -42,6 +54,14 @@ public class UIManager : MonoBehaviour {
 		if(ActiveFace)
 		{
 			ActiveFace.CheckAnims();
+		}
+		if(Input.GetKeyDown(KeyCode.S)) 
+		{
+			UIAlert a = StringAlert("YO", Canvas.transform.position);
+			a.AddStep(Canvas.transform.position + Canvas.transform.up * 4, 1.0f ,(string [] s) =>{
+				Debug.Log(s[0]);
+		 }, "HI");
+			a.AddStep(Canvas.transform.position - Canvas.transform.up * 10, 1.0f, (string [] s) =>{});
 		}
 	}
 
@@ -76,6 +96,59 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
+	public UIAlert UIAlertObj;
+	public UIAlert StringAlert(string s, Vector3 pos, float lifetime = 2.0F, float size = 50.0F, float speed = 1.0F)
+	{
+		UIAlert final = Instantiate(UIAlertObj);
+		WorldObjects.AddChild(final);
+		final.ResetRect();
+		final.transform.position = pos;
+
+		final.Txt[0].enabled = true;
+		final.Txt[0].text = s;
+		final.Txt[0].fontSize = size;
+		final.Img[0].enabled = false;
+		final.Setup(lifetime, speed);
+		return final;
+	}
+
+	public UIAlert ImgAlert(Sprite s, Vector3 pos, float lifetime = 2.0F, float size = 50.0F, float speed = 1.0F)
+	{
+		UIAlert final = Instantiate(UIAlertObj);
+		WorldObjects.AddChild(final);
+		final.ResetRect();
+		final.transform.position = pos;
+
+		final.Txt[0].enabled = false;
+		final.Img[0].enabled = true;
+		final.Img[0].sprite = s;
+		final.Setup(lifetime, speed);
+		return final;
+	}
+
 	
 
+}
+
+[System.Serializable]
+public class ObjectContainer
+{
+	public OCon [] Objects;
+	public Object GetObject(string s)
+	{
+		s = s.ToLower();
+		for(int i = 0; i < Objects.Length; i++)
+		{
+			//Debug.Log(Objects[i].Name);
+			if(Objects[i].Name == s) return Objects[i].Obj;
+		}
+		return null;
+	}
+
+	[System.Serializable]
+	public class OCon
+	{
+		public string Name;
+		public Object Obj;
+	}
 }

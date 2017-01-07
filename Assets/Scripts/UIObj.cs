@@ -39,6 +39,15 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	protected ObjectPoolerReference poolref;
 	public ObjectPoolerReference GetPoolRef(){return poolref;}
 
+	public void PoolDestroy()
+	{
+		if(poolref)
+		{
+			poolref.Unspawn();
+		}
+		else Destroy(this.gameObject);
+	}
+
 	//public bool isActive{get{return this.gameObject.activeSelf;}}
 
 	public virtual void Start()
@@ -59,6 +68,11 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 		if(SetInactiveAfterLoading) SetActive(false);
 		else isActive = this.gameObject.activeSelf;
+	}
+
+	public virtual void Setup(params float [] args)
+	{
+
 	}
 
 
@@ -146,6 +160,24 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			x++;
 		}
 		Child = newchild;
+	}
+
+	private RectTransform _rect;
+	public RectTransform RectT{
+		get{
+			if(_rect == null) _rect = this.GetComponent<RectTransform>();
+			return _rect;
+		}
+	}
+	public void ResetRect()
+	{
+
+		//RectT.anchorMax = Vector2.zero;
+		//RectT.anchorMax = Vector2.one;
+		RectT.sizeDelta = Vector3.zero;
+		transform.localRotation = Quaternion.Euler(0,0,0);
+		transform.localPosition = Vector3.zero;
+		transform.localScale = Vector3.one;
 	}
 
 	public void DestroyChildren()
