@@ -59,6 +59,17 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public bool AllSeated
+	{
+		get{
+			for(int i = 0; i < GG.Length; i++)
+			{
+				if(!GG[i].isSeated) return false;
+			}
+			return true;
+		}
+	}
+
 	void Awake(){
 		instance = this;
 		Table = _TableManager;
@@ -137,16 +148,38 @@ public class GameManager : MonoBehaviour {
 			GenerateGrumpsReal(GG[i], 1);
 
 		}
-
-		while(NumberHappy > 3) ShuffleGG();
+		int [] ind = new int[0];
+		while(NumberHappy > 3) ind = ShuffleGG();
 
 		for(int i = 0; i < GG_num; i++)
 		{
 			GG[i].CreateGrumpLines();
 		}
 
-		gameStart = true;
+		StartCoroutine(StartDinnerGame(ind));
+
+		
+	}
+
+	IEnumerator StartDinnerGame(int [] index)
+	{
 		UI.ShowEndGame(false);
+		for(int i = 0; i < GG.Length; i++)
+		{
+			GG[i].Face.transform.position = Table.Door.position;
+		}
+
+		for(int i = 0; i < GG.Length; i++)
+		{
+			StartCoroutine(Table.DoorToSeat(GG[i], index[i], 0.7F));
+			yield return null;
+		}
+
+		while(!AllSeated) yield return null;
+
+		gameStart = true;
+		
+		yield return null;
 	}
 
 	public void EndGame()
@@ -245,8 +278,9 @@ public class GameManager : MonoBehaviour {
 		g.Grumps = final;	
 	}
 
-	public void ShuffleGG()
-	{
+	public int [] ShuffleGG()
+	{	
+		int [] fin = new int[Table.Seat.Length];
 		List<_Seat> finalpos = new List<_Seat>();
 		finalpos.AddRange(Table.Seat);
 
@@ -260,9 +294,13 @@ public class GameManager : MonoBehaviour {
 				point = finalpos[num];
 			}
 
+			fin[i] = finalpos[num].Index;
 			GG[i].SitImmediate(point);
 			finalpos.RemoveAt(num);
+
 		}
+
+		return fin;
 	}
 
 	public GreatGrand GetRandomGG(GreatGrand g)

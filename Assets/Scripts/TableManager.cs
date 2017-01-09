@@ -7,6 +7,7 @@ public class TableManager : MonoBehaviour {
 	public Transform TableObj;
 	public _Seat [] Seat;
 	public _Food [] Food;
+	public Transform Door;
 
 	public VectorLine Movement;
 
@@ -51,8 +52,11 @@ public class TableManager : MonoBehaviour {
 		return norm;
 	}
 
-	public IEnumerator MoveSeat(Transform t, int from, int to, float time)
+	float x_rot = 80;
+	public IEnumerator MoveSeat(GreatGrand g, int from, int to, float time)
 	{
+		Transform t = g.Face.transform;
+		g.isSeated = false;
 		Vector3 start = GetMovementPointAtSeat(from);
 		Vector3 end = GetMovementPointAtSeat(to);
 
@@ -60,7 +64,6 @@ public class TableManager : MonoBehaviour {
 
 		float start_norm = GetMovementNormalAtSeat(from);
 		float end_norm = GetMovementNormalAtSeat(to);
-
 
 	//Checking to see if clockwise or anticlockwise movement will be faster
 		float movenorm = 0.0F, clockwise, anticlock;
@@ -88,7 +91,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(Seat[from].transform.position, start, getup_time/getup_init);
 			t.LookAt(TableObj.transform.position);
-			t.rotation *= Quaternion.Euler(65, 0,180);
+			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			yield return null;
 		}
 
@@ -96,7 +99,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = GetMovementPoint(norm);
 			t.LookAt(TableObj.transform.position);
-			t.rotation *= Quaternion.Euler(65, 0,180);
+			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 
 			norm += norm_rate * Time.deltaTime;
 			if(norm < 0.0F) norm = 1.0F;
@@ -108,13 +111,69 @@ public class TableManager : MonoBehaviour {
 		float sitdown_time = 0.0F;
 		while((sitdown_time += Time.deltaTime) < sitdown_init)
 		{
-			t.position = Vector3.Lerp(end, Seat[to].transform.position, sitdown_time/sitdown_init);
-			t.LookAt(TableObj.transform.position);
-			t.rotation *= Quaternion.Euler(65, 0,180);
+			t.position = Vector3.Lerp(end, Seat[to].Position, sitdown_time/sitdown_init);
+			t.transform.rotation = Quaternion.Slerp(t.transform.rotation,
+													Seat[to].Rotation * Quaternion.Euler(65, 0,0),
+													sitdown_time/sitdown_init);
+			//t.LookAt(TableObj.transform.position);
+			//t.rotation *= Quaternion.Euler(x_rot, 0,180);
 
 			yield return null;
 		}
+		g.isSeated = true;
+		yield return null;
+	}
 
+	public IEnumerator DoorToSeat(GreatGrand g, int seat, float time)
+	{
+		Transform t = g.Face.transform;
+		g.isSeated = false;
+		Vector3 d = Door.position;
+		Vector3 start = GetMovementPoint(0.0F);
+		Vector3 end = GetMovementPointAtSeat(seat);
+
+		float start_norm = 0.0F;
+		float end_norm = GetMovementNormalAtSeat(seat);
+		float movenorm = end_norm - start_norm;
+
+		float getup_init = 0.3F;
+		float getup_time = 0.0F;
+		while((getup_time += Time.deltaTime) < getup_init)
+		{
+			t.position = Vector3.Lerp(d, start, getup_time/getup_init);
+			t.LookAt(TableObj.transform.position);
+			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			yield return null;
+		}
+
+		float timer = 0.0F;
+		float norm = start_norm;
+		float norm_rate = movenorm / time;
+
+		while((timer += Time.deltaTime) < time)
+		{
+			t.position = GetMovementPoint(norm);
+			t.LookAt(TableObj.transform.position);
+			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+
+			norm += norm_rate * Time.deltaTime;
+			if(norm < 0.0F) norm = 1.0F;
+			if(norm > 1.0F) norm = 0.0F;
+			yield return null;
+		}
+
+		float sitdown_init = 0.3F;
+		float sitdown_time = 0.0F;
+		while((sitdown_time += Time.deltaTime) < sitdown_init)
+		{
+			t.position = Vector3.Lerp(end, Seat[seat].Position, sitdown_time/sitdown_init);
+			t.rotation = Quaternion.Slerp(t.rotation,
+										Seat[seat].Rotation * Quaternion.Euler(65, 0,0),
+										sitdown_time/sitdown_init);
+
+			yield return null;
+		}
+		g.isSeated = true;
 		yield return null;
 	}
 
