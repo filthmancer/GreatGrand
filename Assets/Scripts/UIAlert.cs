@@ -12,16 +12,18 @@ public class UIAlert : UIObj {
 
 	public ActionStep Stepper;
 	private float _lifetimeoverride;
+	private bool DestroyOnDeath = true;
 	public override void Setup(params float [] args)
 	{
 		Stepper.Setup(this.transform);
 		_lifetimeoverride = args[0];
+		if(_lifetimeoverride < 0.0F) DestroyOnDeath = false;
 		played_startaction = false;
 	}
 
-	public ActionSingle AddStep(Vector3 targ, float t, Action<string []> act= null, params string [] s)
+	public ActionSingle AddStep(float t, params Vector3 [] a)
 	{
-		return Stepper.AddStep(targ, t, act, s);
+		return Stepper.AddStep(t, a);
 	}
 
 	public Action<string []> StartAction;
@@ -37,7 +39,7 @@ public class UIAlert : UIObj {
 			played_startaction = true;
 			if(Stepper.Empty) 
 			{
-				Stepper.AddStep(transform.position, _lifetimeoverride);
+				if(DestroyOnDeath) Stepper.AddStep(_lifetimeoverride);
 			}
 			Stepper.AdvanceStep();
 			if(StartAction != null) StartAction(StartArgs);
@@ -53,11 +55,21 @@ public class UIAlert : UIObj {
 		{
 			
 		}	
-		else
+		else if(DestroyOnDeath)
 		{
 			if(EndAction != null) EndAction(EndArgs);
 			PoolDestroy();
 		}
+	}
+
+	public void RestartSteps()
+	{
+		Stepper.RestartSteps();
+	}
+
+	public void ClearSteps()
+	{
+		Stepper.ClearSteps();
 	}
 
 

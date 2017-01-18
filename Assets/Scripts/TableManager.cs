@@ -288,7 +288,7 @@ public class _Seat
 
 	public void Reset()
 	{
-		Object.transform.localScale = Vector3.one * 0.8F;
+		if(Object != null) Object.transform.localScale = Vector3.one * 0.8F;
 	}
 }
 

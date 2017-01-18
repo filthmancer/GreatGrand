@@ -44,21 +44,27 @@ public class Generator : MonoBehaviour {
 		final.Generate(num);
 
 		final.Info.Color_Hair = RandomHair();
-		final.Info.Color_Offset = Random.ColorHSV();
+		final.Info.Color_Offset = Color.Lerp(Random.ColorHSV(), Color.white, 0.5F);
 		final.Info.Color_Skin = RandomSkin();
 
-		final.Info.Base = Base.Randomise(Vector3.zero);
+		final.Info.Base = Base.Randomise(Vector3.zero, 0.0F, new Vector3(0.0F, 0.0F));
 
-		final.Info.EyeLeft = Eye.Randomise(new Vector3(0,0.3F));
+		final.Info.EyeLeft = Eye.Randomise(new Vector3(0,0.2F), 0.0F, new Vector3(0.3F, 0.3F));
 		final.Info.EyeRight = final.Info.EyeLeft.Clone();
-		final.Info.EarLeft = Ear.Randomise(new Vector3(0,0.4F));
+
+		Vector3 eyescale = (final.Info.EyeLeft._Scale - Vector3.one);
+		Vector3 r = eyescale * Random.Range(0.7F, 1.3F);
+		
+		final.Info.PupilScale = Vector3.one + Utility.RandomVectorInclusive(r.x + 0.1F, r.y + 0.1F, 0.0F);
+
+		final.Info.EarLeft = Ear.Randomise(new Vector3(0,0.2F), 4.0F,  new Vector3(0.3F, 0.3F));
 		final.Info.EarRight = final.Info.EarLeft.Clone();
-		final.Info.BrowLeft = Brow.Randomise(new Vector3(0,0.6F));
+		final.Info.BrowLeft = Brow.Randomise(new Vector3(0,0.0F), 6.0F,  new Vector3(0.3F, 0.05F));
 		final.Info.BrowRight = final.Info.BrowLeft.Clone();
 
-		final.Info.Hair = Hair.Randomise(Vector3.zero);
-		final.Info.Jaw = Jaw.Randomise(Vector3.zero);
-		final.Info.Nose = Nose.Randomise(new Vector3(0,0.1F));
+		final.Info.Hair = Hair.Randomise(Vector3.zero, 0.0F,  new Vector3(0.0F, 0.2F));
+		final.Info.Jaw = Jaw.Randomise(Vector3.zero, 0.0F, new Vector3(0.2F, 0.15F));
+		final.Info.Nose = Nose.Randomise(new Vector3(0,0.1F), 0.0F,  new Vector3(0.2F, 0.2F));
 
 		return final;
 	}
@@ -132,13 +138,13 @@ public class Generator : MonoBehaviour {
 
 	public FaceObj RandomiseFace(GreatGrand f)
 	{
-		Eye.Randomise(Vector3.zero);
+		/*Eye.Randomise(Vector3.zero);
 		Brow.Randomise(Vector3.zero);
 		Ear.Randomise(Vector3.zero);
 		Jaw.Randomise(Vector3.zero, 0.0F);
 		Hair.Randomise(Vector3.zero, 0.0F, 0.0F);
 		Nose.Randomise(Vector3.zero);
-		Base.Randomise(Vector3.zero, 0.0F, 0.15F);
+		Base.Randomise(Vector3.zero, 0.0F, 0.15F);*/
 
 		Skin = RandomSkin();
 		HairCol = RandomHair();

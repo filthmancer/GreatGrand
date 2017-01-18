@@ -9,7 +9,7 @@ namespace Utilities
 	[System.Serializable]
 	public class ActionStep {
 
-		private List<ActionSingle> Steps;
+		private List<ActionSingle> Steps = new List<ActionSingle>();
 		private int current = 0;
 
 		private Transform trans;
@@ -45,14 +45,30 @@ namespace Utilities
 			SeqCurr = DOTween.Sequence();
 			Vector3 posfinal = Current.Position + (Current.Relative ? trans.position: Vector3.zero);
 			Vector3 scalefinal = Current.Scale + (Current.Relative ? trans.localScale: Vector3.zero);
+			scalefinal = new Vector3(Mathf.Clamp(scalefinal.x, 0.0F, Mathf.Infinity),
+									Mathf.Clamp(scalefinal.y, 0.0F, Mathf.Infinity),
+									Mathf.Clamp(scalefinal.z, 0.0F, Mathf.Infinity));
+
 			SeqCurr.Append(trans.DOMove(posfinal, Current.Time));
-			//SeqCurr.Join(trans.DORotate(Current.Rotation, Current.Time));
 			SeqCurr.Join(trans.DOScale(scalefinal, Current.Time)).OnComplete(() => 
 				{
 					AdvanceStep(1);
 					Current.Complete();
 				});
+
+
+			//SeqCurr.Join(trans.DORotate(Current.Rotation, Current.Time));
 			
+		}
+
+		public void RestartSteps(){
+			current = 0;
+			AdvanceStep();
+		}
+		public void ClearSteps()
+		{
+			current = 0;
+			Steps.Clear();
 		}
 
 		public void Setup(Transform t)
@@ -62,9 +78,10 @@ namespace Utilities
 			current  = 0;
 		}
 
-		public ActionSingle AddStep(Vector3 targ, float t, Action<string []> act= null, params string [] s)
+
+		public ActionSingle AddStep(float t, params Vector3 [] v)
 		{
-			ActionSingle a = new ActionSingle(targ,t, act, s);
+			ActionSingle a = new ActionSingle(t, v);
 			Steps.Add(a);
 			return a;
 		}
@@ -77,6 +94,7 @@ namespace Utilities
 	{
 		public Vector3 Position;
 		public Vector3 Scale;
+		public Vector3 Rotation;
 
 		public bool Relative = true;
 		public float Time = 1.0F;
@@ -90,16 +108,20 @@ namespace Utilities
 			Act(Args);
 		}
 
-		public ActionSingle(Vector3 t, float _time, Action<string[]> a, params string [] s)
+		public ActionSingle(float _time, params Vector3 [] d)
 		{
-			Position = t;
-			Scale = Vector3.zero;
+			Position = d.Length >=1 ? d[0] : Vector3.zero;
+			Scale =  d.Length >=2 ? d[1] : Vector3.zero;
+			Rotation = d.Length >=3 ? d[3] : Vector3.zero;
 			Time = _time;
 
 			Relative = true;
+		}
+
+		public void AddAction(Action<string []> act= null, params string [] s)
+		{
+			Act = act;
 			Args = s;
-			Act = a;
-			Time = _time;
 		}
 	}
 }
