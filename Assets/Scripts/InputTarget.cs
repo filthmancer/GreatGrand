@@ -3,7 +3,7 @@ using System.Collections;
 
 public class InputTarget : MonoBehaviour {
 
-	public virtual void Release()
+	public virtual void Release(Vector3 pos)
 	{
 
 	}

@@ -5,6 +5,7 @@ using System.Collections;
 using TMPro;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler{
 	public string _Name;
@@ -39,6 +40,16 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	protected ObjectPoolerReference poolref;
 	public ObjectPoolerReference GetPoolRef(){return poolref;}
 
+	public void PoolDestroy()
+	{
+		if(ParentObj != null) ParentObj.RemoveChild(this);
+		if(poolref)
+		{
+			poolref.Unspawn();
+		}
+		else Destroy(this.gameObject);
+	}
+
 	//public bool isActive{get{return this.gameObject.activeSelf;}}
 
 	public virtual void Start()
@@ -54,11 +65,14 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			Child[i].Index = i;
 			Child[i].ParentObj = this;
 		}
-
-		//if(Img != null && Img.Length > 0) init = Img[0].color;
-
+		activescale = transform.localScale;
 		if(SetInactiveAfterLoading) SetActive(false);
 		else isActive = this.gameObject.activeSelf;
+	}
+
+	public virtual void Setup(params float [] args)
+	{
+
 	}
 
 
@@ -67,6 +81,26 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		bool actual = active ?? !this.gameObject.activeSelf;
 		isActive = actual;
 		this.gameObject.SetActive(actual);
+	}
+
+	private Vector3 activescale = Vector3.one;
+	public virtual void TweenActive(bool ? active = null)
+	{
+		bool actual = active ?? !this.gameObject.activeSelf;
+		isActive = actual;
+
+		if(actual)
+		{
+			this.gameObject.SetActive(true);
+			activescale = this.transform.localScale;
+			this.transform.localScale = Vector3.zero;
+			Sequence s = Tweens.Bounce(this.transform, activescale);
+		}
+		else
+		{
+			activescale = this.transform.localScale;
+			this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
+		}
 	}
 
 	public bool isActive;
@@ -146,6 +180,53 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			x++;
 		}
 		Child = newchild;
+	}
+
+	public void RemoveChild(UIObj c)
+	{
+		bool remove = false;
+		int index = 0;
+		for(int i = 0; i < Child.Length; i++)
+		{
+			if(Child[i] == c)
+			{
+				remove = true;
+				index = i;
+				break;
+			}
+		}
+		if(!remove) return;
+		UIObj [] newchild = new UIObj[Child.Length-1];
+		int a =0;
+		for(int i = 0; i < index; i++)
+		{
+			newchild[a] = Child[i];
+			a++;
+		}
+		for(int x = index+1; x < Child.Length; x++)
+		{
+			newchild[a] = Child[x];
+			a++;
+		}
+		Child = newchild;
+	}
+
+	private RectTransform _rect;
+	public RectTransform RectT{
+		get{
+			if(_rect == null) _rect = this.GetComponent<RectTransform>();
+			return _rect;
+		}
+	}
+	public void ResetRect()
+	{
+
+		//RectT.anchorMax = Vector2.zero;
+		//RectT.anchorMax = Vector2.one;
+		RectT.sizeDelta = Vector3.zero;
+		transform.localRotation = Quaternion.Euler(0,0,0);
+		transform.localPosition = Vector3.zero;
+		transform.localScale = Vector3.one;
 	}
 
 	public void DestroyChildren()
