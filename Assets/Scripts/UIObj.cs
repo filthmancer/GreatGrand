@@ -40,6 +40,8 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	protected ObjectPoolerReference poolref;
 	public ObjectPoolerReference GetPoolRef(){return poolref;}
 
+	public bool RaycastTarget = true;
+
 	public void PoolDestroy()
 	{
 		if(ParentObj != null) ParentObj.RemoveChild(this);
@@ -224,8 +226,12 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		//RectT.anchorMax = Vector2.zero;
 		//RectT.anchorMax = Vector2.one;
 		RectT.sizeDelta = Vector3.zero;
+		RectT.anchoredPosition = Vector3.zero;
+		//transform.localPosition = Vector3.zero;
+
+
 		transform.localRotation = Quaternion.Euler(0,0,0);
-		transform.localPosition = Vector3.zero;
+		
 		transform.localScale = Vector3.one;
 	}
 
@@ -293,6 +299,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		time_over = 0.0F;
 		if(Img.Length > 0) Img[0].color = init;
 	}
+
 
 	public bool PlayClickDown = true, PlayClickUp = true;
 	public void OnPointerDown(PointerEventData eventData)

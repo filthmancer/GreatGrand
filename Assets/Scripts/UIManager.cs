@@ -2,9 +2,10 @@
 using System.Collections;
 using TMPro;
 using DG.Tweening;
+using Vectrosity;
 
 public class UIManager : MonoBehaviour {
-	public Transform Canvas;
+	public Canvas Canvas;
 	public Canvas LineCanvas;
 
 	public Transform ModuleTarget, ModuleLeft, ModuleRight;
@@ -28,13 +29,14 @@ public class UIManager : MonoBehaviour {
 	public Sprite Angry, Bored, Happy;
 
 	public ObjectContainer Sprites;
+	public ObjectContainer Prefabs;
 	public UIAlert UIResObj;
 
 	public void Init()
 	{
 		Module_Menu.Index = 0;
 		Module_Dinner.Index = 1;
-		
+		//VectorLine.SetCanvas(Canvas);
 	//MENU
 		Menu.SetActive(true);
 		for(int i = 0; i < Menu[1].Child.Length; i++)
@@ -45,6 +47,7 @@ public class UIManager : MonoBehaviour {
 			face.transform.localRotation = Quaternion.identity;
 			face.transform.position = Menu[1].Child[i][0].transform.position;
 			face.transform.localScale = Vector3.one * 0.65F;
+			f.gameObject.SetActive(false);
 		}
 
 		Menu[0].ClearActions();
@@ -97,16 +100,53 @@ public class UIManager : MonoBehaviour {
 			m.transform.position = ModuleRight.position;
 		}
 
-		
-		
-
 		Sequence s = Tweens.SwoopTo(m.transform, ModuleTarget.position);
 		ModuleCurrent = m;
 	}
 
+	public IEnumerator Module(UIObj m)
+	{
+		float velocity = 0.0F;
+		m.SetActive(true);
+		if(ModuleCurrent != null)
+		{
+			UIObj temp = ModuleCurrent;
+			if(ModuleCurrent == m) yield break;
+			else if(ModuleCurrent.Index < m.Index)
+			{
+				Tweens.SwoopTo(temp.transform, ModuleLeft.position).OnComplete(() => temp.SetActive(false));
+				m.transform.position = ModuleRight.position;
+				velocity = 1.0F;
+			}
+			else 
+			{
+				Tweens.SwoopTo(temp.transform, ModuleRight.position).OnComplete(() => temp.SetActive(false));
+				m.transform.position = ModuleLeft.position;
+				velocity = -1.0F;
+			}
+		}
+		else
+		{
+			m.transform.position = ModuleRight.position;
+			velocity = 1.0F;
+		}
+
+		Sequence s = Tweens.SwoopTo(m.transform, ModuleTarget.position);
+		yield return new WaitForSeconds(Time.deltaTime * 9);
+
+		for(int i = 0; i < Menu[1].Child.Length; i++)
+		{
+			Tweens.PictureSway(Menu[1].Child[i].transform, new Vector3(0,0,20 * velocity));
+		}
+		yield return s.WaitForCompletion();
+		ModuleCurrent = m;
+		yield return null;
+	}
+
+
+
 	public void ShowEndGame()
 	{
-		//WinMenu.TweenActive(active);
 		WinMenu[0].TweenActive(true);
 		WinMenu[0].ClearActions();
 		WinMenu[0].AddAction(UIAction.MouseUp, () => 
@@ -183,6 +223,22 @@ public class UIManager : MonoBehaviour {
 		return final;
 	}
 
+	public UIObj Quote(string s, string name)
+	{
+		GameObject o = Prefabs.GetObject("quote") as GameObject;
+		print(o);
+
+		UIObj final = Instantiate(Prefabs.GetObject("quote") as GameObject).GetComponent<UIObj>();
+
+		WorldObjects.AddChild(final);
+		final.ResetRect();
+
+		final["textbox"].Txt[0].text = s;
+		final.Txt[0].text = name;
+		return final;
+
+	}
+
 	public IEnumerator ResourceAlert(Resource r, int num)
 	{
 		UIAlert alert = Instantiate(UIResObj);
@@ -250,7 +306,6 @@ public class ObjectContainer
 		s = s.ToLower();
 		for(int i = 0; i < Objects.Length; i++)
 		{
-			//Debug.Log(Objects[i].Name);
 			if(Objects[i].Name == s) return Objects[i].Obj;
 		}
 		return null;
@@ -292,15 +347,15 @@ public class Tweens
 		return s;
 	}
 
-	public static Sequence PictureSway(Transform t, float intensity = 1.0F)
+	public static Sequence PictureSway(Transform t, Vector3 rot)
 	{
-		Vector3 rotamt = new Vector3(0.0F, 0.0F, 20.0F * intensity);
-		Sequence s = DOTween.Sequence();
-		s.Append(t.DOLocalRotate(rotamt, 0.2F));
-		s.Append(t.DOLocalRotate(-rotamt*0.6F, 0.2F));
-		s.Append(t.DOLocalRotate(rotamt*0.3F, 0.2F));
-		s.Append(t.DOLocalRotate(Vector3.zero, 0.2F));
+		Vector3 init = t.localRotation.eulerAngles;
 
+		Sequence s = DOTween.Sequence();
+		s.Append(t.DOLocalRotate(init + rot, 0.2F));
+		s.Append(t.DOLocalRotate(init + -rot*0.6F, 0.2F));
+		s.Append(t.DOLocalRotate(init + rot*0.3F, 0.2F));
+		s.Append(t.DOLocalRotate(init, 0.2F));
 
 		return s;
 	}

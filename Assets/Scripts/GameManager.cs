@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyUp(KeyCode.W)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
+		if(Input.GetKeyUp(KeyCode.W)) UI.Quote("Hi!", "Carer");
 	}
 
 
@@ -116,8 +116,10 @@ public class GameManager : MonoBehaviour {
 		switch(n)
 		{
 			case "dinner":
+			yield return new WaitForSeconds(0.5F);
+			yield return StartCoroutine(UI.Module(UI.Module_Dinner));
 			//yield return StartCoroutine(
-				UI.SetModule(UI.Module_Dinner);
+			//	UI.SetModule(UI.Module_Dinner);
 			//	);
 			yield return new WaitForSeconds(0.6F);
 			 CreateDinnerGame();
@@ -125,12 +127,9 @@ public class GameManager : MonoBehaviour {
 			break;
 			case "menu":
 			yield return new WaitForSeconds(0.5F);
-			UI.SetModule(UI.Module_Menu);
-			yield return new WaitForSeconds(0.25F);
-				for(int i = 0; i < UI.Menu[1].Child.Length; i++)
-				{
-					Tweens.PictureSway(UI.Menu[1].Child[i].transform, Random.Range(0.8F, 1.3F));
-				}
+			yield return StartCoroutine(UI.Module(UI.Module_Menu));
+			//yield return new WaitForSeconds(0.25F);
+				
 			
 			break;
 		}
@@ -139,7 +138,7 @@ public class GameManager : MonoBehaviour {
 
 	public void ExitMinigame()
 	{
-		UI.SetModule(UI.Module_Menu);
+		StartCoroutine(UI.Module(UI.Module_Menu));
 	}
 
 
@@ -244,13 +243,21 @@ public class GameManager : MonoBehaviour {
 	{
 		UI.WinMenu.TweenActive(true);
 		UI.WinMenu[0].SetActive(false);
+		UI.WinMenu[1].SetActive(false);
 
 		int rep = 0;
 		int grumptotal = 0;
 		UIObj total = UI.WinMenu[1];
+		UI.WinMenu.Txt[0].text = "Let's Eat!";
+		UI.WinMenu.Txt[1].text = "";
 		total.Txt[0].text = grumptotal + "";
 
-		yield return new WaitForSeconds(0.25F);
+		yield return new WaitForSeconds(0.6F);
+
+		UI.WinMenu.Txt[1].text = "HAPPY GRANDS";
+		Tweens.Bounce(UI.WinMenu.Txt[1].transform);
+		UI.WinMenu[1].TweenActive(true);
+		yield return new WaitForSeconds(0.2F);
 
 		for(int i = 0; i < Table.Seat.Length; i++)
 		{
@@ -274,7 +281,9 @@ public class GameManager : MonoBehaviour {
 		}
 
 		rep = grumptotal * 10;
-		total.Txt[0].text = rep + " REP";
+		UI.WinMenu.Txt[1].text = "VILLAGE REP";
+		Tweens.Bounce(UI.WinMenu.Txt[1].transform);
+		total.Txt[0].text = rep + "";
 		float repscale = 1.05F + ((float)rep / 100);
 		repscale = Mathf.Clamp(repscale, 1.05F, 1.4F);
 
@@ -474,7 +483,6 @@ public class _Grump
 		Arrow.points3[1] = point;
 		Arrow.points3[2] = (point -(vel*0.2F) - (Vector3.Cross(vel, Vector3.up).normalized * 0.2F));
 		Arrow.SetColor(c);
-
 		Arrow.Draw();
 
 		SetLineTime(1.2F);

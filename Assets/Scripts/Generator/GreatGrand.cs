@@ -156,7 +156,7 @@ public class GreatGrand : GrumpObj {
 
 		Face.transform.position = Seat.Position;
 		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-		Face.transform.localScale = new Vector3(0.45F, 0.45F, 1.0F);
+		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
 		CheckEmotion(false);
 		isSeated = true;
 		//GameManager.instance.CheckGrumps();
@@ -190,7 +190,7 @@ public class GreatGrand : GrumpObj {
 
 		Face.transform.position = Seat.Position;
 		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-		Face.transform.localScale = new Vector3(0.45F, 0.45F, 1.0F);
+		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
 		
 		if(alert) yield return StartCoroutine(EmotionRoutine());
 		isSeated = true;
@@ -263,6 +263,7 @@ public class GreatGrand : GrumpObj {
 
 		Face.Start();
 		Face.Reset(Info.Base);
+
 		(Face[0] as FaceObj).SetInfo(Info.EyeLeft);
 		(Face[1] as FaceObj).SetInfo((Info.EyeRight));
 		(Face[2] as FaceObj).SetInfo((Info.EarLeft));

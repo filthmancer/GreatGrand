@@ -263,7 +263,8 @@ public class _Seat
 		get{return Object.transform.rotation;}
 	}
 
-	public Transform transform {get{return Object.transform;}}
+	public Transform transform {get{
+		return Object.transform;}}
 
 	private bool highlighted = false;
 
