@@ -94,13 +94,16 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		if(actual)
 		{
 			this.gameObject.SetActive(true);
-			activescale = this.transform.localScale;
+			if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
+			else activescale = Vector3.one;
+
 			this.transform.localScale = Vector3.zero;
 			Sequence s = Tweens.Bounce(this.transform, activescale);
 		}
 		else
 		{
-			activescale = this.transform.localScale;
+			if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
+
 			this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
 		}
 	}
@@ -174,7 +177,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			newchild[i] = c[x];
 			newchild[i].Index = i;
 			newchild[i].ParentObj = this;
-			newchild[i].transform.SetParent(this.transform);
+			newchild[i].transform.SetParent(this.transform, false);
 			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.zero;
 			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.one;
 			//newchild[i].GetComponent<RectTransform>().sizeDelta = Vector3.zero;
@@ -227,14 +230,18 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		//RectT.anchorMax = Vector2.one;
 		RectT.sizeDelta = Vector3.zero;
 		RectT.anchoredPosition = Vector3.zero;
-		//transform.localPosition = Vector3.zero;
 
+		//transform.localPosition = Vector3.zero;
 
 		transform.localRotation = Quaternion.Euler(0,0,0);
 		
 		transform.localScale = Vector3.one;
 	}
 
+	public void Destroy()
+	{
+		Destroy(this.gameObject);
+	}
 	public void DestroyChildren()
 	{
 		for(int i = 0; i < Child.Length; i++)
@@ -274,6 +281,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		if(GameManager.IgnoreInput) return;
 		foreach(Action child in Actions_MouseOver)
 		{
 			child();
@@ -287,6 +295,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
+		if(GameManager.IgnoreInput) return;
 		foreach(Action child in Actions_MouseOut)
 		{
 			child();
@@ -304,6 +313,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	public bool PlayClickDown = true, PlayClickUp = true;
 	public void OnPointerDown(PointerEventData eventData)
 	{
+		if(GameManager.IgnoreInput) return;
 		//if(Application.isMobilePlatform) return;
 		//if(UIManager.instance.LogUIObjs) print(Actions_MouseDown.Count + ":" +  this);
 
@@ -331,6 +341,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		if(GameManager.IgnoreInput) return;
 		foreach(UIAction_Method child in TypeActions_MouseUp)
 		{
 			child.Act();

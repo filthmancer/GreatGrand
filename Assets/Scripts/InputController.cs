@@ -16,6 +16,7 @@ public class InputController : MonoBehaviour {
 
 	void Update()
 	{
+		if(GameManager.Paused || GameManager.IgnoreInput) return;
 		if(Input.GetMouseButton(0))
 		{
 			InputRay = Camera.main.ScreenPointToRay(Input.mousePosition);

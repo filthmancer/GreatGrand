@@ -13,7 +13,7 @@ public class GreatGrand : GrumpObj {
 		get{
 			List<_Grump> fin = new List<_Grump>();
 			fin.AddRange(Grumps);
-			fin.AddRange(GameManager.instance.GetRelatedGrumps(this));
+			fin.AddRange(GameManager.Module.GetRelatedGrumps(this));
 			return fin.ToArray();
 		}
 	}
@@ -21,6 +21,13 @@ public class GreatGrand : GrumpObj {
 	public GreatGrand Relation;
 
 	public SpriteRenderer Emotion;
+
+	public override Vector3 Position
+	{
+		get{
+			return Face.transform.position;
+		}
+	}
 
 	public bool IsHappy
 	{
@@ -69,7 +76,13 @@ public class GreatGrand : GrumpObj {
 				drag_targ.Highlight(true);	
 			}
 
-			Vector3 facepos = drag_targ.Target.Face.transform.position;
+			Vector3 dpos = pos;
+			dpos.y = Face.transform.position.y;
+			dpos += new Vector3(0.0F, 0.0F, -0.5F);
+
+			Face.transform.position = Vector3.Lerp(Face.transform.position, dpos, Time.deltaTime * 10);
+			Face.transform.LookAt(GameManager.Table.TableObj.transform, Vector3.up);
+			/*Vector3 facepos = drag_targ.Target.Face.transform.position;
 			Vector3 dragpos = pos;
 			dragpos.y = facepos.y;
 			
@@ -78,15 +91,15 @@ public class GreatGrand : GrumpObj {
 			else 
 			{
 				GameManager.instance.TargetLine(Face.transform.position, drag_targ.Target.Face.transform.position);
-			}
+			}*/
 
-			ShowGrumpLines(); 
+			GrumpLines(0.8F, true); 
 		}
 		else 
 		{
 			Face.transform.position = Seat.Position;
 			Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-			CheckEmotion();
+			GrumpLines(0.8F, true); 
 		}
 	}
 
@@ -97,8 +110,8 @@ public class GreatGrand : GrumpObj {
 		if(isDragging)
 		{
 			drag_targ = GameManager.Table.NearestSeat(pos);
-			if(drag_targ.CanSeat(this) && drag_targ != Seat) StartCoroutine(SitAt(drag_targ, true));
-			else StartCoroutine(SitAt(Seat));			
+			if(drag_targ.CanSeat(this) && drag_targ != Seat) DragSit(drag_targ);//StartCoroutine(SitAt(drag_targ, true));
+			else DragSit(drag_targ);//StartCoroutine(SitAt(Seat));			
 		}
 		base.Release(pos);
 	}
@@ -114,7 +127,6 @@ public class GreatGrand : GrumpObj {
 	float lines_time = 0.0F;
 	void Update()
 	{
-
 		for(int i = 0; i < Grumps.Length; i++)
 		{
 			Grumps[i].Update();
@@ -157,9 +169,32 @@ public class GreatGrand : GrumpObj {
 		Face.transform.position = Seat.Position;
 		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
 		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
-		CheckEmotion(false);
+		//CheckEmotion(false);
 		isSeated = true;
 		//GameManager.instance.CheckGrumps();
+	}
+
+	public void DragSit(_Seat s)
+	{
+		if(s == null) return;
+
+		if(s.Target && s.Target != this)
+		{
+			Seat.Target = null;
+			StartCoroutine(s.Target.SitAt(Seat, false));
+		}
+
+		Seat = s;
+		Seat.SetTarget(this);
+
+		Vector3 sitpos = Seat.transform.position;
+		sitpos.y += 0.5F;
+		transform.position = sitpos;
+
+		Face.transform.position = Seat.Position;
+		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
+		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
+		isSeated = true;
 	}
 
 	public IEnumerator SitAt(_Seat s, bool alert = false)
@@ -174,11 +209,11 @@ public class GreatGrand : GrumpObj {
 			StartCoroutine(s.Target.SitAt(Seat, alert));
 		}
 
+		yield return StartCoroutine(GameManager.Table.MoveSeat(this, Seat.Index, s.Index, 0.6F));
 		if(alert)
 		{
-			Emotion.enabled = false;
-			yield return StartCoroutine(GameManager.Table.MoveSeat(this, Seat.Index, s.Index, 0.6F));
-			Emotion.enabled = true;
+			//Emotion.enabled = false;
+			//Emotion.enabled = true;
 		}
 
 		Seat = s;
@@ -197,35 +232,20 @@ public class GreatGrand : GrumpObj {
 		//GameManager.instance.CheckGrumps();
 	}
 
-	public void CheckEmotion(bool seatingalert = false)
+	public int GetGrumps(bool allgrumps = true)
 	{
-		if(IsHappy) 
-		{
-			Emotion.sprite = GameManager.UI.Happy;
-			Emotion.color = Color.green;
-		}
-		else 
-		{
-			Emotion.sprite = GameManager.UI.Angry;
-			Emotion.color = Color.red;
-		}
-
-		if(Face != null) Emotion.transform.position = Face.transform.position + Face.transform.up * 1.3F;
-
-		if(seatingalert)
-		{
-			StartCoroutine(EmotionRoutine());
-		}
-		
+		GrumpLines(0.4F, allgrumps);
+		return GrumpMeter;
 	}
 
 	public IEnumerator EmotionRoutine(bool allgrumps = true)
 	{
 		yield return StartCoroutine(GrumpLineRoutine(0.8F, allgrumps));
 
-		Object o = GameManager.UI.Sprites.GetObject("Correct");
-		Sprite s = IsHappy ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
-		UIAlert a = GameManager.UI.ImgAlert(s, Face.transform.position);
+		Sprite s = IsHappy ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
+							 GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
+
+		UIAlert a = GameManager.UI.ImgAlert(s, Face.transform.position, -1);
 		a.transform.localScale = Vector3.zero;
 		a.AddStep(0.4F, Vector3.up*0.5F, Vector3.one*0.6F);
 		a.AddStep(0.7F);
@@ -259,7 +279,7 @@ public class GreatGrand : GrumpObj {
 	public void SetFace(FaceObj f)
 	{
 		Face = f;
-		GameManager.GetFaceParent().AddChild(Face);
+		//GameManager.GetFaceParent().AddChild(Face);
 
 		Face.Start();
 		Face.Reset(Info.Base);
@@ -304,15 +324,17 @@ public class GreatGrand : GrumpObj {
 	}
 
 	bool lines_drawing = false;
-	public void ShowGrumpLines(float time = 1.8F)
+	public void ShowGrumpLines(float time = 0.8F)
 	{
-		if(!lines_drawing) StartCoroutine(GrumpLineRoutine(time, true));
-		else
+		GrumpLines(time, true);
+	}
+
+	public void GrumpLines(float time, bool allgrumps)
+	{
+		_Grump [] toshow = (allgrumps) ? AllGrumps : Grumps;
+		for(int i = 0; i < toshow.Length; i++)
 		{
-			for(int i = 0; i < AllGrumps.Length; i++)
-			{
-				AllGrumps[i].SetLineTime(1.2F);
-			}	
+			toshow[i].Trace(0.4F, time);
 		}
 	}
 
@@ -326,7 +348,7 @@ public class GreatGrand : GrumpObj {
 			lines_drawing = true;
 			for(int i = 0; i < toshow.Length; i++)
 			{
-				toshow[i].TraceLine(curr/spawntime);
+				toshow[i].Trace(time);
 			}
 			yield return null;
 		}

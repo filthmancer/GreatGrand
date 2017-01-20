@@ -18,15 +18,14 @@ public class UIManager : MonoBehaviour {
 
 	public UIObj Module_Menu, Module_Dinner;
 
-	public UIObj Menu;
-	public UIObj DinnerUI;
 	public UIObj WinMenu;
-	public UIObj GrandUI, ResUI;
+	public UIObj ResUI;
 	public UIObj FaceParent;
-	public UIObj WorldObjects;
+	public UIObj WorldObjects, QuoteObjects;
+
+	private Material QuoteMat;
 	
 	public FaceObj ActiveFace;
-	public Sprite Angry, Bored, Happy;
 
 	public ObjectContainer Sprites;
 	public ObjectContainer Prefabs;
@@ -34,113 +33,77 @@ public class UIManager : MonoBehaviour {
 
 	public void Init()
 	{
-		Module_Menu.Index = 0;
-		Module_Dinner.Index = 1;
-		//VectorLine.SetCanvas(Canvas);
-	//MENU
-		Menu.SetActive(true);
-		for(int i = 0; i < Menu[1].Child.Length; i++)
-		{
-			GreatGrand f = GameManager.instance.GGGen.Generate(i);
-			FaceObj face = GameManager.instance.GGGen.GenerateFace(f);
-			Menu[1].Child[i][0].AddChild(face);
-			face.transform.localRotation = Quaternion.identity;
-			face.transform.position = Menu[1].Child[i][0].transform.position;
-			face.transform.localScale = Vector3.one * 0.65F;
-			f.gameObject.SetActive(false);
-		}
+		//Module_Menu.Index = 0;
+		//Module_Dinner.Index = 1;
 
-		Menu[0].ClearActions();
-		Menu[0].AddAction(UIAction.MouseUp, () => 
-		{
-			StartCoroutine(GameManager.instance.LoadModule("Dinner"));
-		});
+		QuoteMat = QuoteObjects.Img[0].material;
+		//QuoteMat.SetFloat("_Size", 0);
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+
+	//MENU
+		
 
 	//DINNER
-		DinnerUI[1].AddAction(UIAction.MouseDown, () =>
-		{
-			for(int i = 0; i < GameManager.instance.GG.Length; i++)
-			{
-				GameManager.instance.GG[i].ShowGrumpLines(1.5F);
-			}
-		});
-		DinnerUI[2].AddAction(UIAction.MouseDown, ()=>
-		{
-			GameManager.instance.CompleteDinner();
-		});
-		DinnerUI[3].AddAction(UIAction.MouseDown, ()=>
-		{
-			GameManager.instance.ExitMinigame();
-		});
-		DinnerUI.SetActive(false);
+		
 		
 		CheckResourcesUI();
 	}
 
-	public void SetModule(UIObj m)
+	public void SetModule(Module m)
 	{
-		m.SetActive(true);
-		if(ModuleCurrent != null)
+		UIObj newobj = m.MUI;
+		if(GameManager.Module != null)
 		{
-			UIObj temp = ModuleCurrent;
-			if(ModuleCurrent == m) return;
-			else if(ModuleCurrent.Index < m.Index)
+			UIObj oldobj = GameManager.Module.MUI;
+
+			if(GameManager.Module == m) return;
+			else if(GameManager.Module.Index < m.Index)
 			{
-				Tweens.SwoopTo(temp.transform, ModuleLeft.position).OnComplete(() => temp.SetActive(false));
-				m.transform.position = ModuleRight.position;
+				Tweens.SwoopTo(oldobj.transform, ModuleLeft.position).OnComplete(() => oldobj.SetActive(false));
+				newobj.transform.position = ModuleRight.position;
 			}
 			else 
 			{
-				Tweens.SwoopTo(temp.transform, ModuleRight.position).OnComplete(() => temp.SetActive(false));
-				m.transform.position = ModuleLeft.position;
+				Tweens.SwoopTo(oldobj.transform, ModuleRight.position).OnComplete(() => oldobj.SetActive(false));
+				newobj.transform.position = ModuleLeft.position;
 			}
 		}
 		else
 		{
-			m.transform.position = ModuleRight.position;
+			newobj.transform.position = ModuleRight.position;
 		}
 
-		Sequence s = Tweens.SwoopTo(m.transform, ModuleTarget.position);
-		ModuleCurrent = m;
+		Sequence s = Tweens.SwoopTo(m.MUI.transform, ModuleTarget.position);
 	}
 
-	public IEnumerator Module(UIObj m)
+	public float ModuleVelocity = 0.0F;
+	public IEnumerator LoadModuleUI(Module m, IntVector v)
 	{
-		float velocity = 0.0F;
-		m.SetActive(true);
-		if(ModuleCurrent != null)
-		{
-			UIObj temp = ModuleCurrent;
-			if(ModuleCurrent == m) yield break;
-			else if(ModuleCurrent.Index < m.Index)
-			{
-				Tweens.SwoopTo(temp.transform, ModuleLeft.position).OnComplete(() => temp.SetActive(false));
-				m.transform.position = ModuleRight.position;
-				velocity = 1.0F;
-			}
-			else 
-			{
-				Tweens.SwoopTo(temp.transform, ModuleRight.position).OnComplete(() => temp.SetActive(false));
-				m.transform.position = ModuleLeft.position;
-				velocity = -1.0F;
-			}
-		}
-		else
-		{
-			m.transform.position = ModuleRight.position;
-			velocity = 1.0F;
-		}
+		UIObj mui = m.MUI;
+		Transform start = ModuleRight;
+		Transform end = ModuleTarget;
 
-		Sequence s = Tweens.SwoopTo(m.transform, ModuleTarget.position);
-		yield return new WaitForSeconds(Time.deltaTime * 9);
+		if(v.x == 1) start = ModuleRight;
+		else if(v.x == -1) start = ModuleLeft;
+		else start = ModuleRight;
 
-		for(int i = 0; i < Menu[1].Child.Length; i++)
-		{
-			Tweens.PictureSway(Menu[1].Child[i].transform, new Vector3(0,0,20 * velocity));
-		}
+		mui.transform.position = start.position;
+
+		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
 		yield return s.WaitForCompletion();
-		ModuleCurrent = m;
-		yield return null;
+	}
+
+	public IEnumerator UnloadModuleUI(Module m, IntVector v)
+	{
+		UIObj mui = m.MUI;
+		Transform end = ModuleRight;
+
+		if(v.x == 1) end = ModuleRight;
+		else if(v.x == -1) end = ModuleLeft;
+		else end = ModuleRight;
+
+		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
+		yield return s.WaitForCompletion();
 	}
 
 
@@ -151,7 +114,8 @@ public class UIManager : MonoBehaviour {
 		WinMenu[0].ClearActions();
 		WinMenu[0].AddAction(UIAction.MouseUp, () => 
 		{
-			GameManager.instance.DestroyGame();
+			GameManager.Module.Clear();
+			StartCoroutine(GameManager.Module.Enter(false, new IntVector(0,0)));
 		});
 	}
 
@@ -165,7 +129,7 @@ public class UIManager : MonoBehaviour {
 
 	public void SetGrandUI(GreatGrand g)
 	{
-		UIObj info = GrandUI["info"];
+		/*UIObj info = GrandUI["info"];
 		UIObj face = GrandUI["face"];
 
 		info.Txt[0].text = g.Info.Name;
@@ -189,7 +153,7 @@ public class UIManager : MonoBehaviour {
 			ActiveFace.transform.localScale = Vector3.one * 0.35F;
 			
 			ActiveFace.transform.localRotation = Quaternion.Euler(0,0,0);
-		}
+		}*/
 	}
 
 	public UIAlert UIAlertObj;
@@ -226,17 +190,66 @@ public class UIManager : MonoBehaviour {
 	public UIObj Quote(string s, string name)
 	{
 		GameObject o = Prefabs.GetObject("quote") as GameObject;
-		print(o);
 
 		UIObj final = Instantiate(Prefabs.GetObject("quote") as GameObject).GetComponent<UIObj>();
-
-		WorldObjects.AddChild(final);
+		QuoteObjects[0].AddChild(final);
 		final.ResetRect();
-
 		final["textbox"].Txt[0].text = s;
 		final.Txt[0].text = name;
+		
+		final.TweenActive(true);
 		return final;
 
+	}
+
+	public IEnumerator QuoteRoutine(UIQuote q)
+	{
+		int quote_num = 0;
+		float rate = 1.5F;
+		float rate_inc = 0.03F;
+		
+		GameManager.IgnoreInput = true;
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = true;
+		yield return new WaitForSeconds(0.1F);
+
+		UIObj qobj = Quote("", q.Speaker);
+		while(quote_num < q.Quote.Length)
+		{
+			while(Input.GetMouseButton(0)) yield return null;
+
+			rate = 1.0F;
+			UIString target = q.Quote[quote_num];
+			
+			/*for (float i = 0; i < (target.Value.Length+1); i = i + rate)
+		     {
+		     	if(Input.GetMouseButtonDown(0)) 
+		     	{
+		     		break;
+		     	}
+		         qobj["textbox"].Txt[0].text = target.Value.Substring(0, (int)i);
+		         //qobj["textbox"].Txt[0].color = target.Colour;
+		         qobj["textbox"].Txt[0].fontSize = target.Size;
+
+		         rate += rate_inc;
+		         yield return null;
+		     }*/
+
+		     qobj["textbox"].Txt[0].text = target.Value;
+		     while(Input.GetMouseButton(0)) yield return null;
+		     while(!Input.GetMouseButtonDown(0)) yield return null;
+		  
+		     quote_num++;
+		     yield return null;
+		}
+
+		qobj.PoolDestroy();
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+		//QuoteMat.DOFloat(0, "_Size", 0.25F);
+		QuoteObjects.Img[0].raycastTarget = false;
+		GameManager.IgnoreInput = false;
+
+		yield return null;
 	}
 
 	public IEnumerator ResourceAlert(Resource r, int num)
@@ -280,8 +293,7 @@ public class UIManager : MonoBehaviour {
 		yield return new WaitForSeconds(time_end_pause);
 		alert.PoolDestroy();
 		yield return new WaitForSeconds(time_end);
-		r.Current += num;
-		CheckResourcesUI();
+		r.Add(num);
 		yield return null;
 	}
 
@@ -341,8 +353,9 @@ public class Tweens
 		vel.Normalize();
 
 		Sequence s = DOTween.Sequence();
-		s.Append(t.DOMove(t.position - vel * 0.4F, 0.2F));
-		s.Append(t.DOMove(target + vel * 0.2F, 0.2F));
+		s.Append(t.DOMove(t.position - vel * 0.3F, 0.2F));
+		s.Append(t.DOMove(target + vel * 0.05F, 0.2F));
+		s.Append(t.DOMove(target + vel * 0.25F, 0.2F));
 		s.Append(t.DOMove(target, 0.1F));
 		return s;
 	}
@@ -352,11 +365,41 @@ public class Tweens
 		Vector3 init = t.localRotation.eulerAngles;
 
 		Sequence s = DOTween.Sequence();
-		s.Append(t.DOLocalRotate(init + rot, 0.2F));
-		s.Append(t.DOLocalRotate(init + -rot*0.6F, 0.2F));
-		s.Append(t.DOLocalRotate(init + rot*0.3F, 0.2F));
+		s.Append(t.DOLocalRotate(init + -rot, 0.2F));
+		s.Append(t.DOLocalRotate(init + rot*0.6F, 0.2F));
+		s.Append(t.DOLocalRotate(init + -rot*0.3F, 0.2F));
 		s.Append(t.DOLocalRotate(init, 0.2F));
 
 		return s;
+	}
+}
+
+public class UIQuote
+{
+	public string Speaker;
+	public UIString [] Quote;
+	public UIQuote(string sp, params string [] t)
+	{
+		Speaker = sp;
+		Quote = new UIString[t.Length];
+		for(int i = 0; i < t.Length; i++)
+		{
+			Quote[i] = new UIString(t[i]);
+		}
+	}
+}
+
+public class UIString
+{
+	public string Value;
+	public float Size = 20;
+	public Color Colour = Color.white;
+	public bool NewLine = false;
+	public UIString(string v, float s = 20, Color? c = null, bool nline = false)
+	{
+		Value = v;
+		Size = s;
+		Colour = c ?? Color.white;
+		NewLine = nline;
 	}
 }

@@ -100,6 +100,11 @@ public class IntVector
 		y = (int) v.y;
 	}
 
+	public static IntVector operator -(IntVector v)
+	{
+	    return new IntVector(-v.x, -v.y);
+	}
+
 	public string ToString() {return x + ":" + y;}
 
 	public static IntVector operator + (IntVector a, IntVector b)

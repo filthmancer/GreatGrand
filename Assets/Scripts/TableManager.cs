@@ -82,20 +82,22 @@ public class TableManager : MonoBehaviour {
 		else movenorm = anticlock;
 
 		float timer = 0.0F;
+		float timer_total = Mathf.Clamp(1.6F * Mathf.Abs(movenorm), 0.4F, 1.3F);
+
 		float norm = start_norm;
-		float norm_rate = movenorm / time;
+		float norm_rate = movenorm / timer_total;
 
 		float getup_init = 0.3F;
 		float getup_time = 0.0F;
 		while((getup_time += Time.deltaTime) < getup_init)
 		{
 			t.position = Vector3.Lerp(Seat[from].transform.position, start, getup_time/getup_init);
-			t.LookAt(TableObj.transform.position);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			t.LookAt(TableObj.transform.position, Vector3.up);
+			//t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			yield return null;
 		}
 
-		while((timer += Time.deltaTime) < time)
+		while((timer += Time.deltaTime) < timer_total)
 		{
 			t.position = GetMovementPoint(norm);
 			t.LookAt(TableObj.transform.position);

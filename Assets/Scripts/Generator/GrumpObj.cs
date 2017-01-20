@@ -4,10 +4,14 @@ using System.Collections;
 public class GrumpObj : InputTarget {
 
 	public bool Draggable;
-	public float DragDistanceThreshold = 0.5F;
+	private float DragDistanceThreshold = 1.3F;
 	public bool isDragging;
 
 	private Transform trans;
+	public virtual Vector3 Position
+	{
+		get{return trans.position;}
+	}
 
 	void Start()
 	{
