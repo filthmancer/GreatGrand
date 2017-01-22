@@ -12,14 +12,49 @@ public class Dinner : Module {
 	public VectorObject2D GrumpLine;
 	private int [] GG_Indexes;
 
+	private float Timer = 60.0F;
+	private float Timer_current = 0.0F;
+
 	public override UIQuote [] Intro_String
 	{
 		get{
 			return new UIQuote[]
 			{
-				new UIQuote("Carer", "Some of the residents have mixed feeling about each other.",
-									 "They may get rowdy if they are seated close to enemies, or away from friends!")
+				new UIQuote("Carer", "Many residents have strong feelings about each other...",
+									 "They may get rowdy if seated close to enemies, or away from friends!")
 			};
+		}
+	}
+
+	private UIObj timerobj;
+	private int last_sec = 0;
+	public override void ControlledUpdate()
+	{
+		if(Running)
+		{
+			Timer_current += Time.deltaTime;
+			if(Timer_current >= Timer)
+			{
+				Complete();
+			}
+
+			if(timerobj == null) timerobj = MUI["timer"];
+
+			float timer_ui = (Timer - Timer_current);
+			int mins = (int) timer_ui/60;
+			int secs = (int) timer_ui % 60;
+
+			timerobj.Txt[0].text = mins + ":" + secs;
+			timerobj.Txt[0].color = (Timer_current > Timer*0.75F) ? Color.red : Color.white;
+
+			if(secs != last_sec) 
+			{
+				last_sec = secs;
+				if (Timer_current > Timer*0.75F) 
+					Tweens.Bounce(timerobj.Img[0].transform, 
+									Vector3.one + (Vector3.one * Timer_current / Timer/2));
+			}
+
 		}
 	}
 
@@ -101,7 +136,7 @@ public class Dinner : Module {
 
 	public override void Complete()
 	{
-		if(!AllSeated || !Running) return;
+		if(!Running) return;
 		StartCoroutine(EndDinner());
 	}
 
@@ -126,6 +161,7 @@ public class Dinner : Module {
 	public void CreateDinnerGame()
 	{
 		Running = false;
+
 		UIObj fparent = MUI["faceparent"];
 		Grands = new GreatGrand[GG_num];
 		for(int i = 0; i < GG_num; i++)
@@ -181,6 +217,7 @@ public class Dinner : Module {
 
 		while(!AllSeated) yield return null;
 		Running = true;
+		Timer_current = 0.0F;
 		
 		yield return null;
 	}
@@ -188,7 +225,9 @@ public class Dinner : Module {
 	int FinalScore = 0;
 	IEnumerator EndDinner()
 	{
+		while(!AllSeated) yield return null;
 
+		Running = false;
 		UIObj endgame = MUI["endgame"];
 
 		endgame[0].TweenActive(true);
@@ -232,6 +271,7 @@ public class Dinner : Module {
 
 		total.Txt[0].text = FinalScore + "";
 		total.Txt[1].text = "HAPPY\nGRANDS";
+		total.Txt[1].color = Color.white;
 		total.TweenActive(true);
 	
 		yield return new WaitForSeconds(0.8F);
@@ -264,16 +304,46 @@ public class Dinner : Module {
 			yield return null;
 		}
 
-		yield return new WaitForSeconds(1.0F);
+		yield return new WaitForSeconds(0.8F);
 
-		int rep = FinalScore * 10;
+		int rep = FinalScore * 5;
 
 		total.Txt[0].text = rep + "";
-		total.Txt[1].text = "VILLAGE\nREP";
+		total.Txt[1].text = "REP";
 		
-		float repscale = 1.05F + ((float)rep / 100);
+		float repscale = 1.05F + ((float)rep / 150);
 		repscale = Mathf.Clamp(repscale, 1.05F, 1.4F);
 		Tweens.Bounce(total.transform, Vector3.one * repscale);
+
+		if(Timer_current < Timer)
+		{
+			yield return new WaitForSeconds(0.8F);
+
+			float mult = (1.0F - Timer_current/Timer);
+			mult = Mathf.Clamp(1.0F + mult, 1.0F, 1.5F);
+			rep = (int) ((float) rep * mult);
+			total.Txt[0].text = rep + "";
+			total.Txt[1].text = "TIME";
+			total.Txt[1].color = Color.red;
+
+			repscale = 1.05F + ((float)rep / 150);
+			repscale = Mathf.Clamp(repscale, 1.05F, 1.4F);
+			Tweens.Bounce(total.transform, Vector3.one * repscale);
+		}
+		
+		if(FinalScore == GG_num)
+		{
+			yield return new WaitForSeconds(0.8F);
+			rep *= 2;
+			total.Txt[0].text = rep + "";
+			total.Txt[1].text = "PERFECT!";
+			total.Txt[1].color = Color.blue;
+
+			repscale = 1.05F + ((float)rep / 150);
+			repscale = Mathf.Clamp(repscale, 1.05F, 1.4F);
+			Tweens.Bounce(total.transform, Vector3.one * repscale);
+		}
+		
 
 		yield return StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
 	

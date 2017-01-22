@@ -91,12 +91,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyUp(KeyCode.W))
-		{
-			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
-			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 25));
-			StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 25));
-		} 
+		CurrentModule.ControlledUpdate();
 	}
 
 	public void OnApplicationQuit()
