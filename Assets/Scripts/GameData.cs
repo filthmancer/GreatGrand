@@ -27,6 +27,7 @@ public class WorldResources
 	{
 		get{return new Resource[]{Rep, Funds, Meds};}
 	}
+	public int Length{get{return AllRes.Length;}}
 	public WorldResources()
 	{
 		Rep = new Resource(0);

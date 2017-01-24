@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour {
 
 	public UIObj Module_Menu, Module_Dinner;
 
+	public UIObj Options;
 	public UIObj WinMenu;
 	public UIObj ResUI;
 	public UIObj FaceParent;
@@ -33,17 +34,21 @@ public class UIManager : MonoBehaviour {
 
 	public void Init()
 	{
-		//Module_Menu.Index = 0;
-		//Module_Dinner.Index = 1;
-
 		QuoteMat = QuoteObjects.Img[0].material;
-		//QuoteMat.SetFloat("_Size", 0);
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
 
-	//MENU
-		
+		ResUI["options"].AddAction(UIAction.MouseUp, ()=>
+		{
+			Options.TweenActive();
+		});
 
-	//DINNER
+		Options["resetintros"].AddAction(UIAction.MouseUp, ()=>
+		{
+			for(int i = 0 ; i < GameManager.instance.AllModules.Length; i++)
+			{
+				GameManager.instance.AllModules[i].SetIntro(false);
+			}
+		});
 		
 		
 		CheckResourcesUI();
@@ -300,7 +305,7 @@ public class UIManager : MonoBehaviour {
 	public void CheckResourcesUI()
 	{
 		WorldResources wres = GameManager.WorldRes;
-		for(int i = 0; i < ResUI.Length; i++)
+		for(int i = 0; i < wres.Length; i++)
 		{
 			if(wres[i] == null) continue;
 			ResUI[i].Txt[0].text = wres[i].Value.ToString();

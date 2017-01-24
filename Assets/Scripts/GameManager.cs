@@ -21,6 +21,12 @@ public class GameManager : MonoBehaviour {
 	}
 	public Module CurrentModule;
 	public Module Menu, Dinner;
+	public Module [] AllModules
+	{
+		get{
+			return new Module[] {Menu, Dinner};
+		}
+	}
 
 	public static WorldResources WorldRes;
 	public WorldResources _WorldResources;

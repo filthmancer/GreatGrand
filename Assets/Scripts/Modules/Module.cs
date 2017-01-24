@@ -18,6 +18,10 @@ public class Module : MonoBehaviour {
 		get{return new UIQuote[0];}
 	}
 	private bool Intro_Shown;
+	public void SetIntro(bool f)
+	{
+		Intro_Shown = f;
+	}
 
 	public virtual void ControlledUpdate()
 	{
@@ -121,9 +125,9 @@ public class Module : MonoBehaviour {
 		Sequence f = ClosingSequence(v);
 		yield return f.WaitForCompletion();
 		
-
 		Running = false;
 		Clear();
+		GameManager.UI.WorldObjects.DestroyChildren();
 		this.gameObject.SetActive(false);
 		MUI.SetActive(false);
 	}

@@ -41,10 +41,9 @@ public class Dinner : Module {
 			if(timerobj == null) timerobj = MUI["timer"];
 
 			float timer_ui = (Timer - Timer_current);
-			int mins = (int) timer_ui/60;
 			int secs = (int) timer_ui % 60;
 
-			timerobj.Txt[0].text = mins + ":" + secs;
+			timerobj.Txt[0].text = (int) timer_ui + "";
 			timerobj.Txt[0].color = (Timer_current > Timer*0.75F) ? Color.red : Color.white;
 
 			if(secs != last_sec) 
@@ -83,6 +82,9 @@ public class Dinner : Module {
 		{
 			StartCoroutine(GameManager.instance.LoadModule("Menu"));
 		});
+
+		if(timerobj == null) timerobj = MUI["timer"];
+
 		MUI.SetActive(false);
 	}
 
@@ -154,6 +156,7 @@ public class Dinner : Module {
 		{
 			end[i].TweenActive(false);
 		}
+		//timerobj.TweenActive(false);
 	}
 
 
@@ -218,6 +221,10 @@ public class Dinner : Module {
 		while(!AllSeated) yield return null;
 		Running = true;
 		Timer_current = 0.0F;
+
+		timerobj.Txt[0].text = "";
+		timerobj.Img[0].transform.localScale = Vector3.one;
+		//timerobj.TweenActive(true);
 		
 		yield return null;
 	}
@@ -228,6 +235,9 @@ public class Dinner : Module {
 		while(!AllSeated) yield return null;
 
 		Running = false;
+		GameManager.IgnoreInput = true;
+		timerobj.TweenActive(false);
+
 		UIObj endgame = MUI["endgame"];
 
 		endgame[0].TweenActive(true);
@@ -343,10 +353,11 @@ public class Dinner : Module {
 			repscale = Mathf.Clamp(repscale, 1.05F, 1.4F);
 			Tweens.Bounce(total.transform, Vector3.one * repscale);
 		}
-		
 
 		yield return StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
-	
+		
+		GameManager.IgnoreInput = false;
+
 		endgame[2].TweenActive(true);
 		endgame[2].ClearActions();
 		endgame[2].AddAction(UIAction.MouseUp, () => 
