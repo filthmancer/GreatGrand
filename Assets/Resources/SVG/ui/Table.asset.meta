@@ -1,0 +1,37 @@
+fileFormatVersion: 2
+guid: a082e2f0301a1bf4e9aa30c88b796af4
+timeCreated: 1485654670
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 341 340\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-622,-205)\">\n        <g id=\"Table\">\n            <g
+    transform=\"matrix(1.03371,0,0,1.03371,-26.7194,-12.6323)\">\n                <path
+    d=\"M955.789,221.368C955.789,215.965 951.403,211.579 946,211.579L639.263,211.579C633.86,211.579
+    629.474,215.965 629.474,221.368L629.474,528.105C629.474,533.508 633.86,537.895
+    639.263,537.895L946,537.895C951.403,537.895 955.789,533.508 955.789,528.105L955.789,221.368Z\"
+    style=\"fill:rgb(87,41,8);stroke:black;stroke-width:1.93px;\"/>\n            </g>\n
+    \           <path d=\"M955.789,221.368C955.789,215.965 951.403,211.579 946,211.579L639.263,211.579C633.86,211.579
+    629.474,215.965 629.474,221.368L629.474,528.105C629.474,533.508 633.86,537.895
+    639.263,537.895L946,537.895C951.403,537.895 955.789,533.508 955.789,528.105L955.789,221.368Z\"
+    style=\"fill:rgb(146,107,80);\"/>\n            <g transform=\"matrix(1.04998,0,0,1,-60.5623,0)\">\n
+    \               <rect x=\"690.997\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,65.4634,0)\">\n
+    \               <rect x=\"690.998\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,23.464,0)\">\n
+    \               <rect x=\"690.997\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,149.49,0)\">\n
+    \               <rect x=\"690.997\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,-18.5353,0)\">\n
+    \               <rect x=\"690.997\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,107.49,0)\">\n
+    \               <rect x=\"690.998\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,65.491,0)\">\n
+    \               <rect x=\"690.998\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n            <g transform=\"matrix(1.04998,0,0,1,191.517,0)\">\n
+    \               <rect x=\"690.997\" y=\"211.579\" width=\"0.952\" height=\"326.316\"
+    style=\"fill-opacity:0.360784;\"/>\n            </g>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

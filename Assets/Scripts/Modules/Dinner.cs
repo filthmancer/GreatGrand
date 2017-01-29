@@ -156,7 +156,6 @@ public class Dinner : Module {
 		{
 			end[i].TweenActive(false);
 		}
-		//timerobj.TweenActive(false);
 	}
 
 
@@ -169,20 +168,14 @@ public class Dinner : Module {
 		Grands = new GreatGrand[GG_num];
 		for(int i = 0; i < GG_num; i++)
 		{
-			Grands[i] = GameManager.instance.Generator.Generate(i);
+			if(i < GameManager.instance.Grands.Length)
+				Grands[i] = GameManager.instance.Grands[i].GrandObj;
+			else Grands[i] = GameManager.instance.Generator.Generate(i);
+
+			Grands[i].gameObject.SetActive(true);
+
 			FaceObj f = GameManager.instance.Generator.GenerateFace(Grands[i]);
 			fparent.AddChild(f);
-
-			Grands[i].transform.SetParent(this.transform);
-		}
-
-		for(int i = 0; i < GG_num; i+=2)
-		{
-			MaritalStatus m = Random.value > 0.55F ? MaritalStatus.Married : (Random.value < 0.9F ? MaritalStatus.Divorced : MaritalStatus.Donor);
-			Grands[i].Info.MStat = m;
-			Grands[i+1].Info.MStat = m;
-			Grands[i].Relation = Grands[i+1];
-			Grands[i+1].Relation = Grands[i];
 		}
 
 		for(int i = 0; i < GG_num; i++)
@@ -224,7 +217,7 @@ public class Dinner : Module {
 
 		timerobj.Txt[0].text = "";
 		timerobj.Img[0].transform.localScale = Vector3.one;
-		//timerobj.TweenActive(true);
+		timerobj.TweenActive(true);
 		
 		yield return null;
 	}
@@ -247,9 +240,9 @@ public class Dinner : Module {
 		endgame[0].Txt[0].text = "Let's Eat!";
 
 		FinalScore = 0;
-		UIObj total = endgame[1];
 
-		yield return new WaitForSeconds(0.8F);
+
+		yield return new WaitForSeconds(1.0F);
 
 		endgame[0].TweenActive(false);
 
@@ -275,16 +268,16 @@ public class Dinner : Module {
 			if(targ_grumps >= 0) correct.Add(a);
 			else wrong.Add(a);
 
-			yield return new WaitForSeconds(Time.deltaTime  * 14);
+			yield return new WaitForSeconds(0.22F);
 		}
 
-
+		UIObj total = endgame[1];
 		total.Txt[0].text = FinalScore + "";
 		total.Txt[1].text = "HAPPY\nGRANDS";
 		total.Txt[1].color = Color.white;
 		total.TweenActive(true);
 	
-		yield return new WaitForSeconds(0.8F);
+		yield return new WaitForSeconds(0.9F);
 
 		bool isCounting = true;
 

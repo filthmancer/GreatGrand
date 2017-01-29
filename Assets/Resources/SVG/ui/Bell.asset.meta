@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: 8e963d4d03c805543aeef1980952e33f
+timeCreated: 1485654670
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 164 200\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-986,-215)\">\n        <g id=\"Bell\" transform=\"matrix(1,0,0,1,-180,-16.25)\">\n
+    \           <g id=\"Layer1\">\n                <path d=\"M1206.68,263.669C1204.58,265.649
+    1202.96,274.211 1201.58,285.255C1199.31,303.462 1197.69,328.411 1195.67,341.723C1188,361.711
+    1177.15,368.556 1172.41,375.801C1168.28,383.862 1167.16,391.53 1167.16,391.53L1328.71,391.53C1328.5,386.484
+    1325.85,381.605 1323.81,375.533C1318.36,369.915 1303.79,358.35 1299.87,341.067C1295.63,322.337
+    1294.64,268.461 1289.17,263.273C1282.35,263.119 1214.61,262.883 1206.68,263.669Z\"
+    style=\"fill:rgb(206,177,45);stroke:black;stroke-width:0.96px;\"/>\n                <g
+    transform=\"matrix(1,0,0,1,-1.28,1.28)\">\n                    <path d=\"M1232.86,392.639L1262.38,392.639C1262.38,392.639
+    1261.71,405.865 1250.36,407.601C1250.4,411.444 1250.4,411.119 1250.3,413.946C1261.3,421.121
+    1252.91,429.714 1247.44,429.195C1241.61,429.659 1234.13,420.297 1244.75,413.834C1244.78,410.432
+    1244.74,410.661 1244.85,407.6C1241.29,406.615 1233.03,403.662 1232.86,392.639\"
+    style=\"fill:rgb(206,177,45);stroke:black;stroke-width:0.96px;\"/>\n                </g>\n
+    \               <path d=\"M1282.07,261.408C1275.95,257.34 1269.11,253.739 1246.64,253.785C1225.29,253.8
+    1217.03,257.296 1213.03,261.408C1222.37,261.408 1271.01,261.623 1282.07,261.408Z\"
+    style=\"fill:rgb(206,177,45);stroke:black;stroke-width:0.96px;\"/>\n                <g
+    transform=\"matrix(0.73736,0,0,0.73736,327.644,64.8906)\">\n                    <path
+    d=\"M1221.52,255.288C1219.9,247.557 1217.65,235.639 1217.65,235.639C1217.65,235.639
+    1217.65,230.807 1222.37,230.592C1227.1,230.377 1240.63,231.988 1240.63,231.988L1241.49,227.156L1253.62,227.156L1254.48,231.988L1272.09,230.377C1272.09,230.377
+    1277.18,229.687 1277.35,235.102C1276.43,239.899 1274.57,251.31 1273.81,254.751C1267.58,253.892
+    1263.39,253.033 1263.39,253.033L1265,238.001L1255.77,238.43L1257.81,252.604L1237.19,252.604L1239.45,238.538L1230.21,237.893L1231.82,253.355C1231.82,253.355
+    1227.33,253.706 1221.52,255.288Z\" style=\"fill:rgb(206,177,45);stroke:black;stroke-width:1.31px;\"/>\n
+    \               </g>\n            </g>\n            <path d=\"M1177.15,376.029L1317.41,376.029\"
+    style=\"fill:none;stroke:black;stroke-opacity:0.207843;stroke-width:2.46px;stroke-linecap:round;\"/>\n
+    \           <path d=\"M1189.74,362.104L1305.16,362.104\" style=\"fill:none;stroke:black;stroke-opacity:0.207843;stroke-width:2.46px;stroke-linecap:round;\"/>\n
+    \           <path d=\"M1198.29,347.508L1295.94,347.508\" style=\"fill:none;stroke:black;stroke-opacity:0.207843;stroke-width:2.46px;stroke-linecap:round;\"/>\n
+    \           <path d=\"M1206.85,279.393L1287.21,279.393\" style=\"fill:none;stroke:black;stroke-opacity:0.207843;stroke-width:2.46px;stroke-linecap:round;\"/>\n
+    \       </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

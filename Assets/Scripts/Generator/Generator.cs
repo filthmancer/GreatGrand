@@ -6,14 +6,17 @@ using TMPro;
 public class Generator : MonoBehaviour {
 	public GreatGrand GGObj;
 
+	public GameObject Grand_Parent;
 	public FaceObj Face_Parent;
+
 	public TextMeshProUGUI TitleObj;
 
 	public Color [] SkinTones;
 	public Color [] HairTones;
+	public Color [] EyeTones;
 
-	public Color Skin, HairCol, Offset;
-	public int Skin_num, Hair_num, Offset_num;
+	public Color SkinCurrent, HairCurrent, OffsetCurrent, EyeCurrent;
+
 	public Color CycleSkin(int i)
 	{
 		if(SkinTones.Length == 0) return Color.white;
@@ -28,6 +31,14 @@ public class Generator : MonoBehaviour {
 		return HairTones[actual];
 	}
 	public Color RandomHair(){return HairTones[Random.Range(0, HairTones.Length)];}
+
+	public Color CycleEye(int i)
+	{
+		if(EyeTones.Length == 0) return Color.white;
+		int actual = Mathf.Abs(i) % EyeTones.Length;
+		return EyeTones[actual];
+	}
+	public Color RandomEye(){return EyeTones[Random.Range(0, EyeTones.Length)];}
 	// Use this for initialization
 	void Start () {
 	
@@ -38,34 +49,117 @@ public class Generator : MonoBehaviour {
 	
 	}
 
+	public GrandData GenerateGrand()
+	{
+		GrandData fin = new GrandData(System.Guid.NewGuid());
+		fin.RoleType = Role.Resident;
+		
+		GRandomise(fin);
+		return fin;
+	}
+
 	public GreatGrand Generate(int num)
 	{
 		GreatGrand final = (GreatGrand) Instantiate(GGObj);
 		final.Generate(num);
 
-		final.Info.Color_Hair = RandomHair();
-		final.Info.Color_Offset = Color.Lerp(Random.ColorHSV(), Color.white, 0.5F);
-		final.Info.Color_Skin = RandomSkin();
+		final.Data.Hex = System.Guid.NewGuid();
+		final.Data.RoleType = Role.Visitor;
+		GRandomise(final.Data);
+		final.gameObject.name = final.Data.Info.Name + "-" + final.Data.RoleType;
+		return final;
+	}
 
-		final.Info.Base = Base.Randomise(Vector3.zero, 0.0F, new Vector3(0.0F, 0.0F));
+	public void GRandomise(GrandData final)
+	{
+		final.Info.Gender = Random.value > 0.5F;
+		final.Info.Name = final.Info.Gender ? GrandData.Names_Male_Random : GrandData.Names_Female_Random;
+		final.Social = 0.55F;
+		final.Fitness = 0.55F;
 
-		final.Info.EyeLeft = Eye.Randomise(new Vector3(0,0.2F), 0.0F, new Vector3(0.3F, 0.3F));
-		final.Info.EyeRight = final.Info.EyeLeft.Clone();
+		final.Info.Age = Random.Range(60, 102);
+		//Add grump based on age if male, remove if female
+		//float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);
+		//final.Info.GFactor += gender ? agefactor : -agefactor;
+		final.Info.MStat = Random.value > 0.65F ? MaritalStatus.Married : (Random.value > 0.8F ? MaritalStatus.Divorced : MaritalStatus.Donor);
+		//Add grump if divorced, remove if married
+		switch(final.Info.MStat)
+		{
+			case MaritalStatus.Married:
+			//Info.GFactor -= 0.15F;
+			break;
+			case MaritalStatus.Divorced:
+			//Info.GFactor += 0.15F;
+			break;
+			case MaritalStatus.Donor:
 
-		Vector3 eyescale = (final.Info.EyeLeft._Scale - Vector3.one);
+			break;
+		}
+		final.Info.Military = Random.value > 0.95F;
+
+		final.Info.C_Hair = RandomHair();		
+		final.Info.C_Skin = RandomSkin();
+		final.Info.C_Eye = RandomEye();
+
+		Color skin = final.Info.C_Skin;
+
+		HSBColor offtemp = new HSBColor(skin);
+		//offtemp.h += (Random.value - Random.value)/50;
+		//offtemp.s += (Random.value)/10;
+		offtemp.b += Random.Range(-0.05F, 0.02F);
+		final.Info.C_Offset = offtemp.ToColor();
+
+		HSBColor nosetemp = new HSBColor(skin);
+		nosetemp.s *= 1.6F;
+		final.Info.C_Nose = nosetemp.ToColor();
+
+		final.Info.Base = Base.Randomise(Simple2x2.zero, Simple2x2.zero, Simple2x2.zero);
+
+		final.Info.Eye = Eye.Randomise(new Simple2x2(0.0F, -0.05F, 0.0F, 0.15F),
+									 Simple2x2.zero,
+									 new Simple2x2(-0.2F, -0.2F, 0.1F, 0.1F));
+		//	new Vector3(0,0.05F), 0.0F, new Vector3(0.1F, 0.1F));
+
+		final.Info.Ear = Ear.Randomise(new Simple2x2(0.0F, -0.3F, 0.0F, 0.3F),
+									 new Simple2x2(-4.0F, 0.0F, 4.0F, 0.0F),
+									 new Simple2x2(-0.3F, -0.3F, 0.25F, 0.25F));
+			//new Vector3(0,0.3F), 4.0F,  new Vector3(0.3F, 0.3F));
+
+		final.Info.Brow = Brow.Randomise(new Simple2x2(0.0F, -0.1F, 0.0F, 0.15F),
+									  new Simple2x2(-5.0F, 0.0F, 7.0F, 0.0F),
+									 new Simple2x2(-0.2F, -0.15F, 0.35F, 0.35F));
+			//new Vector3(0,0.1F), 6.0F,  new Vector3(0.3F, 0.2F));
+
+		final.Info.Hair = Hair.Randomise(Simple2x2.zero,
+									 Simple2x2.zero,
+									 new Simple2x2(0.0F, -0.1F, 0.0F, 0.1F));
+			//Vector3.zero, 0.0F,  new Vector3(0.0F, 0.1F));
+
+		final.Info.Jaw = Jaw.Randomise(Simple2x2.zero,
+									 Simple2x2.zero,
+									 new Simple2x2(-0.15F, -0.2F, 0.15F, 0.24F));
+			//Vector3.zero, 0.0F, new Vector3(0.35F, 0.25F));
+
+		final.Info.Nose = Nose.Randomise(new Simple2x2(0.0F, -0.1F, 0.0F, 0.2F),
+									 Simple2x2.zero,
+									 new Simple2x2(-0.2F, -0.15F, 0.1F, 0.2F));
+			//new Vector3(0,0.1F), 0.0F,  new Vector3(0.1F, 0.3F));
+
+
+		Vector3 eyescale = (final.Info.Eye._Scale - Vector3.one);
 		Vector3 r = eyescale * Random.Range(0.7F, 1.3F);
+		final.Info.PupilScale = Vector3.one*1.4F + Utility.RandomVectorInclusive(r.x + 0.1F, r.y + 0.1F, 0.0F);
 		
-		final.Info.PupilScale = Vector3.one + Utility.RandomVectorInclusive(r.x + 0.1F, r.y + 0.1F, 0.0F);
+	}
 
-		final.Info.EarLeft = Ear.Randomise(new Vector3(0,0.2F), 4.0F,  new Vector3(0.3F, 0.3F));
-		final.Info.EarRight = final.Info.EarLeft.Clone();
-		final.Info.BrowLeft = Brow.Randomise(new Vector3(0,0.0F), 6.0F,  new Vector3(0.3F, 0.05F));
-		final.Info.BrowRight = final.Info.BrowLeft.Clone();
+	public GreatGrand Generate(GrandData g)
+	{
+		GreatGrand final = (GreatGrand) Instantiate(GGObj);
+		final.Data = g;
+		final.Data.GrandObj = final;
 
-		final.Info.Hair = Hair.Randomise(Vector3.zero, 0.0F,  new Vector3(0.0F, 0.2F));
-		final.Info.Jaw = Jaw.Randomise(Vector3.zero, 0.0F, new Vector3(0.2F, 0.15F));
-		final.Info.Nose = Nose.Randomise(new Vector3(0,0.1F), 0.0F,  new Vector3(0.2F, 0.2F));
-
+		final.transform.SetParent(Grand_Parent.transform);
+		final.gameObject.name = final.Data.Info.Name + "-" + final.Data.RoleType;
 		return final;
 	}
 
@@ -77,7 +171,7 @@ public class Generator : MonoBehaviour {
 
 		FaceObj _base = RandomiseFace(final);
 		final.SetFace(_base);
-		TitleObj.text = final.Info.Name + "\nAge " + final.Info.Age;
+		TitleObj.text = final.Data.Info.Name + "\nAge " + final.Data.Info.Age;
 		return final;
 	}
 
@@ -93,18 +187,18 @@ public class Generator : MonoBehaviour {
 	public GreatGrand TargetGrand;
 	public FaceObj GenerateFace(GreatGrand targ)
 	{
-		GameObject _base = (GameObject) Instantiate(targ.Info.Base.Prefab);
+		GameObject _base = (GameObject) Instantiate(Base[targ.Data.Info.Base.Index].Prefab);
 
 		FaceObj final = _base.GetComponent<FaceObj>();
 
-		final.SetSkinColor(targ.Info.Color_Skin);
-		final.SetHairColor(targ.Info.Color_Hair);
-		final.SetOffsetColor(targ.Info.Color_Offset);
+		final.SetSkinColor(targ.Data.Info.C_Skin);
+		final.SetHairColor(targ.Data.Info.C_Hair);
+		final.SetOffsetColor(targ.Data.Info.C_Offset);
+		final.SetNoseColor (targ.Data.Info.C_Nose);
 
 		targ.SetFace(final);
 
-		_base.name = targ.Info.Name;
-		//_base.transform.localScale = new Vector3(0.3F, 0.15F, 0.3F);
+		_base.name = targ.Data.Info.Name;
 		return final;
 	}
 
@@ -112,9 +206,9 @@ public class Generator : MonoBehaviour {
 	{
 		if(f == null) return;
 
-		f.SetSkinColor(Skin);
-		f.SetHairColor(HairCol);
-		f.SetOffsetColor(Offset);
+		f.SetSkinColor(SkinCurrent);
+		f.SetHairColor(HairCurrent);
+		f.SetOffsetColor(OffsetCurrent);
 		f[9].Img[0].sprite = Ear.Current._Sprite;
 		f[9].Img[1].sprite = Ear.Current._Sprite;
 
@@ -146,10 +240,9 @@ public class Generator : MonoBehaviour {
 		Nose.Randomise(Vector3.zero);
 		Base.Randomise(Vector3.zero, 0.0F, 0.15F);*/
 
-		Skin = RandomSkin();
-		HairCol = RandomHair();
-		Offset = Random.ColorHSV();
-		Offset = Color.Lerp(Offset, Color.white, 0.1F);
+		SkinCurrent = RandomSkin();
+		HairCurrent = RandomHair();
+		OffsetCurrent = Random.ColorHSV();
 
 		FaceObj fin = GenerateFace(f);
 		CheckDifferences(fin);
@@ -166,32 +259,38 @@ public class Generator : MonoBehaviour {
 	bool elements_loaded = false;
 	public void LoadElements()
 	{
+		int x = 0;
 		List<Object> _base = new List<Object>();
 		List<FaceObjInfo> final = new List<FaceObjInfo>();
-		_base.AddRange(Resources.LoadAll("Objects/Base", typeof(Object)));
+		_base.AddRange(Resources.LoadAll("SVG/base", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _base.Count; i++)
 		{
 			GameObject g = _base[i] as GameObject;
 			if((g != null) && g.transform.root == g.transform)
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				final.Add(f);
+				x++;
 			}
 		}
 		Base = new FaceObjInfoContainer(final.ToArray());
 
 		List<Object> _eye = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_eye.AddRange(Resources.LoadAll("Objects/Eye", typeof(Object)));
+		_eye.AddRange(Resources.LoadAll("SVG/eyes", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _eye.Count; i++)
 		{
 			GameObject g = _eye[i] as GameObject;
 			if((g != null) && g.transform.root == g.transform)
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
-				f.Colour = ColorType.Offset;
+				FaceObjInfo f = new FaceObjInfo(x, g);
+				f.Colour = ColorType.Skin;
 				final.Add(f);
+				x++;
 			}
+
 		}
 		Eye =new FaceObjInfoContainer(final.ToArray());
 		Eye.Symm = true;
@@ -200,31 +299,37 @@ public class Generator : MonoBehaviour {
 
 		List<Object> _nose = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_nose.AddRange(Resources.LoadAll("Objects/Nose", typeof(Object)));
+		_nose.AddRange(Resources.LoadAll("SVG/nose", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _nose.Count; i++)
 		{
 			GameObject g = _nose[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				final.Add(f);
+					x++;
 			}
 		}
+		
 		Nose = new FaceObjInfoContainer(final.ToArray());
-		Nose.Colour = ColorType.Offset;
+		Nose.Colour = ColorType.Nose;
 
 		List<Object> _brow = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_brow.AddRange(Resources.LoadAll("Objects/Brow", typeof(Object)));
+		_brow.AddRange(Resources.LoadAll("SVG/brow", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _brow.Count; i++)
 		{
 			GameObject g = _brow[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				f.Colour = ColorType.Hair;
 				final.Add(f);
+					x++;
 			}
+		
 		}
 		Brow = new FaceObjInfoContainer(final.ToArray());
 		Brow.Symm = true;
@@ -233,16 +338,19 @@ public class Generator : MonoBehaviour {
 
 		List<Object> _hair = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_hair.AddRange(Resources.LoadAll("Objects/Hair", typeof(Object)));
+		_hair.AddRange(Resources.LoadAll("SVG/hair", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _hair.Count; i++)
 		{
 			GameObject g = _hair[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				f.Colour = ColorType.Hair;
 				final.Add(f);
+					x++;
 			}
+		
 		}
 		Hair = new FaceObjInfoContainer(final.ToArray());
 		Hair.Symm = true;
@@ -250,41 +358,46 @@ public class Generator : MonoBehaviour {
 
 		List<Object> _ear = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_ear.AddRange(Resources.LoadAll("Objects/Ear", typeof(Object)));
+		_ear.AddRange(Resources.LoadAll("SVG/ears", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _ear.Count; i++)
 		{
 			GameObject g = _ear[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				f.Colour = ColorType.Offset;
 				final.Add(f);
+					x++;
 			}
+		
 		}
 		Ear = new FaceObjInfoContainer(final.ToArray());
 		Ear.Symm = true;
-		Ear.Colour = ColorType.Offset;
+		Ear.Colour = ColorType.Skin;
 
 
 		List<Object> _jaw = new List<Object>();
 		final = new List<FaceObjInfo>();
-		_jaw.AddRange(Resources.LoadAll("Objects/Jaw", typeof(Object)));
+		_jaw.AddRange(Resources.LoadAll("SVG/jaw", typeof(Object)));
+		x = 0;
 		for(int i =0 ; i < _jaw.Count; i++)
 		{
 			GameObject g = _jaw[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(i, g);
-				f.Colour = ColorType.Offset;
+				FaceObjInfo f = new FaceObjInfo(x, g);
 				final.Add(f);
+					x++;
 			}
+		
 		}
 		Jaw = new FaceObjInfoContainer(final.ToArray());
 		Jaw.Colour = ColorType.Offset;
 
-		Skin = SkinTones[0];
-		HairCol = HairTones[0];
-		Offset = Color.white;
+		SkinCurrent = SkinTones[0];
+		HairCurrent = HairTones[0];
+		OffsetCurrent = Color.white;
 
 		elements_loaded = true;
 	}

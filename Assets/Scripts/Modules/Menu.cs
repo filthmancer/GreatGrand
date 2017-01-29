@@ -33,17 +33,22 @@ public class Menu : Module {
 	public override IEnumerator Load()
 	{
 		faces = new FaceObj[MUI[1].Child.Length];
+		List<GrandData> allgrands = new List<GrandData>();
+		allgrands.AddRange(GameManager.instance.Grands);
+
 		for(int i = 0; i < MUI[1].Child.Length; i++)
 		{
-			GreatGrand f = GameManager.instance.Generator.Generate(i);
+			int num = Random.Range(0, allgrands.Count);
+			GreatGrand f = allgrands[num].GrandObj;
 			faces[i] = GameManager.instance.Generator.GenerateFace(f);
 
 			MUI[1].Child[i][0].AddChild(faces[i]);
 
-			faces[i].transform.localRotation = Quaternion.identity;
 			faces[i].transform.position = MUI[1].Child[i][0].transform.position;
 			faces[i].transform.localScale = Vector3.one * 0.65F;
 			f.gameObject.SetActive(false);
+
+			allgrands.RemoveAt(num);
 
 			yield return null;
 		}

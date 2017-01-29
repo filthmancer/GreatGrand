@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: eec222453d101e74392e97105add73df
+timeCreated: 1485569362
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 128 161\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-1016,-431)\">\n        <g>\n            <path
+    d=\"M1080.13,591.944C1047.2,591.944 1016.77,537.309 1016.77,537.309C1016.77,537.309
+    1025.85,528.429 1032.77,528.401C1039.7,528.373 1046.11,537.309 1056.12,537.309C1056.12,537.309
+    1045.39,502.202 1064.12,438.729C1064.12,438.729 1066.04,433.458 1080.13,431.602\"
+    style=\"fill:url(#_Radial1);fill-rule:nonzero;\"/>\n            <path d=\"M1080.13,591.944C1113.06,591.944
+    1143.49,537.309 1143.49,537.309C1143.49,537.309 1134.41,528.429 1127.48,528.401C1120.56,528.373
+    1114.14,537.309 1104.14,537.309C1104.14,537.309 1114.87,502.202 1096.13,438.729C1096.13,438.729
+    1094.22,433.458 1080.13,431.602\" style=\"fill:url(#_Radial2);fill-rule:nonzero;\"/>\n
+    \       </g>\n    </g>\n    <defs>\n        <radialGradient id=\"_Radial1\" cx=\"0\"
+    cy=\"0\" r=\"1\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(98.2339,0,0,75.0653,1080.38,579.122)\"><stop
+    offset=\"0%\" style=\"stop-color:rgb(231,231,231);stop-opacity:1\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(190,190,190);stop-opacity:1\"/></radialGradient>\n        <radialGradient
+    id=\"_Radial2\" cx=\"0\" cy=\"0\" r=\"1\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(98.2339,0,0,75.0653,1080.38,579.122)\"><stop
+    offset=\"0%\" style=\"stop-color:rgb(231,231,231);stop-opacity:1\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(190,190,190);stop-opacity:1\"/></radialGradient>\n    </defs>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public enum ColorType
 {
-	Skin, Hair, Offset, Feature
+	Skin, Hair, Offset, Feature, Nose, Ears, Jaw
 }
 
 public class FaceObj : UIObj {
@@ -19,7 +19,7 @@ public class FaceObj : UIObj {
 
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
-	public FaceObjInfo Info;
+	public FaceInfo Info;
 	public Image Shadow;
 
 	public void CheckAnims()
@@ -60,7 +60,7 @@ public class FaceObj : UIObj {
 
 	public FaceObj GetObj(int num) {return _obj[num];}
 
-	public void Setup(FaceObj p, FaceObjInfo f = null, bool side = true)
+	public void Setup(FaceObj p, FaceInfo f = null, bool side = true)
 	{
 		FaceParent = p;
 		Reset(f, side);
@@ -91,17 +91,18 @@ public class FaceObj : UIObj {
 			}
 			//Info = f;
 
-			SetInfo(f.Current, side);
+			//SetInfo(f.Current, null, side);
 		}
 	}
 
-	public void SetInfo(FaceObjInfo f, bool side = true)
+	public void SetInfo(FaceInfo f, GameObject pref = null, bool side = true)
 	{
 		Info = f;
 		if(Element == null || Index != f.Index)
 		{
 			if(Element != null) DestroyImmediate(Element.gameObject);
-			Element = Instantiate(f.Prefab).GetComponent<FaceObj>();
+			Element = Instantiate(pref).GetComponent<FaceObj>();
+			
 			Element.transform.SetParent(this.transform);
 			Element.GetComponent<RectTransform>().anchorMin = Vector3.zero;
 			Element.GetComponent<RectTransform>().anchorMax = Vector3.one;
@@ -122,8 +123,8 @@ public class FaceObj : UIObj {
 	
 			if(Info.Symm)
 			{		
-				Element.transform.position += Vector3.right * Info.Symm_Distance * (side ? 1 : -1);
-				Element.transform.localScale += Vector3.up * Info.Symm_ScaleDiff * (side ? 1 : -1);
+				//Element.transform.position += Vector3.right * Info.Symm_Distance * (side ? 1 : -1);
+				//Element.transform.localScale += Vector3.up * Info.Symm_ScaleDiff * (side ? 1 : -1);
 			}
 	
 			if(FaceParent != null && Info != null)
@@ -139,31 +140,19 @@ public class FaceObj : UIObj {
 						final = FaceParent.HairCol;
 					break;
 					case ColorType.Offset:
-						final = FaceParent.SkinCol + FaceParent.OffsetCol;
+						final = FaceParent.OffsetCol;
+					break;
+					case ColorType.Nose:
+						final = FaceParent.NoseCol;
 					break;
 					case ColorType.Feature:
 						final = Color.black;
 					break;
 				}
-				if( Element._Image) 
+				if( Element.Svg.Length > 0) 
 				{
-					for(int i = 0; i < Element.Img.Length; i++) 
-					{
-						if(Info._Sprite != null) Element.Img[i].sprite = Info._Sprite;
-						Element.Img[i].color = final;
-					}
+					Element.Svg[0].color = final;
 				}
-	
-				/*if(Shadow != null)
-				{
-					Shadow.transform.SetParent(Img[0].transform.parent);
-					Shadow.transform.position = Img[0].transform.position;
-					Shadow.transform.rotation = Img[0].transform.rotation;
-					Shadow.transform.localScale = Img[0].transform.localScale * 1.07F;
-					Shadow.sprite = Img[0].sprite;
-					Shadow.color = Color.black;
-					Shadow.transform.SetParent(FaceParent[9].transform);
-				}*/
 	
 				for(int i = 0; i < Child.Length; i++)
 				{
@@ -187,7 +176,7 @@ public class FaceObj : UIObj {
 		}
 	}
 
-	public void Reset(FaceObjInfo f = null, bool side = true)
+	public void Reset(FaceInfo f = null, bool side = true)
 	{
 		if(f != null) 
 		{
@@ -217,30 +206,26 @@ public class FaceObj : UIObj {
 					final = FaceParent.HairCol;
 				break;
 				case ColorType.Offset:
-					final = FaceParent.SkinCol + FaceParent.OffsetCol;
+					final = FaceParent.OffsetCol;
 				break;
 				case ColorType.Feature:
 					final = Color.black;
 				break;
 			}
-			if( _Image) 
+			if( Svg.Length >0) 
 			{
-				for(int i = 0; i < Img.Length; i++) 
-				{
-					if(Info._Sprite != null) Img[i].sprite = Info._Sprite;
-					Img[i].color = final;
-				}
+				Svg[0].color = final;
 			}
 
 			if(Shadow != null)
 			{
-				Shadow.transform.SetParent(Img[0].transform.parent);
+				Shadow.transform.SetParent(Svg[0].transform.parent);
 				Shadow.GetComponent<RectTransform>().anchorMax = Vector3.one;
 				Shadow.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
-				Shadow.transform.position = Img[0].transform.position;
-				Shadow.transform.rotation = Img[0].transform.rotation;
-				Shadow.transform.localScale = Img[0].transform.localScale * 1.12F;
-				Shadow.sprite = Img[0].sprite;
+				Shadow.transform.position = Svg[0].transform.position;
+				Shadow.transform.rotation = Svg[0].transform.rotation;
+				Shadow.transform.localScale = Svg[0].transform.localScale * 1.12F;
+				//Shadow.sprite = Svg[0].sprite;
 				Shadow.color = Color.black;
 				Shadow.transform.SetParent(FaceParent[9].transform);
 			}
@@ -279,6 +264,16 @@ public class FaceObj : UIObj {
 	public void SetOffsetColor(Color c)
 	{
 		_offsetcol = c;
+	}
+
+	private Color _nosecol;
+	public Color NoseCol
+	{
+		get{return _nosecol;}
+	}
+	public void SetNoseColor(Color c)
+	{
+		_nosecol = c;
 	}
 
 	public override void SetParent(UIObj p)
@@ -360,7 +355,7 @@ public class AnimTrigger
 	}
 }
 
-
+[System.Serializable]
 public class FaceObjInfoContainer
 {
 	private int _index = 0;
@@ -372,7 +367,9 @@ public class FaceObjInfoContainer
 			}
 	}
 	public FaceObjInfo [] Objs;
-	public FaceObjInfo this[int num]{get{return Objs[num];}}
+	public FaceObjInfo this[int num]{get{
+		return Objs[num];
+		}}
 	public int Length{get{return Objs.Length;}}
 	public FaceObjInfo Current{get{return Objs[Index];}}
 	public FaceObjInfoContainer(FaceObjInfo [] f)
@@ -392,20 +389,37 @@ public class FaceObjInfoContainer
 
 	public void RandomIndex()
 	{
-		_index = Random.Range(0, Objs.Length-1);
+		_index = Random.Range(0, Objs.Length);
 	}
 
-
-	public FaceObjInfo Randomise(Vector3 pos, float rot, Vector3 sc)
+	public FaceInfo Randomise(Simple2x2 pos, Simple2x2 rot, Simple2x2 sc)
 	{
 		RandomIndex();
+		FaceInfo final = new FaceInfo(Index, Colour);
 
-		FaceObjInfo final = new FaceObjInfo(Current);
+		Vector3 p = new Vector3(pos.RandX(), 0.0F, pos.RandY());
+		final._Position = p;
+
+		Vector3 r = new Vector3(0.0F, 0.0F, rot.RandX());
+		final._Rotation = r;
+
+		Vector2 s = Utility.RandomMatrixPoint(sc);
+		final._Scale = Vector3.one + new Vector3(s.x, s.y, 0.0F);
+
+		return final;
+	}
+
+	public FaceInfo Randomise(Vector3 pos, float rot, Vector3 sc)
+	{
+		RandomIndex();
+		FaceInfo final = new FaceInfo(Index, Colour);
 		final.Randomise(pos, rot, sc);
 		return final;
 	}
+
 }
 
+[System.Serializable]
 public class FaceObjInfo
 {
 	public int Index;
@@ -453,6 +467,7 @@ public class FaceObjInfo
 		_Rotation = Utility.RandomVectorInclusive(0.0F, 0.0F, rot);
 		_Scale = Vector3.one + Utility.RandomVectorInclusive(sc.x, sc.y);
 	}
+
 
 	public FaceObjInfo Clone()
 	{

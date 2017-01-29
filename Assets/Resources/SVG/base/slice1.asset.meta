@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 648355a3941e3dd458c50411acfcbdca
+timeCreated: 1485432925
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 692 729\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-14,-69)\">\n        <path d=\"M41.47,619.846C41.47,715.071
+    182.345,792.266 358.15,792.266C533.956,792.266 674.83,715.071 674.83,619.846L674.991,616.784C679.511,487.923
+    608.778,354.155 571.09,230.867C542.923,140.255 458.034,74.576 358.159,74.56C258.276,74.569
+    173.379,140.25 145.211,230.867C107.523,354.155 36.789,487.923 41.31,616.784L41.47,619.846Z\"
+    style=\"fill:rgb(216,216,216);fill-rule:nonzero;stroke:rgb(216,216,216);stroke-width:1px;\"/>\n
+    \   </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

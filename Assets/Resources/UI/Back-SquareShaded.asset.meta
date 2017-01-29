@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 6a006bcc45316d846a42b9a7da076186
+timeCreated: 1485328510
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 640 1136\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;\">\n
+    \   <rect id=\"Artboard1\" x=\"0\" y=\"0\" width=\"640\" height=\"1136\" style=\"fill:none;\"/>\n
+    \   <clipPath id=\"_clip1\">\n        <rect id=\"Artboard11\" x=\"0\" y=\"0\"
+    width=\"640\" height=\"1136\"/>\n    </clipPath>\n    <g clip-path=\"url(#_clip1)\">\n
+    \       <g transform=\"matrix(1.04872,0,0,1.04872,0.888284,-175.364)\">\n            <rect
+    x=\"135.721\" y=\"438.538\" width=\"307.91\" height=\"307.91\" style=\"fill:url(#_Linear2);\"/>\n
+    \           <path d=\"M444.756,435.822L445.709,436.459L446.347,437.413L446.571,438.538L446.571,746.448L446.347,747.573L445.709,748.527L444.756,749.164L443.63,749.388L135.721,749.388L134.596,749.164L133.642,748.527L133.004,747.573L132.781,746.448L132.781,438.538L133.004,437.413L133.642,436.459L134.596,435.822L135.721,435.598L443.63,435.598L444.756,435.822ZM135.721,438.538L135.721,746.448L443.63,746.448L443.63,438.538L135.721,438.538Z\"
+    style=\"fill:url(#_Linear3);\"/>\n        </g>\n    </g>\n    <defs>\n        <linearGradient
+    id=\"_Linear2\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\" gradientUnits=\"userSpaceOnUse\"
+    gradientTransform=\"matrix(-3.74851e-14,204.059,-204.059,-3.74851e-14,289.687,585.018)\"><stop
+    offset=\"0%\" style=\"stop-color:white;stop-opacity:1\"/><stop offset=\"48%\"
+    style=\"stop-color:rgb(230,230,230);stop-opacity:0.913725\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(157,157,157);stop-opacity:0.658824\"/></linearGradient>\n
+    \       <linearGradient id=\"_Linear3\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\" gradientUnits=\"userSpaceOnUse\"
+    gradientTransform=\"matrix(2.86064,223.13,-223.13,2.86064,286.827,584.065)\"><stop
+    offset=\"0%\" style=\"stop-color:black;stop-opacity:1\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(114,114,114);stop-opacity:1\"/></linearGradient>\n    </defs>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

@@ -27,9 +27,12 @@ public class GameManager : MonoBehaviour {
 			return new Module[] {Menu, Dinner};
 		}
 	}
+	public string StartingModule = "";
 
-	public static WorldResources WorldRes;
-	public WorldResources _WorldResources;
+	public static WorldResources WorldRes
+	{
+		get{return Data.World;}
+	}
 
 	public static Transform GetCanvas()
 	{
@@ -42,20 +45,33 @@ public class GameManager : MonoBehaviour {
 		else return GameObject.Find("FaceParent").GetComponent<UIObj>();
 	}
 
+	public static Generator GetGenerator()
+	{
+		if(_generator == null)
+		{
+			_generator = GameObject.Find("Generator").GetComponent<Generator>();
+		}
+		return _generator;
+	}
+
+	private static Generator _generator;
+
+
 	public static GameData Data;
 
 	public InputController _Input;
-	public GreatGrand [] GG;
-
-	public static int GG_num = 8;
+	public GrandData [] Grands
+	{
+		get{return Data.Grands.ToArray();}
+	}
 
 	public Generator Generator;
 	public VectorObject2D GrumpLine;
 
-	public bool loadDinner = false;
-
 	public static bool Paused = false;
 	public static bool IgnoreInput = false;
+
+	public static bool FirstTimeInitialise = true;
 
 	private bool GivenDefaultResources = false;
 
@@ -69,49 +85,86 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Data = this.GetComponent<GameData>();
-
-		WorldRes = _WorldResources;
-		WorldRes.Init();
-
-		WorldRes.VillageName = "Tall Trees";
-	
+		Data.Init();
 		_Input.Init();
-		Generator.LoadElements();
 		UI.Init();
+		for(int i = 0; i < AllModules.Length; i++) AllModules[i].Init();
 
-		Menu.Init();
-		Dinner.Init();
+		Generator.LoadElements();
 
-		if(loadDinner) StartCoroutine(LoadModule("dinner"));
-		else StartCoroutine(LoadModule("menu"));
-
-		GivenDefaultResources = PlayerPrefs.GetInt("DefRes") == 1;
-		if(!GivenDefaultResources || WorldRes.Meds.Current == 0)
+		FirstTimeInitialise = PlayerPrefs.GetInt("FirstTime") == 0;
+		if(FirstTimeInitialise)
 		{
-			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
-			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
-			StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
-			PlayerPrefs.SetInt("DefRes", 1);
+			//PlayerPrefs.SetInt("FirstTime", 1);
+
+			WorldRes.VillageName = "Tall Trees";
+			WorldRes[0].Name = "Rep";
+			WorldRes[0].Col = Color.red;
+			WorldRes[0].Set(0);
+			(WorldRes[0] as Stat).SetLevel(1);
+
+			WorldRes[1].Name = "Funds";
+			WorldRes[1].Col = Color.green;
+			WorldRes[1].Set(0);
+
+			WorldRes[2].Name = "Meds";
+			WorldRes[2].Col = Color.blue;
+			WorldRes[2].Set(0);
+
+			//StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
+			//StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
+			//StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
+
+			Data.Grands = new List<GrandData>();
+
+			for(int i = 0; i < WorldRes.Population; i++)
+			{
+				AddGrand(Generator.GenerateGrand());
+			}
 		}
+		
+		if(Data.Grands.Count == 0)
+		{
+			for(int i = 0; i < WorldRes.Population; i++)
+			{
+				AddGrand(Generator.GenerateGrand());
+			}
+		}
+		else
+		{
+			for(int i = 0; i < Data.Grands.Count; i++)
+			{
+				Data.Grands[i].GrandObj = Generator.Generate(Data.Grands[i]);
+			}
+		}
+		
+		if(StartingModule == string.Empty) StartingModule = "menu";
+		StartCoroutine(LoadModule(StartingModule));
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
-		CurrentModule.ControlledUpdate();
+		if(CurrentModule != null) CurrentModule.ControlledUpdate();
+		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
+		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
 	}
 
 	public void OnApplicationQuit()
 	{
-		WorldRes.Save();
+		Data.Save();
 	}
 
 
 	public void Clear()
 	{
-		for(int i = 0; i < GG.Length; i++)
-		{
-			GG[i].Destroy();
-		}
+
+	}
+
+
+	public void AddGrand(GrandData g)
+	{
+		Data.Grands.Add(g);
 	}
 
 	public IEnumerator LoadModule(string n)
@@ -146,11 +199,6 @@ public class GameManager : MonoBehaviour {
 		yield return null;
 	}
 
-	public void ExitMinigame()
-	{
-		//StartCoroutine(UI.Module(UI.Module_Menu));
-	}
-
 	public static void OnTouch()
 	{
 
@@ -160,24 +208,6 @@ public class GameManager : MonoBehaviour {
 	{
 		Table.Reset();
 	}
-
-	VectorLine TLine;
-	[SerializeField]
-	private Color TLineColor;
-	public void TargetLine(Vector3 from, Vector3 to)
-	{
-		if(TLine == null)
-		{
-			TLine = new VectorLine("Targeter", new List<Vector3>(), 7.0F, LineType.Continuous);
-			TLine.points3.Add(from);
-			TLine.points3.Add(to);
-			TLine.SetColor(TLineColor);
-		}
-		TLine.points3[0] = from;
-		TLine.points3[1] = to;
-		TLine.Draw();
-	}
-
 	
 	public void FocusOn(InputTarget t)
 	{

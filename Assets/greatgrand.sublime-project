@@ -9,10 +9,9 @@
 			],
 			"folder_exclude_patterns":
 			[
-				"Generator",
 				"Utilities"
 			],
-			"name": "Mains",
+			"name": "Main",
 			"path": "Scripts"
 		},
 		{
@@ -21,17 +20,12 @@
 				"*.dll",
 				"*.meta"
 			],
+			"folder_exclude_patterns":
+			[
+				
+			],
 			"name": "Utilities",
 			"path": "Scripts/Utilities"
-		},
-		{
-			"file_exclude_patterns":
-			[
-				"*.dll",
-				"*.meta"
-			],
-			"name": "Generator",
-			"path": "Scripts/Generator"
 		}
 	]
 }

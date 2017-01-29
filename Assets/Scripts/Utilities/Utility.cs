@@ -26,6 +26,12 @@ public class Utility : MonoBehaviour {
 		return new Vector2(UnityEngine.Random.Range(0, x), UnityEngine.Random.Range(0, y));
 	}
 
+	public static Vector2 RandomMatrixPoint(Simple2x2 s)
+	{
+		return new Vector2(UnityEngine.Random.Range(s.min.x, s.max.x),
+							UnityEngine.Random.Range(s.min.y, s.max.y));
+	}
+
 	public static Vector3 RandomVectorInclusive(float x = 0.0F, float y = 0.0F, float z = 0.0F)
 	{
 		return new Vector3(UnityEngine.Random.Range(-x, x), UnityEngine.Random.Range(-y, y), UnityEngine.Random.Range(-z,z));
@@ -147,6 +153,30 @@ public class IntVector
 		x = (int)((float)x*m);
 		y = (int)((float)y*m);
 	}
+}
+
+public class Simple2x2
+{
+	public static Simple2x2 zero
+	{get{return new Simple2x2();}}
+	public Vector2 min, max;
+	public Simple2x2(float _x = 0.0F, float _y = 0.0F, float _w = 0.0F, float _z = 0.0F)
+	{
+		min = new Vector2(_x, _y);
+		max = new Vector2(_w, _z);
+	}
+
+	public Rect ToRect()
+	{
+		return new Rect(min.x, min.y, max.x, max.y);
+	}
+
+	public bool ContainsX(float x){return x > min.x && x < max.x;}
+	public bool ContainsY(float y){return y > min.y && y < max.y;}
+	public bool Contains(Vector2 m) {return ContainsX(m.x) && ContainsY(m.y);}
+
+	public float RandX() {return UnityEngine.Random.Range(min.x, max.x);}
+	public float RandY() {return UnityEngine.Random.Range(min.y, max.y);}
 }
 
 [System.Serializable]

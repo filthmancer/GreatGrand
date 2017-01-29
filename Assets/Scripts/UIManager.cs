@@ -277,7 +277,6 @@ public class UIManager : MonoBehaviour {
 
 		UIObj res = ResUI[(int)r.Index];
 
-		float amt_soft = 0.0F;
 		int init = r.Current;
 
 		alert.Txt[0].text = "+" + num;
@@ -285,20 +284,21 @@ public class UIManager : MonoBehaviour {
 		yield return new WaitForSeconds(time_start);
 
 		Tweens.Bounce(res.transform);
+		float amt_soft = num / (time_adding/Time.deltaTime);
 		while((time_curr += Time.deltaTime) <= time_adding)
 		{
-			amt_soft = Mathf.Lerp(0.0F, num, time_curr/time_adding);
-			res.Txt[0].text = "" + (init + (int) amt_soft);
-
+			init += (int) amt_soft;
+			r.Add(amt_soft);
+			res.Txt[0].text = r.ToString();
 			Tweens.Bounce(res.transform);
 			yield return null;
 		}
 
-		res.Txt[0].text = "" + (init + num);
+		res.Txt[0].text = r.ToString();
 		yield return new WaitForSeconds(time_end_pause);
 		alert.PoolDestroy();
 		yield return new WaitForSeconds(time_end);
-		r.Add(num);
+		
 		yield return null;
 	}
 
@@ -308,8 +308,8 @@ public class UIManager : MonoBehaviour {
 		for(int i = 0; i < wres.Length; i++)
 		{
 			if(wres[i] == null) continue;
-			ResUI[i].Txt[0].text = wres[i].Value.ToString();
-			ResUI[i].Img[0].color = wres[i].Col;
+			ResUI[i].Txt[0].text = wres[i].ToString();
+			ResUI[i].Svg[0].color = wres[i].Col;
 		}
 	}
 }
@@ -344,7 +344,6 @@ public class Tweens
 		if(sc.HasValue) fin = sc.Value;
 
 		Sequence s = DOTween.Sequence();
-
 		s.Append(t.DOScale(fin * 1.08F, 0.2F));
 		s.Append(t.DOScale(fin * 0.9F, 0.08F));
 		s.Append(t.DOScale(fin, 0.1F));

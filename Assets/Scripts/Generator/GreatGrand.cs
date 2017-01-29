@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using Vectrosity;
 
 public class GreatGrand : GrumpObj {
-	public GreatGrand_Data Info;
+	public GrandData Data;
+	public GrandInfo Info {
+		get{return Data.Info;}
+	}
+	//public GreatGrand_Data Info;
 	public int Index;
 	public _Seat Seat;
 	public _Grump [] Grumps;
@@ -82,17 +86,6 @@ public class GreatGrand : GrumpObj {
 
 			Face.transform.position = Vector3.Lerp(Face.transform.position, dpos, Time.deltaTime * 10);
 			Face.transform.LookAt(GameManager.Table.TableObj.transform, Vector3.up);
-			/*Vector3 facepos = drag_targ.Target.Face.transform.position;
-			Vector3 dragpos = pos;
-			dragpos.y = facepos.y;
-			
-
-			if(Vector3.Distance(dragpos, facepos) > 0.6F) GameManager.instance.TargetLine(Face.transform.position, pos);
-			else 
-			{
-				GameManager.instance.TargetLine(Face.transform.position, drag_targ.Target.Face.transform.position);
-			}*/
-
 			GrumpLines(0.8F, true); 
 		}
 		else 
@@ -105,7 +98,6 @@ public class GreatGrand : GrumpObj {
 
 	public override void Release(Vector3 pos)
 	{
-		GameManager.instance.TargetLine(Vector3.zero, Vector3.zero);
 		lines_drawing = false;
 		if(isDragging)
 		{
@@ -260,44 +252,48 @@ public class GreatGrand : GrumpObj {
 
 	public void ResetFace(FaceObj f)
 	{
-		f.SetSkinColor(Info.Color_Skin);
-		f.SetHairColor(Info.Color_Hair);
-		f.SetOffsetColor(Info.Color_Offset);
+		f.SetSkinColor(Info.C_Skin);
+		f.SetHairColor(Info.C_Hair);
+		f.SetOffsetColor(Info.C_Offset);
 
 		f.Reset(Info.Base);
-		(f[0] as FaceObj).SetInfo(Info.EyeLeft);
-		(f[1] as FaceObj).SetInfo((Info.EyeRight));
-		(f[2][0] as FaceObj).Reset((Info.EarLeft));
-		(f[3][0] as FaceObj).Reset((Info.EarRight));
-		(f[4][0] as FaceObj).Reset((Info.BrowLeft));
-		(f[5][0] as FaceObj).Reset((Info.BrowRight));
-		(f[6][0] as FaceObj).Reset((Info.Hair));
-		(f[8][0] as FaceObj).Reset((Info.Nose));
-		(f[7][0] as FaceObj).Reset((Info.Jaw));
+		(f[0][0] as FaceObj).Reset(Info.Eye);
+		(f[1][0] as FaceObj).Reset(Info.Eye);
+		(f[2][0] as FaceObj).Reset(Info.Ear);
+		(f[3][0] as FaceObj).Reset(Info.Ear);
+		(f[4][0] as FaceObj).Reset(Info.Brow);
+		(f[5][0] as FaceObj).Reset(Info.Brow);
+		(f[6][0] as FaceObj).Reset(Info.Hair);
+		(f[8][0] as FaceObj).Reset(Info.Nose);
+		(f[7][0] as FaceObj).Reset(Info.Jaw);
 	}
 
 	public void SetFace(FaceObj f)
 	{
 		Face = f;
-		//GameManager.GetFaceParent().AddChild(Face);
 
 		Face.Start();
 		Face.Reset(Info.Base);
-
-		(Face[0] as FaceObj).SetInfo(Info.EyeLeft);
-		(Face[1] as FaceObj).SetInfo((Info.EyeRight));
-		(Face[2] as FaceObj).SetInfo((Info.EarLeft));
-		(Face[3] as FaceObj).SetInfo((Info.EarRight));
-
-		(Face[4] as FaceObj).SetInfo((Info.BrowLeft));
-		(Face[5] as FaceObj).SetInfo((Info.BrowRight));
-		(Face[6] as FaceObj).SetInfo((Info.Hair));
-		(Face[8] as FaceObj).SetInfo((Info.Nose));
-		(Face[7] as FaceObj).SetInfo((Info.Jaw));
+		(Face.Child[0] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
+		(Face.Child[1] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
+		(Face.Child[2] as FaceObj).SetInfo( Info.Ear, GameManager.GetGenerator().Ear[Info.Ear.Index].Prefab);
+		(Face.Child[3] as FaceObj).SetInfo( Info.Ear, GameManager.GetGenerator().Ear[Info.Ear.Index].Prefab);
+		(Face.Child[4] as FaceObj).SetInfo( Info.Brow, GameManager.GetGenerator().Brow[Info.Brow.Index].Prefab);
+		(Face.Child[5] as FaceObj).SetInfo( Info.Brow, GameManager.GetGenerator().Brow[Info.Brow.Index].Prefab);
+		(Face.Child[6] as FaceObj).SetInfo( Info.Hair, GameManager.GetGenerator().Hair[Info.Hair.Index].Prefab);
+		(Face.Child[8] as FaceObj).SetInfo( Info.Nose, GameManager.GetGenerator().Nose[Info.Nose.Index].Prefab);
+		(Face.Child[7] as FaceObj).SetInfo( Info.Jaw, GameManager.GetGenerator().Jaw[Info.Jaw.Index].Prefab);
 
 		Emotion.transform.position = Face.transform.position + Face.transform.up;
-		Face.Child[0][0].Img[1].transform.localScale = Info.PupilScale;
-		Face.Child[1][0].Img[1].transform.localScale = Info.PupilScale;
+		
+		Face.Child[0][0].Svg[1].transform.localScale = Info.PupilScale;
+		Face.Child[1][0].Svg[1].transform.localScale = Info.PupilScale;
+		Face.Child[0][0].Svg[1].color = Info.C_Eye;
+		Face.Child[1][0].Svg[1].color = Info.C_Eye;
+
+		Face.Child[7][0].Svg[1].transform.SetParent(Face.Svg[1].transform);
+		Face.Child[2][0].Svg[1].color = Info.C_Offset;
+		Face.Child[3][0].Svg[1].color = Info.C_Offset;
 	}
 
 	public FaceObj CloneFace()
@@ -306,9 +302,9 @@ public class GreatGrand : GrumpObj {
 
 		final.Start();
 
-		final.SetSkinColor(Info.Color_Skin);
-		final.SetHairColor(Info.Color_Hair);
-		final.SetOffsetColor(Info.Color_Offset);
+		final.SetSkinColor(Info.C_Skin);
+		final.SetHairColor(Info.C_Hair);
+		final.SetOffsetColor(Info.C_Offset);
 
 		/*final.Reset(Info.Base);
 		(final[0] as FaceObj).SetInfo(Info.EyeLeft);
@@ -360,38 +356,42 @@ public class GreatGrand : GrumpObj {
 		bool gender = Index % 2 == 0;
 		if(Random.value < 0.05F) gender = !gender;
 
-		Info.Gender = gender;
-		Info.Name = gender ? GreatGrand_Data.Names_Male_Random : GreatGrand_Data.Names_Female_Random;
-		Info.GFactor = 0.55F;
+		Data.Info.Gender = gender;
+		Data.Info.Name = gender ? GrandData.Names_Male_Random : GrandData.Names_Female_Random;
+		Data.Social = 0.55F;
+		Data.Fitness = 0.55F;
 
-		Info.Age = Random.Range(80, 115);
+		Data.Info.Age = Random.Range(80, 115);
 		//Add grump based on age if male, remove if female
-		float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);
-		Info.GFactor += gender ? agefactor : -agefactor;
+		//float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);
+		//Data.Info.GFactor += gender ? agefactor : -agefactor;
 
-		//Info.MStat = Random.value > 0.65F ? MaritalStatus.Married : (Random.value > 0.8F ? MaritalStatus.Divorced : MaritalStatus.Donor);
+		Data.Info.MStat = Random.value > 0.65F ? MaritalStatus.Married : (Random.value > 0.8F ? MaritalStatus.Divorced : MaritalStatus.Donor);
 		//Add grump if divorced, remove if married
 		switch(Info.MStat)
 		{
 			case MaritalStatus.Married:
-			Info.GFactor -= 0.15F;
+			//Info.GFactor -= 0.15F;
 			break;
 			case MaritalStatus.Divorced:
-			Info.GFactor += 0.15F;
+			//Info.GFactor += 0.15F;
 			break;
 			case MaritalStatus.Donor:
 
 			break;
 		}
 
-		Info.Military = Random.value > 0.95F;
+		Data.Info.Military = Random.value > 0.95F;
+
+		Data.Info.PupilScale = Vector3.one;
+
 		transform.name = Info.Name;
 		//Emotion.color = GameManager.Data.GG_Colours[Index];
 	}
 
 	public void SetMaritalStatus(MaritalStatus m)
 	{
-		Info.MStat = m;
+		Data.Info.MStat = m;
 	}
 }
 
@@ -405,9 +405,10 @@ public class GreatGrand : GrumpObj {
 		Australian, British, American, Japanese, Sudanese, Chinese, Greek, Vietnamese
 	}
 
-	[System.Serializable]
+	/*[System.Serializable]
 	public class GreatGrand_Data
 	{
+		public int Hex;
 		public bool Gender;
 		public int Age;
 		public string Name;
@@ -447,7 +448,7 @@ public class GreatGrand : GrumpObj {
 			get{return Names_Female[Random.Range(0, Names_Female.Length)];}
 		}
 
-		public FaceObjInfo  EyeLeft, EyeRight,
+		public FaceInfo  EyeLeft, EyeRight,
 							EarLeft, EarRight,
 							BrowLeft, BrowRight,
 							Base, Hair, Jaw, Nose;
@@ -455,4 +456,19 @@ public class GreatGrand : GrumpObj {
 
 		public Color Color_Skin, Color_Hair, Color_Offset;
 
-	}
+		public FaceInfo GetFaceInfo(string s)
+		{
+			switch(s)
+			{
+				case "Eye": return EyeLeft;
+				case "Ear": return EarLeft;
+				case "Brow": return BrowLeft;
+				case "Base": return Base;
+				case "Hair": return Hair;
+				case "Jaw": return Jaw;
+				case "Nose": return Nose;
+			}
+			return null;
+		}
+
+	}*/

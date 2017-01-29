@@ -92,7 +92,9 @@ public class GrandGenerator : EditorWindow {
 			Gen.TargetGrand = Gen.Generate(0);
 			FaceObj f = Gen.GenerateFace(Gen.TargetGrand);
 			f.transform.localRotation = Quaternion.identity;
-			//f.transform.localScale = new Vector3(1.0F, 0.6F, 1.0F);
+			f.transform.SetParent(GameManager.GetCanvas());
+			f.transform.localScale = Vector3.one;
+			f.transform.localRotation = Quaternion.identity;
 		}
 
 		if(progress < time_total)
@@ -156,22 +158,22 @@ public class GrandGenerator : EditorWindow {
 		{
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Label("Skin", GUILayout.Width(50));
-			Gen.Skin = EditorGUILayout.ColorField(Gen.Skin, GUILayout.Width(150));
-			if(GUILayout.Button("<",  GUILayout.Width(20))) Gen.Skin = Gen.CycleSkin(Gen.Skin_num++);
-			if(GUILayout.Button(">",  GUILayout.Width(20))) Gen.Skin = Gen.CycleSkin(Gen.Skin_num--);
+			Gen.SkinCurrent = EditorGUILayout.ColorField(Gen.SkinCurrent, GUILayout.Width(150));
+			if(GUILayout.Button("<",  GUILayout.Width(20))) Gen.SkinCurrent = Gen.CycleSkin(1);
+			if(GUILayout.Button(">",  GUILayout.Width(20))) Gen.SkinCurrent = Gen.CycleSkin(-1);
 
 			EditorGUILayout.EndHorizontal();
 
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Label("Hair", GUILayout.Width(50));
-			Gen.HairCol = EditorGUILayout.ColorField(Gen.HairCol, GUILayout.Width(150));
-			if(GUILayout.Button("<",  GUILayout.Width(20))) Gen.HairCol = Gen.CycleHair(Gen.Hair_num++);
-			if(GUILayout.Button(">",  GUILayout.Width(20))) Gen.HairCol = Gen.CycleHair(Gen.Hair_num--);
+			Gen.HairCurrent = EditorGUILayout.ColorField(Gen.HairCurrent, GUILayout.Width(150));
+			if(GUILayout.Button("<",  GUILayout.Width(20))) Gen.HairCurrent = Gen.CycleHair(1);
+			if(GUILayout.Button(">",  GUILayout.Width(20))) Gen.HairCurrent = Gen.CycleHair(-1);
 			EditorGUILayout.EndHorizontal();
 
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Label("Col B", GUILayout.Width(50));
-			Gen.Offset = EditorGUILayout.ColorField(Gen.Offset, GUILayout.Width(150));
+			Gen.OffsetCurrent = EditorGUILayout.ColorField(Gen.OffsetCurrent, GUILayout.Width(150));
 			EditorGUILayout.EndHorizontal();
 		}
 		else

@@ -6,6 +6,7 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using SVGImporter;
 
 public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler{
 	public string _Name;
@@ -14,8 +15,10 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	//[HideInInspector]
 	public UIObj ParentObj;
 	public Image [] Img;
+	public SVGImage [] Svg;
 	public TextMeshProUGUI [] Txt;
 	public UIObj [] Child;
+
 
 	public bool SetInactiveAfterLoading;
 	public TextMeshProUGUI _Text
@@ -51,8 +54,6 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		}
 		else Destroy(this.gameObject);
 	}
-
-	//public bool isActive{get{return this.gameObject.activeSelf;}}
 
 	public virtual void Start()
 	{
@@ -99,11 +100,14 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 			this.transform.localScale = Vector3.zero;
 			Sequence s = Tweens.Bounce(this.transform, activescale);
+			for(int i = 0; i < Txt.Length; i++)
+			{
+				Txt[i].text = Txt[i].text;
+			}
 		}
 		else
 		{
 			if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
-
 			this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
 		}
 	}
@@ -178,6 +182,8 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			newchild[i].Index = i;
 			newchild[i].ParentObj = this;
 			newchild[i].transform.SetParent(this.transform, false);
+			newchild[i].transform.localRotation = Quaternion.identity;
+			newchild[i].transform.localPosition = Vector3.zero;
 			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.zero;
 			//newchild[i].GetComponent<RectTransform>().anchorMax = Vector2.one;
 			//newchild[i].GetComponent<RectTransform>().sizeDelta = Vector3.zero;

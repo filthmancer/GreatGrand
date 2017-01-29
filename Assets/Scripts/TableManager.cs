@@ -191,7 +191,7 @@ public class TableManager : MonoBehaviour {
 		{
 			range.Add(l);
 		}
-		for(int h = GameManager.GG_num-1; h > max; h--)
+		for(int h = GameManager.Module.Grands.Length; h > max; h--)
 		{
 			range.Add(h);
 		}

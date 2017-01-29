@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: a6791a561929fd144a71520bb5a0a13f
+timeCreated: 1485654670
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 95 95\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-863,-97)\">\n        <g id=\"Dish\" transform=\"matrix(1,0,0,1,118.091,-125.648)\">\n
+    \           <g transform=\"matrix(1,0,0,1,-21,3)\">\n                <circle cx=\"813.474\"
+    cy=\"267.509\" r=\"46\" style=\"fill:rgb(201,201,201);stroke:black;stroke-opacity:0.360784;stroke-width:2px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(0.771739,0,0,0.771739,164.684,64.0618)\">\n
+    \               <path d=\"M813.474,221.509C838.862,221.509 859.474,242.121 859.474,267.509C859.474,292.897
+    838.862,313.509 813.474,313.509C788.086,313.509 767.474,292.897 767.474,267.509C767.474,242.121
+    788.086,221.509 813.474,221.509ZM813.474,227.029C835.815,227.029 853.954,245.167
+    853.954,267.509C853.954,289.85 835.815,307.989 813.474,307.989C791.132,307.989
+    772.994,289.85 772.994,267.509C772.994,245.167 791.132,227.029 813.474,227.029Z\"
+    style=\"fill:rgb(152,152,152);stroke:black;stroke-opacity:0.478431;stroke-width:2px;\"/>\n
+    \           </g>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 
