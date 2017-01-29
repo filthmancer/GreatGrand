@@ -148,7 +148,7 @@ public class Generator : MonoBehaviour {
 
 		Vector3 eyescale = (final.Info.Eye._Scale - Vector3.one);
 		Vector3 r = eyescale * Random.Range(0.7F, 1.3F);
-		final.Info.PupilScale = Vector3.one*1.4F + Utility.RandomVectorInclusive(r.x + 0.1F, r.y + 0.1F, 0.0F);
+		final.Info.PupilScale = Vector3.one*0.9F + Utility.RandomVectorInclusive(r.x + 0.1F, r.y + 0.1F, 0.0F);
 		
 	}
 

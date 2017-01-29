@@ -213,6 +213,16 @@ public class GameManager : MonoBehaviour {
 	{
 		if(t is GreatGrand) UI.SetGrandUI(t as GreatGrand);
 	}
+
+	public static Vector3 InputPos;
+	public static GreatGrand TargetGrand;
+	public void SetTargetGrand(GreatGrand g)
+	{
+		if(g == null) TargetGrand.Release(InputPos);
+		else g.Tap(InputPos);
+		UI.SetGrandUI(g);
+		TargetGrand = g;
+	}
 }
 
 

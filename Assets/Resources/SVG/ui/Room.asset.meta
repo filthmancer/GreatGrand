@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: d4f1a68fab95e8c4e91995fc29d6860d
+timeCreated: 1485677862
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 456 553\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-1302,-457)\">\n        <g id=\"Room\" transform=\"matrix(0.920792,0,0,1.11552,103.174,-116.561)\">\n
+    \           <g transform=\"matrix(1.45673,0,0,1.45673,-448.779,-271.919)\">\n
+    \               <path d=\"M1541.55,540L1541.55,877.87L1202.24,879.303L1202.24,540L1541.55,540Z\"
+    style=\"fill:url(#_Radial1);stroke:black;stroke-width:0.31px;\"/>\n            </g>\n
+    \           <g transform=\"matrix(1,0,0,1,177.808,52.2005)\">\n                <rect
+    x=\"1202.24\" y=\"540\" width=\"339.303\" height=\"339.303\" style=\"fill:none;stroke:black;stroke-width:1.06px;\"/>\n
+    \           </g>\n            <path d=\"M1380.05,592.201L1302.57,514.715\" style=\"fill:none;stroke:black;stroke-width:0.45px;\"/>\n
+    \           <path d=\"M1719.75,592.266L1796.84,514.715\" style=\"fill:none;stroke:black;stroke-width:0.45px;\"/>\n
+    \           <path d=\"M1720.79,931.569L1796.84,1006.9\" style=\"fill:none;stroke:black;stroke-width:0.45px;\"/>\n
+    \           <path d=\"M1381.49,932.613L1302.57,1008.99\" style=\"fill:none;stroke:black;stroke-width:0.45px;\"/>\n
+    \       </g>\n    </g>\n    <defs>\n        <radialGradient id=\"_Radial1\" cx=\"0\"
+    cy=\"0\" r=\"1\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(1.42623e-14,-232.921,232.921,1.42623e-14,1373.96,710.771)\"><stop
+    offset=\"0%\" style=\"stop-color:rgb(146,107,80);stop-opacity:1\"/><stop offset=\"60%\"
+    style=\"stop-color:rgb(134,94,66);stop-opacity:1\"/><stop offset=\"81%\" style=\"stop-color:rgb(107,64,34);stop-opacity:1\"/><stop
+    offset=\"100%\" style=\"stop-color:rgb(78,32,0);stop-opacity:1\"/></radialGradient>\n
+    \   </defs>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

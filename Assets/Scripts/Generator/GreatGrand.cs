@@ -68,7 +68,7 @@ public class GreatGrand : GrumpObj {
 		base.Drag(pos);
 		GameManager.instance.FocusOn(this);
 		
-		if(isDragging)
+		/*if(isDragging)
 		{
 			if(drag_targ == null) drag_targ = Seat;
 			_Seat n = GameManager.Table.NearestSeat(pos);
@@ -93,25 +93,25 @@ public class GreatGrand : GrumpObj {
 			Face.transform.position = Seat.Position;
 			Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
 			GrumpLines(0.8F, true); 
-		}
+		}*/
 	}
 
 	public override void Release(Vector3 pos)
 	{
 		lines_drawing = false;
-		if(isDragging)
+		/*if(isDragging)
 		{
 			drag_targ = GameManager.Table.NearestSeat(pos);
 			if(drag_targ.CanSeat(this) && drag_targ != Seat) DragSit(drag_targ);//StartCoroutine(SitAt(drag_targ, true));
 			else DragSit(drag_targ);//StartCoroutine(SitAt(Seat));			
-		}
+		}*/
 		base.Release(pos);
 	}
 
 	public override void Tap(Vector3 pos)
 	{
 		base.Tap(pos);
-		ShowGrumpLines();
+		//ShowGrumpLines();
 		GameManager.instance.FocusOn(this);
 	}
 
@@ -155,12 +155,12 @@ public class GreatGrand : GrumpObj {
 		Seat.SetTarget(this);
 
 		Vector3 sitpos = Seat.transform.position;
-		sitpos.y += 0.5F;
+		sitpos.y -= 0.5F;
 		transform.position = sitpos;
 
 		Face.transform.position = Seat.Position;
-		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
+		Face.transform.rotation = Seat.Rotation;// * Quaternion.Euler(65, 0,0);
+		//Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
 		//CheckEmotion(false);
 		isSeated = true;
 		//GameManager.instance.CheckGrumps();
@@ -212,12 +212,12 @@ public class GreatGrand : GrumpObj {
 		Seat.SetTarget(this);
 
 		Vector3 sitpos = Seat.transform.position;
-		sitpos.y += 0.5F;
+		sitpos.y -= 0.5F;
 		transform.position = sitpos;
 
 		Face.transform.position = Seat.Position;
-		Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-		Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
+		Face.transform.rotation = Seat.Rotation;// * Quaternion.Euler(65, 0,0);
+		//Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
 		
 		if(alert) yield return StartCoroutine(EmotionRoutine());
 		isSeated = true;
@@ -226,7 +226,7 @@ public class GreatGrand : GrumpObj {
 
 	public int GetGrumps(bool allgrumps = true)
 	{
-		GrumpLines(0.4F, allgrumps);
+		GrumpLines(0.55F, allgrumps);
 		return GrumpMeter;
 	}
 

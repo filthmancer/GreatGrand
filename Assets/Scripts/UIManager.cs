@@ -263,12 +263,13 @@ public class UIManager : MonoBehaviour {
 		UIAlert alert = Instantiate(UIResObj);
 		WorldObjects.AddChild(alert);
 		alert.ResetRect();
-		alert.transform.position = ResUI[(int)r.Index].Txt[0].transform.position;
+		alert.transform.position = ResUI[(int)r.Index].Txt[0].transform.position -
+									ResUI[(int)r.Index].Txt[0].transform.up*0.5F;
 
 		float time_start = 0.2F;
-		float time_adding = 1.2F;
-		float time_end_pause = 0.4F;
-		float time_end = 0.5F;
+		float time_adding = 0.8F;
+		float time_end_pause = 0.3F;
+		float time_end = 0.2F;
 		float time_total = time_start + time_adding + time_end;
 
 		float time_curr = 0.0F;
@@ -297,7 +298,7 @@ public class UIManager : MonoBehaviour {
 
 		res.Txt[0].text = r.ToString();
 		yield return new WaitForSeconds(time_end_pause);
-		alert.PoolDestroy();
+		if(alert != null) alert.PoolDestroy();
 		yield return new WaitForSeconds(time_end);
 		
 		yield return null;

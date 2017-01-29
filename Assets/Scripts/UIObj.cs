@@ -297,6 +297,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			child.Act();
 		}
 		if(Img.Length > 0) init = Img[0].color;
+		if(Svg.Length > 0) init = Svg[0].color;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
@@ -313,6 +314,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		isPressed = false;
 		time_over = 0.0F;
 		if(Img.Length > 0) Img[0].color = init;
+		if(Svg.Length > 0) Svg[0].color = init;
 	}
 
 
@@ -343,6 +345,11 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			init = Img[0].color;
 			Img[0].color = Color.Lerp(init, Color.black, 0.2F);
 		}
+		else if(Svg.Length > 0) 
+		{
+			init = Svg[0].color;
+			Svg[0].color = Color.Lerp(init, Color.black, 0.2F);
+		}
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
@@ -364,6 +371,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		isPressed = false;
 		time_over = 0.0F;
 		if(Img.Length > 0) Img[0].color = init;	
+		if(Svg.Length > 0) Svg[0].color = init;	
 	}
 	List<Action>	Actions_MouseOut = new List<Action>(), 
 					Actions_MouseOver = new List<Action>(),

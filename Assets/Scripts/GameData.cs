@@ -438,7 +438,7 @@ public class Stat:Resource
 {
 	public override string ToString()
 	{
-		return Value + "\n/" + Max;
+		return Value + "/" + Max;
 	}
 
 	public int Level;

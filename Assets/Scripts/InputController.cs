@@ -24,8 +24,9 @@ public class InputController : MonoBehaviour {
 			baseplane = new Plane(Vector3.up, Vector3.zero);
 			float d;
 			baseplane.Raycast(InputRay, out d);
-			InputPos = InputRay.GetPoint(d);
+			GameManager.InputPos = InputRay.GetPoint(d);
 		}
+
 		if(Input.GetMouseButtonDown(0))
 		{
 			if(Physics.Raycast(InputRay, out InputRay_hit, Mathf.Infinity))
