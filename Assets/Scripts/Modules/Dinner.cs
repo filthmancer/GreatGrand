@@ -51,7 +51,7 @@ public class Dinner : Module {
 	private GreatGrand Target;
 	private bool isDragging;
 	private _Seat drag_targ;	
-	private float drag_distance = 1.4F;
+	private float drag_distance = 0.8F;
 	public override void ControlledUpdate()
 	{
 		if(Running)
@@ -97,7 +97,7 @@ public class Dinner : Module {
 					}
 
 					Vector3 dpos = GameManager.InputPos;
-					//dpos.y = Target.Face.transform.position.y;
+					dpos.y = Target.Face.transform.position.y;
 					//dpos += new Vector3(0.0F, 0.0F, -0.5F);
 
 					Target.Face.transform.position = Vector3.Lerp(Target.Face.transform.position, dpos, Time.deltaTime * 20);
@@ -107,10 +107,13 @@ public class Dinner : Module {
 				}
 				else 
 				{
+					Vector3 dpos = GameManager.InputPos;
+					dpos.y = Target.Face.transform.position.y;
+
 					Target.Face.transform.position = Target.Seat.Position;
 					Target.Face.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(4, 0,0);
 					Target.GrumpLines(0.8F, true); 
-					if(Vector3.Distance(GameManager.InputPos, Target.Face.transform.position) > drag_distance)
+					if(Vector3.Distance(dpos, Target.Face.transform.position) > drag_distance)
 					{
 						isDragging = true;
 					}
@@ -140,13 +143,8 @@ public class Dinner : Module {
 		{
 			Complete();
 		});
-		MUI[3].AddAction(UIAction.MouseDown, ()=>
-		{
-			StartCoroutine(GameManager.instance.LoadModule("Menu"));
-		});
-
+		
 		if(timerobj == null) timerobj = MUI["kitchen"];
-
 		MUI.SetActive(false);
 	}
 
@@ -156,7 +154,7 @@ public class Dinner : Module {
 		yield return StartCoroutine(Load());
 		
 		MUI.SetActive(true);
-
+		GameManager.UI.PermUI["exit"].TweenActive(true);
 		if(entry)
 		{
 			Sequence f = OpeningSequence(v);
@@ -242,9 +240,10 @@ public class Dinner : Module {
 	{
 		drag_targ = _TableManager.NearestSeat(GameManager.InputPos);
 		DragSit(Target, drag_targ);	
+
 		//if(drag_targ.CanSeat(Target) && drag_targ != Target.Seat) Target.DragSit(drag_targ);
 		//else 
-
+		isDragging = false;
 		Target = null;
 	}
 
@@ -345,6 +344,7 @@ public class Dinner : Module {
 
 	IEnumerator StartDinner(int [] index)
 	{
+		yield return null;
 		GameManager.UI.WinMenu.SetActive(false);
 		for(int i = 0; i < Grands.Length; i++)
 		{
@@ -372,6 +372,11 @@ public class Dinner : Module {
 
 	int FinalScore = 0;
 	float final_timer = 0.8F;
+	public float Bonus_DifficultyMultiplier = 1.0F;
+	public float Bonus_TimerMax = 1.0F;
+	public float Bonus_TimerDecay = 1.0F;
+	public float Bonus_Perfect = 2.0F;
+
 	IEnumerator EndDinner()
 	{
 		while(!AllSeated) yield return null;
@@ -457,8 +462,9 @@ public class Dinner : Module {
 
 		yield return new WaitForSeconds(0.4F);
 
-		int rep = FinalScore * 5;
+		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
 
+		//total.Img[0].color = Color.
 		total.Txt[0].text = rep + "";
 		total.Txt[1].text = "REP";
 		
@@ -470,8 +476,8 @@ public class Dinner : Module {
 		{
 			yield return new WaitForSeconds(0.5F);
 
-			float mult = (1.0F - Timer_current/Timer);
-			mult = Mathf.Clamp(1.0F + mult, 1.0F, 1.5F);
+			float mult = 1.0F - (Timer_current/Timer*Bonus_TimerDecay);
+			mult = Mathf.Clamp(1.0F + mult, 1.0F, Bonus_TimerMax);
 			rep = (int) ((float) rep * mult);
 			total.Txt[0].text = rep + "";
 			total.Txt[1].text = "TIME";
@@ -485,7 +491,7 @@ public class Dinner : Module {
 		if(FinalScore == GGNum)
 		{
 			yield return new WaitForSeconds(0.5F);
-			rep *= 2;
+			rep = (int) ((float)rep * Bonus_Perfect);
 			total.Txt[0].text = rep + "";
 			total.Txt[1].text = "PERFECT!";
 			total.Txt[1].color = Color.blue;

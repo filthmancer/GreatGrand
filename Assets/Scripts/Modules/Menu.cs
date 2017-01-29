@@ -52,6 +52,8 @@ public class Menu : Module {
 
 			yield return null;
 		}
+
+		GameManager.UI.PermUI["exit"].TweenActive(false);
 	}
 
 	public override Sequence OpeningSequence(IntVector v)

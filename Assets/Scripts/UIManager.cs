@@ -42,6 +42,11 @@ public class UIManager : MonoBehaviour {
 		{
 			Options.TweenActive();
 		});
+		
+		PermUI["exit"].AddAction(UIAction.MouseUp, ()=>
+		{
+			StartCoroutine(GameManager.instance.LoadModule("Menu"));
+		});
 
 		Options["resetintros"].AddAction(UIAction.MouseUp, ()=>
 		{
