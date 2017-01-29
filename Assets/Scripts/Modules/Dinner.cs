@@ -51,7 +51,7 @@ public class Dinner : Module {
 	private GreatGrand Target;
 	private bool isDragging;
 	private _Seat drag_targ;	
-	private float drag_distance = 3.4F;
+	private float drag_distance = 1.4F;
 	public override void ControlledUpdate()
 	{
 		if(Running)
@@ -356,7 +356,7 @@ public class Dinner : Module {
 		//for(int i = 0; i < _TableManager.Seat.Length; i++)
 		{
 			StartCoroutine(_TableManager.DoorToSeat(Grands[i], index[i], 0.35F));
-			yield return new WaitForSeconds(Time.deltaTime * 10);
+			//yield return new WaitForSeconds(Time.deltaTime * 10);
 		}
 
 		while(!AllSeated) yield return null;

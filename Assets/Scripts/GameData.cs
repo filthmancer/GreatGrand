@@ -101,7 +101,9 @@ public class GameData : MonoBehaviour {
 	public void Load()
 	{
 		print("Loading from " + Save_Target);
+		if(!System.IO.File.Exists(Save_Target)) return;
 		Save_Data =  SaveData.Load(Save_Target);
+		//if(Save_Data == null) return;
 	//Loading World
 		string [] s;
 		if(Save_Data.TryGetValue<string[]>("World-Resources", out s))
