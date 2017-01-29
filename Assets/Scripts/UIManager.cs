@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour {
 
 	public UIObj Options;
 	public UIObj WinMenu;
+	public UIObj PermUI;
 	public UIObj ResUI;
 	public UIObj FaceParent;
 	public UIObj WorldObjects, QuoteObjects;
@@ -37,7 +38,7 @@ public class UIManager : MonoBehaviour {
 		QuoteMat = QuoteObjects.Img[0].material;
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
 
-		ResUI["options"].AddAction(UIAction.MouseUp, ()=>
+		PermUI["options"].AddAction(UIAction.MouseUp, ()=>
 		{
 			Options.TweenActive();
 		});

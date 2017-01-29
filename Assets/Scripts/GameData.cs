@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
@@ -105,7 +106,7 @@ public class GameData : MonoBehaviour {
 		string [] s;
 		if(Save_Data.TryGetValue<string[]>("World-Resources", out s))
 		{
-			World = new WorldResources();
+			//World = new WorldResources();
 			for(int i = 0; i < s.Length; i++)
 			{
 				World[i].Name = s[i];
@@ -113,7 +114,7 @@ public class GameData : MonoBehaviour {
 				World[i].Multiplier = Save_Data.GetValue<float>("World-"+s[i]+"-Multiplier");
 				World[i].Index = Save_Data.GetValue<int>("World-"+s[i]+"-Index");
 				
-				World[i].Col = Save_Data.GetValue<Color>("World-"+s[i]+"-Col");
+				//World[i].Col = Save_Data.GetValue<Color>("World-"+s[i]+"-Col");
 				if(World[i] is Stat)
 				{
 					(World[i] as Stat).SetLevel(Save_Data.GetValue<int>("World-"+s[i]+"-Level"));

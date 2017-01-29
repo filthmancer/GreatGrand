@@ -99,16 +99,16 @@ public class GameManager : MonoBehaviour {
 
 			WorldRes.VillageName = "Tall Trees";
 			WorldRes[0].Name = "Rep";
-			WorldRes[0].Col = Color.red;
+			//WorldRes[0].Col = Color.red;
 			WorldRes[0].Set(0);
 			(WorldRes[0] as Stat).SetLevel(1);
 
 			WorldRes[1].Name = "Funds";
-			WorldRes[1].Col = Color.green;
+			//WorldRes[1].Col = Color.green;
 			WorldRes[1].Set(0);
 
 			WorldRes[2].Name = "Meds";
-			WorldRes[2].Col = Color.blue;
+			//WorldRes[2].Col = Color.blue;
 			WorldRes[2].Set(0);
 
 			//StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
