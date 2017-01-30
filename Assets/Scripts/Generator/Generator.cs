@@ -76,6 +76,7 @@ public class Generator : MonoBehaviour {
 		final.Info.Name = final.Info.Gender ? GrandData.Names_Male_Random : GrandData.Names_Female_Random;
 		final.Social = 0.55F;
 		final.Fitness = 0.55F;
+		final.Hunger = 0.0F;
 
 		final.Info.Age = Random.Range(60, 102);
 		//Add grump based on age if male, remove if female

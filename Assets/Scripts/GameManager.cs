@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
@@ -95,7 +95,11 @@ public class GameManager : MonoBehaviour {
 		FirstTimeInitialise = PlayerPrefs.GetInt("FirstTime") == 0;
 		if(FirstTimeInitialise)
 		{
-			//PlayerPrefs.SetInt("FirstTime", 1);
+			PlayerPrefs.SetInt("FirstTime", 1);
+			for(int i = 0; i < AllModules.Length; i++)
+			{
+				AllModules[i].SetIntro(false);
+			}
 
 			WorldRes.VillageName = "Tall Trees";
 			WorldRes[0].Name = "Rep";
@@ -111,9 +115,9 @@ public class GameManager : MonoBehaviour {
 			//WorldRes[2].Col = Color.blue;
 			WorldRes[2].Set(0);
 
-			//StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
-			//StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
-			//StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
+			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
+			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
+			StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
 
 			Data.Grands = new List<GrandData>();
 

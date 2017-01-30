@@ -67,44 +67,11 @@ public class GreatGrand : GrumpObj {
 	{
 		base.Drag(pos);
 		GameManager.instance.FocusOn(this);
-		
-		/*if(isDragging)
-		{
-			if(drag_targ == null) drag_targ = Seat;
-			_Seat n = GameManager.Table.NearestSeat(pos);
-
-			if(n != drag_targ)
-			{
-				drag_targ.Reset();
-				drag_targ = n;
-				drag_targ.Highlight(true);	
-			}
-
-			Vector3 dpos = pos;
-			dpos.y = Face.transform.position.y;
-			dpos += new Vector3(0.0F, 0.0F, -0.5F);
-
-			Face.transform.position = Vector3.Lerp(Face.transform.position, dpos, Time.deltaTime * 10);
-			Face.transform.LookAt(GameManager.Table.TableObj.transform, Vector3.up);
-			GrumpLines(0.8F, true); 
-		}
-		else 
-		{
-			Face.transform.position = Seat.Position;
-			Face.transform.rotation = Seat.Rotation * Quaternion.Euler(65, 0,0);
-			GrumpLines(0.8F, true); 
-		}*/
 	}
 
 	public override void Release(Vector3 pos)
 	{
 		lines_drawing = false;
-		/*if(isDragging)
-		{
-			drag_targ = GameManager.Table.NearestSeat(pos);
-			if(drag_targ.CanSeat(this) && drag_targ != Seat) DragSit(drag_targ);//StartCoroutine(SitAt(drag_targ, true));
-			else DragSit(drag_targ);//StartCoroutine(SitAt(Seat));			
-		}*/
 		base.Release(pos);
 	}
 
@@ -202,11 +169,6 @@ public class GreatGrand : GrumpObj {
 		}
 
 		yield return StartCoroutine(GameManager.Table.MoveSeat(this, Seat.Index, s.Index, 0.6F));
-		if(alert)
-		{
-			//Emotion.enabled = false;
-			//Emotion.enabled = true;
-		}
 
 		Seat = s;
 		Seat.SetTarget(this);
@@ -216,12 +178,10 @@ public class GreatGrand : GrumpObj {
 		transform.position = sitpos;
 
 		Face.transform.position = Seat.Position;
-		Face.transform.rotation = Seat.Rotation;// * Quaternion.Euler(65, 0,0);
-		//Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
+		Face.transform.rotation = Seat.Rotation;
 		
 		if(alert) yield return StartCoroutine(EmotionRoutine());
 		isSeated = true;
-		//GameManager.instance.CheckGrumps();
 	}
 
 	public int GetGrumps(bool allgrumps = true)
@@ -248,7 +208,6 @@ public class GreatGrand : GrumpObj {
 	}
 
 	public FaceObj Face;
-	//private FaceObj MiniFace;
 
 	public void ResetFace(FaceObj f)
 	{

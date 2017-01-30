@@ -247,6 +247,8 @@ public class UIManager : MonoBehaviour {
 		     }*/
 
 		     qobj["textbox"].Txt[0].text = target.Value;
+		     qobj["textbox"].Txt[0].color = Color.white;
+		      qobj["textbox"].Txt[0].fontSize = 20;
 		     while(Input.GetMouseButton(0)) yield return null;
 		     while(!Input.GetMouseButtonDown(0)) yield return null;
 		  
@@ -291,17 +293,20 @@ public class UIManager : MonoBehaviour {
 		yield return new WaitForSeconds(time_start);
 
 		Tweens.Bounce(res.transform);
-		float amt_soft = num / (time_adding/Time.deltaTime);
+		/*float amt_soft = num / (time_adding/Time.deltaTime);
 		while((time_curr += Time.deltaTime) <= time_adding)
 		{
 			init += (int) amt_soft;
-			r.Add(amt_soft);
+			
 			res.Txt[0].text = r.ToString();
-			Tweens.Bounce(res.transform);
+			
 			yield return null;
-		}
+		}*/
 
+		Tweens.Bounce(res.transform);
+		r.Add(num);
 		res.Txt[0].text = r.ToString();
+
 		yield return new WaitForSeconds(time_end_pause);
 		if(alert != null) alert.PoolDestroy();
 		yield return new WaitForSeconds(time_end);

@@ -78,6 +78,7 @@ public class GameData : MonoBehaviour {
 
 			Save_Data[pref+"-C_Skin"] = Data.Info.C_Skin;
 			Save_Data[pref+"-C_Hair"] = Data.Info.C_Hair;
+			Save_Data[pref+"-C_Eye"] = Data.Info.C_Eye;
 			Save_Data[pref+"-C_Offset"] = Data.Info.C_Offset;
 			Save_Data[pref+"-C_Nose"] = Data.Info.C_Nose;
 
@@ -146,6 +147,7 @@ public class GameData : MonoBehaviour {
 
 				g.Info.C_Skin = Save_Data.GetValue<Color>(pref+"-C_Skin");
 				g.Info.C_Hair = Save_Data.GetValue<Color>(pref+"-C_Hair");
+				g.Info.C_Eye = Save_Data.GetValue<Color>(pref+"-C_Eye");
 				g.Info.C_Offset = Save_Data.GetValue<Color>(pref+"-C_Offset");
 				g.Info.C_Nose = Save_Data.GetValue<Color>(pref+"-C_Nose");
 
@@ -237,6 +239,13 @@ public class GrandData
 
 	public Resource Smiles, Grumps;
 	public float Fitness, Social;
+	public float Hunger;
+
+	public void AgeUp()
+	{
+		Info.Age++;
+	}
+
 	public GrandData(System.Guid h){
 		Hex = h;
 		Info = new GrandInfo();

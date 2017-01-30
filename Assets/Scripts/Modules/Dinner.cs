@@ -8,26 +8,24 @@ public class Dinner : Module {
 
 	public TableManager _TableManager;
 
-	public static int Difficulty = 0;
-	public static int [] Difficulty_GG = new int[]
+	public int Difficulty = 0;
+	private int [] Difficulty_GG = new int[]
 	{
-		4, 6, 8
+		5, 6, 8
 	};
-	public static int GGNum{
-		get{return Difficulty_GG[Difficulty];}
-	}
+	public int GGNum {get {return Difficulty_GG[Difficulty];} }
 
-	private static float [] Difficulty_Timer = new float []
+	private float [] Difficulty_Timer = new float []
 	{
-		10.0F, 20.0F, 25.0F
+		20.0F, 30.0F, 40.0F
 	};
-	public static float Timer
+	public float Timer {get {return Difficulty_Timer[Difficulty];} }
+
+	private int [] Difficulty_ThirdEyeCost = new int []
 	{
-		get
-		{
-			return Difficulty_Timer[Difficulty];
-		}
-	}
+		4,6,8
+	};
+	public int ThirdEyeCost {get {return Difficulty_ThirdEyeCost[Difficulty];}}
 
 	public VectorObject2D GrumpLine;
 	private int [] GG_Indexes;
@@ -129,16 +127,14 @@ public class Dinner : Module {
 
 	public override void InitUI()
 	{
-		MUI[1].AddAction(UIAction.MouseDown, () =>
+		MUI["thirdeye"].AddAction(UIAction.MouseDown, () =>
 		{
-			if(GameManager.WorldRes.Meds.Charge(1))
+			if(GameManager.WorldRes.Meds.Charge(ThirdEyeCost))
 			{
-				for(int i = 0; i < Grands.Length; i++)
-				{
-					Grands[i].GrumpLines(3.0F, false);
-				}
+				Ability_ThirdEye();
 			}	
 		});
+		MUI["thirdeye"].Txt[0].text = ThirdEyeCost + "";
 		MUI["kitchen"].AddAction(UIAction.MouseDown, ()=>
 		{
 			Complete();
@@ -229,6 +225,14 @@ public class Dinner : Module {
 		});
 	}
 
+	private void Ability_ThirdEye(float time = 2.5F)
+	{
+		for(int i = 0; i < Grands.Length; i++)
+		{
+			Grands[i].GrumpLines(time, false);
+		}
+	}
+
 
 	public void SetTarget(GreatGrand g)
 	{
@@ -317,7 +321,7 @@ public class Dinner : Module {
 
 			FaceObj f = GameManager.instance.Generator.GenerateFace(Grands[i]);
 			fparent.AddChild(f);
-			f.transform.localScale = Vector3.one * 0.32F;
+			f.transform.localScale = Vector3.one * 0.29F;
 			SetupFace(f, Grands[i]);
 		}
 
@@ -328,8 +332,8 @@ public class Dinner : Module {
 
 		for(int i = 0; i < GGNum; i++)
 		{
-			int gnum = 1;
-			if(Random.value > 0.8F) gnum ++;
+			int gnum = 1 + Random.Range(0, Difficulty);
+			//if(Random.value > 0.8F) gnum ++;
 			GenerateGrumpsReal(Grands[i], gnum);
 		}
 
@@ -360,6 +364,8 @@ public class Dinner : Module {
 		}
 
 		while(!AllSeated) yield return null;
+
+		Ability_ThirdEye(1.3F);
 		Running = true;
 		Timer_current = 0.0F;
 
@@ -428,6 +434,7 @@ public class Dinner : Module {
 		total.Txt[0].text = FinalScore + "";
 		total.Txt[1].text = "HAPPY\nGRANDS";
 		total.Txt[1].color = Color.white;
+		total.transform.localScale = Vector3.one * 1.6F;
 		total.TweenActive(true);
 	
 		yield return new WaitForSeconds(0.5F);
@@ -441,7 +448,7 @@ public class Dinner : Module {
 
 		for(int i = 0; i < wrong.Count; i++)
 		{
-			wrong[i].transform.DOScale(Vector3.zero, 0.6F).OnComplete(()=>{});
+			wrong[i].transform.DOScale(Vector3.zero, 0.3F).OnComplete(()=>{});
 		}
 
 		while(isCounting)
@@ -460,7 +467,7 @@ public class Dinner : Module {
 			yield return null;
 		}
 
-		yield return new WaitForSeconds(0.4F);
+		yield return new WaitForSeconds(0.2F);
 
 		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
 
@@ -468,7 +475,7 @@ public class Dinner : Module {
 		total.Txt[0].text = rep + "";
 		total.Txt[1].text = "REP";
 		
-		float repscale = 1.5F + ((float)rep / 150);
+		float repscale = 1.6F + ((float)rep / 150);
 		repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
 		Tweens.Bounce(total.transform, Vector3.one * repscale);
 
@@ -483,7 +490,7 @@ public class Dinner : Module {
 			total.Txt[1].text = "TIME";
 			total.Txt[1].color = Color.red;
 
-			repscale = 1.5F + ((float)rep / 150);
+			repscale = 1.6F + ((float)rep / 150);
 			repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
 			Tweens.Bounce(total.transform, Vector3.one * repscale);
 		}
@@ -496,7 +503,7 @@ public class Dinner : Module {
 			total.Txt[1].text = "PERFECT!";
 			total.Txt[1].color = Color.blue;
 
-			repscale = 1.5F + ((float)rep / 150);
+			repscale = 1.6F + ((float)rep / 150);
 			repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
 			Tweens.Bounce(total.transform, Vector3.one * repscale);
 		}
@@ -504,15 +511,14 @@ public class Dinner : Module {
 		for(int i = Grands.Length-1; i >= 0; i--)
 		{
 			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
+			Grands[i].Data.Hunger = 0.0F;
 		}
 		
 
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
-		GameManager.IgnoreInput = false;
-
 		yield return new WaitForSeconds(final_timer);
+		GameManager.IgnoreInput = false;
 		Clear();
-
 		StartCoroutine(Enter(false, new IntVector(0,0)));
 		/*endgame[2].TweenActive(true);
 		endgame[2].ClearActions();
@@ -525,7 +531,7 @@ public class Dinner : Module {
 	public void SendCorrectAlert(UIAlert u, Transform t)
 	{
 		u.transform.DOScale(Vector3.one * 0.4F, 0.23F);
-		u.transform.DOMove(t.position, 0.4F).OnComplete(()=>{
+		u.transform.DOMove(t.position, 0.3F).OnComplete(()=>{
 			//Tweens.Bounce(t);
 			FinalScore++;
 			u.PoolDestroy();

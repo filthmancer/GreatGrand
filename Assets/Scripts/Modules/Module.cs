@@ -21,6 +21,7 @@ public class Module : MonoBehaviour {
 	public void SetIntro(bool f)
 	{
 		Intro_Shown = f;
+		PlayerPrefs.SetInt("Intro-" + Index, 0);
 	}
 
 	public virtual void ControlledUpdate()

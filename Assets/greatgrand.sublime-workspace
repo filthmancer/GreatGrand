@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"Diffi",
+				"Difficulty_ThirdEyeCost"
+			],
+			[
 				"Bonus",
 				"Bonus_DifficultyMultiplier"
 			],
@@ -124,26 +128,18 @@
 			}
 		},
 		{
+			"file": "Scripts/Generator/GreatGrand.cs",
+			"settings":
+			{
+				"buffer_size": 10189,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "Scripts/Modules/Dinner.cs",
 			"settings":
 			{
-				"buffer_size": 14769,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/TableManager.cs",
-			"settings":
-			{
-				"buffer_size": 9833,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/UIManager.cs",
-			"settings":
-			{
-				"buffer_size": 9712,
+				"buffer_size": 15150,
 				"line_ending": "Windows"
 			}
 		},
@@ -151,31 +147,7 @@
 			"file": "Scripts/GameData.cs",
 			"settings":
 			{
-				"buffer_size": 14096,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/Generator/GreatGrand.cs",
-			"settings":
-			{
-				"buffer_size": 11384,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/InputController.cs",
-			"settings":
-			{
-				"buffer_size": 1123,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/GameManager.cs",
-			"settings":
-			{
-				"buffer_size": 4548,
+				"buffer_size": 14269,
 				"line_ending": "Windows"
 			}
 		},
@@ -183,15 +155,23 @@
 			"file": "Scripts/Generator/Generator.cs",
 			"settings":
 			{
-				"buffer_size": 10780,
+				"buffer_size": 10803,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/Modules/Menu.cs",
+			"file": "Scripts/GameManager.cs",
 			"settings":
 			{
-				"buffer_size": 2325,
+				"buffer_size": 4631,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/Modules/Module.cs",
+			"settings":
+			{
+				"buffer_size": 3040,
 				"line_ending": "Windows"
 			}
 		}
@@ -220,17 +200,18 @@
 	},
 	"file_history":
 	[
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
-		"/C/Projects/greatgrand/Assets/Editor/GrandGen.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/TableManager.cs",
-		"/C/Projects/matchima/Matchima!/Assets/Scripts/Utilities/_GameSaveLoad.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Utility.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/UIManager.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/GameData.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
+		"/C/Projects/greatgrand/Assets/Editor/GrandGen.cs",
+		"/C/Projects/matchima/Matchima!/Assets/Scripts/Utilities/_GameSaveLoad.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Utility.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/Example/SaveDataExample.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/ColorHSB.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/SaveData.cs",
@@ -283,7 +264,6 @@
 		"/C/Projects/greatgrand/Assets/Generator/GrumpObj.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/InputTarget.cs",
 		"/C/Projects/unitystation/Assets/scripts/UI/ControlChat.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Face.cs",
 		"/C/Users/Matt/Downloads/mxrj001@hotmail.com.Photon-vX.free.100-ccu.license"
 	],
@@ -305,6 +285,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"1.5F",
+			"repscale = 1.5F + ((float)rep / 150);",
+			"Ability_ThirdEye",
+			"static",
+			"C_Hair",
+			"C_Eye",
+			"GenerateGrumpsReal",
 			"Difficulty",
 			"init",
 			"Init",
@@ -425,14 +412,7 @@
 			"GreatGrand_fin",
 			"final",
 			"Data",
-			"0.55F",
-			" =",
-			"Resource",
-			"Info",
-			"Right",
-			"Left",
-			"))",
-			"Info"
+			"0.55F"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -450,7 +430,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -465,8 +445,8 @@
 						"selection":
 						[
 							[
-								6910,
-								6910
+								6213,
+								6213
 							]
 						],
 						"settings":
@@ -482,153 +462,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "Scripts/Modules/Dinner.cs",
-					"settings":
-					{
-						"buffer_size": 14769,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								10923,
-								10923
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4791.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Scripts/TableManager.cs",
-					"settings":
-					{
-						"buffer_size": 9833,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7696,
-								7696
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4148.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Scripts/UIManager.cs",
-					"settings":
-					{
-						"buffer_size": 9712,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								979,
-								979
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 114.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Scripts/GameData.cs",
-					"settings":
-					{
-						"buffer_size": 14096,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 66.0,
-						"translation.y": 4449.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
 					"file": "Scripts/Generator/GreatGrand.cs",
 					"settings":
 					{
-						"buffer_size": 11384,
+						"buffer_size": 10189,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11295,
-								11295
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1197.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "Scripts/InputController.cs",
-					"settings":
-					{
-						"buffer_size": 1123,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								392,
-								392
+								195,
+								195
 							]
 						],
 						"settings":
@@ -643,19 +488,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "Scripts/GameManager.cs",
+					"buffer": 2,
+					"file": "Scripts/Modules/Dinner.cs",
 					"settings":
 					{
-						"buffer_size": 4548,
+						"buffer_size": 15150,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4500,
-								4500
+								12336,
+								12336
 							]
 						],
 						"settings":
@@ -664,25 +509,52 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 798.0,
+						"translation.y": 9120.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 3,
+					"file": "Scripts/GameData.cs",
+					"settings":
+					{
+						"buffer_size": 14269,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6635,
+								6635
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "Scripts/Generator/Generator.cs",
 					"settings":
 					{
-						"buffer_size": 10780,
+						"buffer_size": 10803,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4615,
-								4615
+								1968,
+								1968
 							]
 						],
 						"settings":
@@ -691,25 +563,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2052.0,
+						"translation.y": 570.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "Scripts/Modules/Menu.cs",
+					"buffer": 5,
+					"file": "Scripts/GameManager.cs",
 					"settings":
 					{
-						"buffer_size": 2325,
+						"buffer_size": 4631,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1536,
-								1536
+								2121,
+								2121
 							]
 						],
 						"settings":
@@ -718,7 +590,34 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 285.0,
+						"translation.y": 1311.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Scripts/Modules/Module.cs",
+					"settings":
+					{
+						"buffer_size": 3040,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								446,
+								446
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 57.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -768,12 +667,28 @@
 		"selected_items":
 		[
 			[
-				"menu",
-				"Main/Modules/Menu.cs"
+				"module",
+				"Main/Modules/Module.cs"
+			],
+			[
+				"gamemanager",
+				"Main/GameManager.cs"
 			],
 			[
 				"gener",
 				"Main/Generator/Generator.cs"
+			],
+			[
+				"gamedat",
+				"Main/GameData.cs"
+			],
+			[
+				"gamedata",
+				"Main/GameData.cs"
+			],
+			[
+				"menu",
+				"Main/Modules/Menu.cs"
 			],
 			[
 				"faceobj",
@@ -790,10 +705,6 @@
 			[
 				"great",
 				"Main/Generator/GreatGrand.cs"
-			],
-			[
-				"gamedata",
-				"Main/GameData.cs"
 			],
 			[
 				"uimana",
