@@ -68,7 +68,6 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			Child[i].Index = i;
 			Child[i].ParentObj = this;
 		}
-		activescale = transform.localScale;
 		if(SetInactiveAfterLoading) SetActive(false);
 		else isActive = this.gameObject.activeSelf;
 	}
@@ -99,7 +98,8 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			else activescale = Vector3.one;
 
 			this.transform.localScale = Vector3.zero;
-			Sequence s = Tweens.Bounce(this.transform, activescale);
+
+			Sequence s = Tweens.Bounce(this.transform, activescale).OnComplete(() => {activescale = this.transform.localScale;});
 			for(int i = 0; i < Txt.Length; i++)
 			{
 				Txt[i].text = Txt[i].text;
@@ -107,7 +107,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		}
 		else
 		{
-			if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
+			//if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
 			this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
 		}
 	}
@@ -246,7 +246,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public void Destroy()
 	{
-		Destroy(this.gameObject);
+		PoolDestroy();
 	}
 	public void DestroyChildren()
 	{

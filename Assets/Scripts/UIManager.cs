@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour {
 
 	public UIObj Module_Menu, Module_Dinner;
 
+	public UIObj GrandAlertObj;
 	public UIObj Options;
 	public UIObj WinMenu;
 	public UIObj PermUI;
@@ -267,11 +268,13 @@ public class UIManager : MonoBehaviour {
 
 	public IEnumerator ResourceAlert(Resource r, int num)
 	{
+		UIObj res = ResUI.Child[(int)r.Index];
 		UIAlert alert = Instantiate(UIResObj);
 		WorldObjects.AddChild(alert);
 		alert.ResetRect();
-		alert.transform.position = ResUI[(int)r.Index].Txt[0].transform.position -
-									ResUI[(int)r.Index].Txt[0].transform.up*0.5F;
+
+		alert.transform.position = res.Txt[0].transform.position -
+									res.Txt[0].transform.up*0.5F;
 
 		float time_start = 0.2F;
 		float time_adding = 0.8F;
@@ -283,12 +286,11 @@ public class UIManager : MonoBehaviour {
 
 		alert.Setup(time_total);
 		Tweens.Bounce(alert.transform);
-
-		UIObj res = ResUI[(int)r.Index];
-
+		
 		int init = r.Current;
 
 		alert.Txt[0].text = "+" + num;
+		alert.Svg[0].color = r.Col;
 
 		yield return new WaitForSeconds(time_start);
 
@@ -311,6 +313,59 @@ public class UIManager : MonoBehaviour {
 		if(alert != null) alert.PoolDestroy();
 		yield return new WaitForSeconds(time_end);
 		
+		yield return null;
+	}
+
+	public IEnumerator ShowGrandAlert(GrandAlert g)
+	{
+		UIObj alert = PermUI["grandalert"];
+		GrandData grand = g.Grand;
+
+		switch(g.Type)
+		{
+			case AlertType.Ageup:
+				alert.Txt[0].text = grand.Info.Name + " Aged Up!";
+				alert.Txt[1].text = grand.Info.Age - g.Values[0] + "";
+			break;
+			case AlertType.Hungry:
+				alert.Txt[0].text = grand.Info.Name + " is Hungry!";
+				alert.Txt[1].text = "";
+			break;
+		}
+
+		FaceObj f = GameManager.instance.Generator.GenerateFace(grand.GrandObj);
+		alert.Child[0][0].AddChild(f);
+		f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
+		f.transform.localScale = Vector3.one * 0.15F;
+
+		alert.TweenActive(true);
+
+		switch(g.Type)
+		{
+			case AlertType.Ageup:
+				yield return new WaitForSeconds(0.8F);
+				int init = grand.Info.Age - g.Values[0];
+				for(int i = 0; i < g.Values[0]; i++)
+				{
+					init ++;
+					alert.Txt[1].text = init + "";
+					Tweens.Bounce(alert.Txt[1].transform);
+					yield return new WaitForSeconds(0.07F);
+				}
+				alert.Txt[1].text = grand.Info.Age + "";
+				
+				yield return new WaitForSeconds(1.0F);
+			break;
+			case AlertType.Hungry:
+				yield return new WaitForSeconds(2.0F);
+			break;
+		}
+
+		
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.3F);
+
+		alert.Child[0][0].DestroyChildren();
 		yield return null;
 	}
 

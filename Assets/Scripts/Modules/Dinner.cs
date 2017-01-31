@@ -27,6 +27,8 @@ public class Dinner : Module {
 	};
 	public int ThirdEyeCost {get {return Difficulty_ThirdEyeCost[Difficulty];}}
 
+	public int DinnerCost = 10;
+
 	public VectorObject2D GrumpLine;
 	private int [] GG_Indexes;
 
@@ -100,7 +102,7 @@ public class Dinner : Module {
 
 					Target.Face.transform.position = Vector3.Lerp(Target.Face.transform.position, dpos, Time.deltaTime * 20);
 					Target.Face.transform.LookAt(_TableManager.TableObj.transform, Vector3.up);
-					
+					Target.Face.transform.rotation *= Quaternion.Euler(-30, 0,0);
 					Target.GrumpLines(0.8F, true); 
 				}
 				else 
@@ -201,6 +203,15 @@ public class Dinner : Module {
 	public override void Clear()
 	{
 		_TableManager.Clear();
+
+		for(int x = 0; x < Grands.Length; x++)
+		{
+			for(int i = 0; i < Grands[x].Grumps.Length; i++)
+			{
+				Grands[x].Grumps[i].Destroy();
+			}
+		}
+
 		MUI["faceparent"].DestroyChildren();
 
 		UIObj end = MUI["endgame"];
@@ -387,11 +398,29 @@ public class Dinner : Module {
 	{
 		while(!AllSeated) yield return null;
 
+		UIObj endgame = MUI["endgame"];
 		Running = false;
 		GameManager.IgnoreInput = true;
 		timerobj.TweenActive(false);
 
-		UIObj endgame = MUI["endgame"];
+		if(!GameManager.WorldRes.Funds.Charge(DinnerCost))
+		{
+			endgame[0].TweenActive(true);
+			endgame[1].SetActive(false);
+			endgame[2].SetActive(false);
+
+			endgame[0].Txt[0].text = "No Funds!";
+
+			FinalScore = 0;
+
+			yield return new WaitForSeconds(0.8F);
+
+			endgame[0].TweenActive(false);
+
+			yield return StartCoroutine(FinishDinner());
+
+			yield break;
+		}
 
 		endgame[0].TweenActive(true);
 		endgame[1].SetActive(false);
@@ -508,24 +537,29 @@ public class Dinner : Module {
 			Tweens.Bounce(total.transform, Vector3.one * repscale);
 		}
 
-		for(int i = Grands.Length-1; i >= 0; i--)
-		{
-			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
-			Grands[i].Data.Hunger = 0.0F;
-		}
-		
-
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
-		yield return new WaitForSeconds(final_timer);
-		GameManager.IgnoreInput = false;
-		Clear();
-		StartCoroutine(Enter(false, new IntVector(0,0)));
+		yield return StartCoroutine(FinishDinner());
 		/*endgame[2].TweenActive(true);
 		endgame[2].ClearActions();
 		endgame[2].AddAction(UIAction.MouseUp, () => 
 		{
 			
 		});*/
+	}
+
+	IEnumerator FinishDinner()
+	{
+		for(int i = Grands.Length-1; i >= 0; i--)
+		{
+			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
+			Grands[i].Data.Hunger.Add(-100);
+		}
+
+		yield return new WaitForSeconds(final_timer);
+		GameManager.IgnoreInput = false;
+		Clear();
+		StartCoroutine(Enter(false, new IntVector(0,0)));
+		yield return null;
 	}
 
 	public void SendCorrectAlert(UIAlert u, Transform t)

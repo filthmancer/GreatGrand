@@ -230,6 +230,16 @@ public class SaveData
 			return false;
 		}
 	}
+
+	public T TryGetValue<T>(string key)
+	{
+		System.Object resultOut;
+		if(_data.TryGetValue(key, out resultOut) && resultOut.GetType() == typeof(T))
+		{
+			return (T)resultOut;
+		}
+		else return default(T);
+	}
 	
 	/// <summary>
 	/// 	- Saves this instance to the Streaming Assets path.

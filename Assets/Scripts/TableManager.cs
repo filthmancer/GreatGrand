@@ -34,6 +34,8 @@ public class TableManager : MonoBehaviour {
 
 	public void SetupTable(int n)
 	{
+		if(TableUI == TableObjects[n]) return;
+
 		for(int i = 0; i < TableObjects.Length; i++) 
 		{
 			if(i != n)	TableObjects[i].TweenActive(false);
@@ -54,7 +56,8 @@ public class TableManager : MonoBehaviour {
 	 		Vector3 p = TableUI.Child[i+1].transform.position + TableUI.Child[i+1].transform.forward * 1.7F;
 			splinepoints.Add(new Vector2(p.x, p.z));
 	 	}
-
+	 	VectorLine.Destroy(ref Movement);
+	 	
 	 	Movement = new VectorLine("Movement Path", new List<Vector2>(mvmt_segments+1), 4.0F, LineType.Continuous);
 		Movement.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, true);
 		Movement.Draw();

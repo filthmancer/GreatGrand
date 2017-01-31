@@ -317,9 +317,6 @@ public class GreatGrand : GrumpObj {
 
 		Data.Info.Gender = gender;
 		Data.Info.Name = gender ? GrandData.Names_Male_Random : GrandData.Names_Female_Random;
-		Data.Social = 0.55F;
-		Data.Fitness = 0.55F;
-
 		Data.Info.Age = Random.Range(80, 115);
 		//Add grump based on age if male, remove if female
 		//float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);

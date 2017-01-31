@@ -4,11 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
 using DG.Tweening;
+using Scumworks;
 
 public class GameData : MonoBehaviour {
 
 	public WorldResources World;
 	public List<GrandData> Grands;
+
+	public System.DateTime LastTime;
+
+	public GoodBoy FundsDaily;
 
 	public SaveData Save_Data;
 	private string Save_Location; 
@@ -43,6 +48,8 @@ public class GameData : MonoBehaviour {
 	public void Save()
 	{
 		Save_Data = new SaveData(Save_File); 
+
+		Save_Data["Time"] = System.DateTime.Now;
 
 	//Saving World
 		Save_Data["World-Resources"] = World.Names;
@@ -90,6 +97,17 @@ public class GameData : MonoBehaviour {
 				Save_Data[s+":Values"] = f.Values;
 				Save_Data[s+":Colour"] = f.Colour;
 			}
+
+			for(int r = 0; r < Data.Resources.Length; r++)
+			{
+				Resource res = Data.Resources[r];
+				string s = pref + "-Res " + r;
+
+				Save_Data[s+":Current"] = res.Current;
+				Save_Data[s+":Max"] = res.Max;
+				Save_Data[s+":Index"] = res.Index;
+				Save_Data[s+":Rate"] = res.Rate;
+			}
 		}
 
 		Save_Data["Prev Grands"] = prevgrands;
@@ -105,6 +123,14 @@ public class GameData : MonoBehaviour {
 		if(!System.IO.File.Exists(Save_Target)) return;
 		Save_Data =  SaveData.Load(Save_Target);
 		//if(Save_Data == null) return;
+
+		if(!Save_Data.TryGetValue<System.DateTime>("Time", out LastTime)) 
+		{
+			LastTime = System.DateTime.Now;
+		}
+
+		FundsDaily = new GoodBoy(LastTime, new System.TimeSpan(24, 0, 0));
+
 	//Loading World
 		string [] s;
 		if(Save_Data.TryGetValue<string[]>("World-Resources", out s))
@@ -115,7 +141,7 @@ public class GameData : MonoBehaviour {
 				World[i].Name = s[i];
 				World[i].Set(Save_Data.GetValue<int>("World-"+s[i]+"-Current"));
 				World[i].Multiplier = Save_Data.GetValue<float>("World-"+s[i]+"-Multiplier");
-				World[i].Index = Save_Data.GetValue<int>("World-"+s[i]+"-Index");
+				//World[i].Index = Save_Data.GetValue<int>("World-"+s[i]+"-Index");
 				
 				//World[i].Col = Save_Data.GetValue<Color>("World-"+s[i]+"-Col");
 				if(World[i] is Stat)
@@ -126,7 +152,7 @@ public class GameData : MonoBehaviour {
 			}
 		}
 		
-
+		
 	//Loading Grands
 		System.Guid [] prevhex;
 		Grands = new List<GrandData>();
@@ -159,10 +185,20 @@ public class GameData : MonoBehaviour {
 						Save_Data.GetValue<ColorType>(pref+"-"+f_inf[a]+":Colour")));
 				}
 
+				for(int r = 0; r < g.Resources.Length; r++)
+				{
+					g.Resources[r] = new Resource(
+						Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Index"),
+						Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Current"),
+						Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Max")
+						);
+					g.Resources[r].Set(Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Current"));
+					g.Resources[r].SetRate(Save_Data.TryGetValue<float>(pref+"-Res " + r + ":Rate"));
+				}
+			
 				Grands.Add(g);
 			}
 		}
-
 		print("Loaded info: " + Grands.Count + " grands");
 	}
 }
@@ -185,9 +221,7 @@ public class WorldResources
 	}
 	public WorldResources()
 	{
-		Rep = new Stat(0);
-		Funds = new Resource(1);
-		Meds = new Resource(2);
+
 	}
 	public void Init()
 	{
@@ -238,17 +272,48 @@ public class GrandData
 	public GrandInfo Info;
 
 	public Resource Smiles, Grumps;
-	public float Fitness, Social;
-	public float Hunger;
+	public Resource Fitness, Social;
+	public Resource Hunger;
+
+	public Resource [] Resources
+	{
+		get{return new Resource[] {Smiles, Grumps, Fitness, Social, Hunger};}
+	}
 
 	public void AgeUp()
 	{
 		Info.Age++;
 	}
 
+	public GrandAlert [] CheckTime(System.TimeSpan t)
+	{
+		List<GrandAlert> fin = new List<GrandAlert>();
+	//HOUR CHECK
+		for(int h = 0; h < 10; h++)
+		{
+			Hunger.Check();
+		}
+		if(Hunger.Ratio > 0.8F) fin.Add(new GrandAlert(AlertType.Hungry,this));
+		int ageinc = 0;
+		for(int d = 0; d < (int) t.TotalDays; d++)
+		{
+			ageinc++;
+		}
+		if(ageinc > 0) fin.Add(new GrandAlert(AlertType.Ageup, this, 
+							   new int [1] {ageinc}));
+		Info.Age += ageinc;
+
+		return fin.ToArray();
+	}
+
 	public GrandData(System.Guid h){
 		Hex = h;
 		Info = new GrandInfo();
+		Hunger = new Resource(1, 0, 100);
+		Fitness = new Resource(2, 0, 100);
+		Social = new Resource(3, 0, 100);
+		Smiles = new Resource(0,10,-1);
+		Grumps = new Resource(1,10,-1);
 	}
 	public FaceInfo GetFaceInfo(string s)
 	{
@@ -309,6 +374,19 @@ public class GrandData
 			get{return Names_Female[Random.Range(0, Names_Female.Length)];}
 		}
 }
+public struct GrandAlert
+{
+	public GrandData Grand;
+	public int [] Values;
+	public AlertType Type;
+	public GrandAlert(AlertType t, GrandData g, params int [] v)
+	{
+		Type = t;
+		Grand = g;
+		Values = v;
+	}
+}
+public enum AlertType{None, Hungry, Ageup, Senile, Fight, Gift}
 
 [System.Serializable]
 public class GrandInfo
@@ -394,6 +472,14 @@ public class Resource
 		}
 	}
 
+	public float Ratio
+	{
+		get{
+			if(Max == -1) return 1.0F;
+			return Current_soft / (float)Max;
+		}
+	}
+
 	public virtual string ToString()
 	{
 		return Value+"";
@@ -403,25 +489,44 @@ public class Resource
 	public int Current;
 
 	public Color Col;
-
-	[HideInInspector]
-	public int Index;
-	public string Name;
-	public int Max = 99999;
-
-	public Resource(int ind)
+	private int _index;
+	public int Index
 	{
-		Current = 0;
-		Current_soft = 0.0F;
-		Multiplier = 1.0F;
-		Col = Color.white;
+		get{return _index;}
+		set{_index = value;}
+	}
+	public string Name;
+	public int Max = -1;
+
+	public Resource(int ind, int curr = 0, int max = -1, float mult = 1.0F)
+	{
 		Index = ind;
+
+		Current_soft = (float) curr;
+		Current = curr;
+		Max = max;
+
+		Multiplier = mult;
+		Col = Color.white;
 	}
 
 	public virtual void Set(int i)
 	{
 		Current = i;
 		Current_soft = (float)i;
+	}
+
+	public float Rate = 0.0F;
+	public virtual void SetRate(float r)
+	{
+		Rate = r;
+	}
+
+	public virtual void Check()
+	{
+		float m = (Max == -1) ? 99999 : Max;
+		Current_soft = Mathf.Clamp(Current_soft + Rate, 0.0F, Max);
+		Current = (int) Mathf.Round(Current_soft);
 	}
 
 	public virtual bool Charge(int n)
@@ -438,7 +543,9 @@ public class Resource
 	protected float Current_soft;
 	public virtual void Add(float n)
 	{
-		Current_soft += n;
+		float m = (Max == -1) ? 99999 : Max;
+		Current_soft = Mathf.Clamp(Current_soft + n, 0.0F, Max);
+
 		Current = (int) Mathf.Round(Current_soft);
 		GameManager.UI.CheckResourcesUI();
 	}
@@ -461,7 +568,6 @@ public class Stat:Resource
 		Current = (int) Mathf.Round(Current_soft);
 		while(Current > Max) 
 		{
-			Current -= Max;
 			Level++;
 			Max = Max + (int) ((float)Max * Max_Mult_Per_Lvl);
 		}
@@ -486,6 +592,8 @@ public class Stat:Resource
 		Level = l;
 	}
 }
+
+
 
 [System.Serializable]
 public class _Grump
@@ -608,6 +716,7 @@ public class _Grump
 	public void Destroy()
 	{
 		VectorLine.Destroy(ref Line);
+		VectorLine.Destroy(ref Arrow);
 	}
 
 	public void SetLineTime(float t){line_time = t;}
@@ -632,4 +741,5 @@ public enum ResourceType
 {
 	Rep, Funds, Meds, Smiles, Grumps, Fit, Slob
 }
+
 

@@ -92,6 +92,138 @@ public class GameManager : MonoBehaviour {
 
 		Generator.LoadElements();
 
+		CheckForFirstTime();
+		
+		if(Data.Grands.Count == 0)
+		{
+			for(int i = 0; i < WorldRes.Population; i++)
+			{
+				AddGrand(Generator.GenerateGrand());
+			}
+		}
+		else
+		{
+			for(int i = 0; i < Data.Grands.Count; i++)
+			{
+				Data.Grands[i].GrandObj = Generator.Generate(Data.Grands[i]);
+				
+			}
+		}
+
+		StartCoroutine(StartGame());
+	}
+
+	
+	// Update is called once per frame
+	void Update () {
+		if(CurrentModule != null) CurrentModule.ControlledUpdate();
+		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
+		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
+	}
+
+
+
+	public IEnumerator StartGame()
+	{
+		if(StartingModule == string.Empty) StartingModule = "menu";
+		yield return StartCoroutine(LoadModule(StartingModule));
+
+		int amt = 100;
+		while(Data.FundsDaily.Claim(()=>{
+			amt += Data.Grands.Count * 40;
+			}));
+
+		if(amt > 0) yield return StartCoroutine(UI.ResourceAlert(WorldRes.Funds, amt));
+
+		System.TimeSpan span = System.DateTime.Now.Subtract(Data.LastTime);
+
+		List<GrandAlert> alerts = new List<GrandAlert>();
+		for(int i = 0; i < Data.Grands.Count; i++) 
+			alerts.AddRange(Data.Grands[i].CheckTime(span));
+
+		for(int i = 0; i < alerts.Count; i++)
+		{
+			yield return StartCoroutine(UI.ShowGrandAlert(alerts[i]));
+		}
+
+		yield return null;
+	}
+
+	public IEnumerator LoadModule(string n)
+	{
+		bool entry = false;
+		Module target = null;
+
+		Clear();
+		n = n.ToLower();
+		
+		switch(n)
+		{
+			case "dinner":
+			target = Dinner;
+			break;
+			case "menu":
+			target = Menu;
+			break;
+		}
+
+		Module temp = CurrentModule;
+		CurrentModule = target;	
+
+		IntVector velocity = new IntVector(1,0);
+		if(temp != null) velocity = new IntVector(target.Index - temp.Index,0);
+		if(temp != target) 
+		{
+			if(temp != null) StartCoroutine(temp.Exit(-velocity));
+			yield return StartCoroutine(CurrentModule.Enter(true, velocity));
+		}
+		yield return null;
+
+	}
+
+	public static void OnTouch()
+	{
+
+	}
+
+	public static void OnRelease()
+	{
+		Table.Reset();
+	}
+	
+	public void FocusOn(InputTarget t)
+	{
+		if(t is GreatGrand) UI.SetGrandUI(t as GreatGrand);
+	}
+
+	public static Vector3 InputPos;
+	public static GreatGrand TargetGrand;
+	public void SetTargetGrand(GreatGrand g)
+	{
+		if(g == null) TargetGrand.Release(InputPos);
+		else g.Tap(InputPos);
+		UI.SetGrandUI(g);
+		TargetGrand = g;
+	}
+
+	public void OnApplicationQuit()
+	{
+		Data.Save();
+	}
+
+
+	public void Clear()
+	{
+
+	}
+
+	public void AddGrand(GrandData g)
+	{
+		Data.Grands.Add(g);
+	}
+
+	private void CheckForFirstTime()
+	{
 		FirstTimeInitialise = PlayerPrefs.GetInt("FirstTime") == 0;
 		if(FirstTimeInitialise)
 		{
@@ -126,106 +258,6 @@ public class GameManager : MonoBehaviour {
 				AddGrand(Generator.GenerateGrand());
 			}
 		}
-		
-		if(Data.Grands.Count == 0)
-		{
-			for(int i = 0; i < WorldRes.Population; i++)
-			{
-				AddGrand(Generator.GenerateGrand());
-			}
-		}
-		else
-		{
-			for(int i = 0; i < Data.Grands.Count; i++)
-			{
-				Data.Grands[i].GrandObj = Generator.Generate(Data.Grands[i]);
-			}
-		}
-		
-		if(StartingModule == string.Empty) StartingModule = "menu";
-		StartCoroutine(LoadModule(StartingModule));
-	}
-
-	
-	// Update is called once per frame
-	void Update () {
-		if(CurrentModule != null) CurrentModule.ControlledUpdate();
-		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
-		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
-	}
-
-	public void OnApplicationQuit()
-	{
-		Data.Save();
-	}
-
-
-	public void Clear()
-	{
-
-	}
-
-
-	public void AddGrand(GrandData g)
-	{
-		Data.Grands.Add(g);
-	}
-
-	public IEnumerator LoadModule(string n)
-	{
-		bool entry = false;
-		Module target = null;
-
-		Clear();
-		n = n.ToLower();
-		
-		switch(n)
-		{
-			case "dinner":
-			target = Dinner;
-			break;
-			case "menu":
-			target = Menu;
-			break;
-		}
-
-		Module temp = CurrentModule;
-		CurrentModule = target;	
-
-		IntVector velocity = new IntVector(1,0);
-		if(temp != null) velocity = new IntVector(target.Index - temp.Index,0);
-		if(temp != target) 
-		{
-			if(temp != null) StartCoroutine(temp.Exit(-velocity));
-
-			yield return StartCoroutine(CurrentModule.Enter(true, velocity));
-		}
-		yield return null;
-	}
-
-	public static void OnTouch()
-	{
-
-	}
-
-	public static void OnRelease()
-	{
-		Table.Reset();
-	}
-	
-	public void FocusOn(InputTarget t)
-	{
-		if(t is GreatGrand) UI.SetGrandUI(t as GreatGrand);
-	}
-
-	public static Vector3 InputPos;
-	public static GreatGrand TargetGrand;
-	public void SetTargetGrand(GreatGrand g)
-	{
-		if(g == null) TargetGrand.Release(InputPos);
-		else g.Tap(InputPos);
-		UI.SetGrandUI(g);
-		TargetGrand = g;
 	}
 }
 
