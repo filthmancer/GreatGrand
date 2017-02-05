@@ -11,7 +11,8 @@ public enum ColorType
 public class FaceObj : UIObj {
 
 	public FaceObj FaceParent;
-	
+	public UIObj AlertParent;
+
     public ColorType Colour = ColorType.Skin;
 	private RectTransform _anchorpoint;
 	private FaceObj [] _obj;
@@ -20,7 +21,6 @@ public class FaceObj : UIObj {
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
 	public FaceInfo Info;
-	public Image Shadow;
 
 	public void CheckAnims()
 	{
@@ -176,6 +176,12 @@ public class FaceObj : UIObj {
 		}
 	}
 
+	public void Scale(Vector3 sc)
+	{
+		transform.localScale = sc;
+		StateWhenPressed.Scale = sc * 1.1F;
+	}
+
 	public void Reset(FaceInfo f = null, bool side = true)
 	{
 		if(f != null) 
@@ -215,19 +221,6 @@ public class FaceObj : UIObj {
 			if( Svg.Length >0) 
 			{
 				Svg[0].color = final;
-			}
-
-			if(Shadow != null)
-			{
-				Shadow.transform.SetParent(Svg[0].transform.parent);
-				Shadow.GetComponent<RectTransform>().anchorMax = Vector3.one;
-				Shadow.GetComponent<RectTransform>().sizeDelta = Vector3.zero;
-				Shadow.transform.position = Svg[0].transform.position;
-				Shadow.transform.rotation = Svg[0].transform.rotation;
-				Shadow.transform.localScale = Svg[0].transform.localScale * 1.12F;
-				//Shadow.sprite = Svg[0].sprite;
-				Shadow.color = Color.black;
-				Shadow.transform.SetParent(FaceParent[9].transform);
 			}
 
 			for(int i = 0; i < Child.Length; i++)

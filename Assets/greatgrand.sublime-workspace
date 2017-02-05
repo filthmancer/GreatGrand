@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"COntrol",
+				"Control_Velocity"
+			],
+			[
+				"Move",
+				"MoveSpeed_actual"
+			],
+			[
+				"Swa",
+				"Sway_TimeBracket"
+			],
+			[
+				"TargetGrand",
+				"TargetGrand_Face"
+			],
+			[
+				"Sway",
+				"Sway_CurrentVelocity"
+			],
+			[
+				"Control",
+				"Control_Velocity"
+			],
+			[
+				"Distan",
+				"DistanceFromSafeway"
+			],
+			[
+				"_UI",
+				"_UICanvas_rect"
+			],
+			[
+				"_UICan",
+				"_UICanvas"
+			],
+			[
+				"Safe",
+				"Safeway_Threshold"
+			],
+			[
+				"Distanc",
+				"DistanceAlongPath"
+			],
+			[
+				"TargetGra",
+				"TargetGrand_Face"
+			],
+			[
+				"MoveSpee",
+				"MoveSpeed_actual"
+			],
+			[
+				"State",
+				"StateWhenPressed"
+			],
+			[
 				"grandA",
 				"GrandAlertObj"
 			],
@@ -128,42 +184,34 @@
 	"buffers":
 	[
 		{
-			"file": "Scripts/UIObj.cs",
+			"file": "Scripts/GameManager.cs",
 			"settings":
 			{
-				"buffer_size": 11212,
+				"buffer_size": 5785,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/Generator/GreatGrand.cs",
+			"file": "Scripts/UIManager.cs",
 			"settings":
 			{
-				"buffer_size": 10141,
+				"buffer_size": 13056,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/TableManager.cs",
+			"file": "Scripts/Modules/Bowls.cs",
 			"settings":
 			{
-				"buffer_size": 9915,
-				"line_ending": "Windows"
+				"buffer_size": 8779,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scripts/Modules/Dinner.cs",
+			"file": "Scripts/Modules/Module.cs",
 			"settings":
 			{
-				"buffer_size": 15856,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/GameData.cs",
-			"settings":
-			{
-				"buffer_size": 16905,
+				"buffer_size": 3040,
 				"line_ending": "Windows"
 			}
 		}
@@ -171,15 +219,27 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 35.0,
+		"height": 104.0,
 		"selected_items":
 		[
+			[
+				"Insta",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
 		],
-		"width": 392.0
+		"width": 400.0
 	},
 	"console":
 	{
-		"height": 0.0
+		"height": 153.0
 	},
 	"distraction_free":
 	{
@@ -192,26 +252,35 @@
 	},
 	"file_history":
 	[
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Bowls.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Module.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Modules/Dinner.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/GameData.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UIManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UIObj.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
+		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/C#/Comments.tmPreferences",
+		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/Projects/greatgrand/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll",
+		"/C/Projects/greatgrand/Assets/Scripts/TableManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UIAlert.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/GrumpObj.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/DefaultMod.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/SaveData.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Scumworks.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Modules/Module.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/UIManager.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/TableManager.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
 		"/C/Projects/greatgrand/Assets/Editor/GrandGen.cs",
 		"/C/Projects/matchima/Matchima!/Assets/Scripts/Utilities/_GameSaveLoad.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Utility.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/Example/SaveDataExample.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/ColorHSB.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/readme.txt",
-		"/C/Projects/greatgrand/Assets/Scripts/UIAlert.cs",
 		"/C/Projects/greatgrand/Assets/greatgrand.sublime-project",
 		"/C/Projects/matchima/Matchima!/Assets/Matchima.sublime-project",
 		"/C/Projects/greatgrand/Assets/greatgrand.sublime-workspace",
@@ -249,7 +318,6 @@
 		"/D/Games/Gears of War/Engine/Config/BaseEngineUserSettings.ini",
 		"/D/Games/Gears of War/Engine/Config/BaseEditorUserSettings.ini",
 		"/C/Users/Matt/Documents/Downloads/The Young Pope Season 1 Mp4 720p/English Subtitles/The Young Pope S01E01.srt",
-		"/C/Projects/greatgrand/Assets/Scripts/UIObj.cs",
 		"/C/Projects/greatgrand/Assets/Generator/Generator.cs",
 		"/C/Projects/greatgrand/Assets/Generator/GreatGrand.cs",
 		"/C/Projects/greatgrand/Assets/Generator/FaceObj.cs",
@@ -262,7 +330,7 @@
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 49.0
 	},
 	"find_in_files":
 	{
@@ -278,134 +346,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"EndDinner",
-			"ThirdEye",
-			"i",
-			"Grumps",
-			"grumps",
-			"Grumps",
-			"_Grump",
-			"Clear",
-			"Resources",
-			"GetValue",
-			"Current_soft",
-			"r",
-			"Index",
-			"GrandData",
-			"GRandomise",
-			"CheckForFirstTime",
-			"ResUI.Child[(int)r.Index]",
-			"CheckResourcesUI",
-			"alerttime",
-			"activescale",
-			"faces[i]",
-			"Destroy",
-			"grandalert",
-			"GrandAlertObj",
-			"alert",
-			"GenerateFace",
-			"Face",
-			"prevtime",
-			"GreatGrand",
-			"GrandAlert",
-			"SetCurrent",
-			"Fitness",
+			"Quote",
 			"100",
-			"int",
-			"DateTime",
-			"private",
-			"public",
-			"1.5F",
-			"repscale = 1.5F + ((float)rep / 150);",
-			"Ability_ThirdEye",
-			"static",
-			"C_Hair",
-			"C_Eye",
-			"GenerateGrumpsReal",
-			"Difficulty",
-			"init",
+			"Hunger",
+			"ts[i]",
+			"FrameObj",
+			"grand",
+			"hunger",
+			"alerts",
+			"GrandAlert",
+			"i",
+			"grand",
+			"Grand",
+			"grand",
+			"FundsDaily",
+			"ResourceAlert",
+			"Resource",
 			"Init",
-			"init",
-			"Img",
-			"init",
-			"Svg",
-			"Load",
-			"init",
-			"GameManager.InputPos",
-			"GenerateGrumpsReal",
-			"GetNonNeighbourSeat",
-			"GenerateGrumpsReal",
-			"SendCorrectAlert",
-			"localScale",
-			"TableObj",
-			"0.0F",
-			"t",
-			"Child",
-			"Seat",
-			"Img",
-			"Svg[i]",
-			"PupilScale",
-			"Grumps",
-			"Target",
-			"TARGET",
-			"Target",
-			"TARGET",
-			"Target",
-			"Grands",
-			"Clear",
-			"Seat",
-			"this",
-			"35F",
-			"Seat",
-			"this",
-			"TargetGrand",
-			"GameManager.TargetGrand",
-			"GameManager",
-			"Face",
-			"TargetGrand",
-			"15",
-			"90",
-			"MUI[\"timer\"]",
-			"timerobj",
-			"SitAt",
-			"SeatAt",
-			"GGNum",
-			"GG_num",
-			"ToString",
-			"CheckResourcesUI",
-			"FaceObjContainer",
-			"fin",
-			"instance.Generator",
+			"CheckForFirstTime",
+			"rep",
+			".0F",
+			"finalpos",
+			"TargetGrand_Face.transform.position",
+			"Exit",
+			"MUI[1]",
+			"GetUIPosition",
+			"ExtraSway",
+			"50",
+			"100",
+			"40",
+			"30",
+			"BalancePoint",
+			"Sway_CurrentVelocity",
+			"control",
+			"alt+d",
+			"		if(Stopped && !Input.GetMouseButton(0)) MoveSpeed_actual = MoveSpeed;\n",
+			"Stopped = Input.GetMouseButton(0);",
+			"MoveSpeed_actual += MoveSpeed_inc;",
+			"if(!Stopped)\n		{",
+			")\n",
+			"ctrl+e",
+			")\n",
+			"Stopped",
+			"/",
+			"0.2F",
+			"position",
+			"GetUIPosition()",
+			"position",
+			"Length",
+			"Sway_CurrentVelocity",
+			"Start",
+			"DistanceAlongPath",
+			"Safeway",
+			"Exit",
+			"ShowGrumpLines",
+			"GrumpLines",
+			"UIObj",
+			"DragSit",
+			"g.Parent.UIObject",
+			"GameManager.UI.WorldObjects",
+			"GrumpAlert",
+			"SetParent",
+			"Init",
+			"Grump",
+			"GrumpLine",
+			"FacePos",
+			"GrumpLines",
+			"_UICanvasScaler",
+			"RectTransform",
+			"Input.mousePosition",
+			"_UICanvasRect",
+			"_UICanvas_rect",
+			"scaler",
+			"canvas_rect",
+			"_UICanvas",
+			"SetPosition",
+			"Position",
+			"RectT",
+			"_rect",
+			"_UICanvas",
+			"WorldObject_ScreenPosition",
+			"_UICanvas",
+			"Canvas",
+			"Camera",
+			"CanvasRect",
 			"pos",
-			"4.0",
+			"180",
+			"Grands[i].Face",
+			"f",
+			"SetupFace",
+			"UIManager.instance.",
+			"Quaternion.Euler(5, 0,180)",
+			", Vector3.up",
+			"Quaternion.Euler(x_rot, 0,0)",
+			"Quaternion.Euler(5, 0,0)",
+			" * Quaternion.Euler(5, 0,0)",
+			", Vector3.forward",
+			"Quaternion.Euler(5, 0,0)",
+			"180",
+			"mpos",
+			"StartDinner",
+			"CreateDinnerGame",
+			"EndDinner",
+			"FinishDinner",
+			"Down",
+			"SetupFace",
+			"Cross",
+			"Movement",
 			"float",
-			"x",
-			"max",
-			"min",
-			"m",
-			"HairCol",
-			"++",
-			"Skin",
-			"Hair",
-			"skin",
-			"Skin",
-			"Hair",
-			"Skin_num",
-			"fin",
-			"offset",
-			"/2",
-			"C_Offset",
-			"/2",
-			"Offset",
-			"offset",
-			"Offset",
-			"GrandInfo",
-			"ColorType",
-			"RandomHair",
-			"}\n			x++;",
-			"typeof(Object)));",
+			"Timer",
+			"total",
+			"GrandAlertObj",
+			"Start()",
+			"Start",
+			"Setup",
+			"timerobj",
+			"SvgImage",
 			"Img",
-			"Reset"
+			"Image",
+			"Img",
+			"Actions_MouseOut",
+			"RaycastTarget",
+			"RectTransform",
+			"transform",
+			"0.15F",
+			"0.15f",
+			"0.15F",
+			" = Col",
+			"Append"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -413,6 +481,10 @@
 		"regex": false,
 		"replace_history":
 		[
+			"		if(Stopped && !Input.GetMouseButton(0)) MoveSpeed_actual = MoveSpeed;\n",
+			"))",
+			"Stopped = Input.GetMouseButton(0);",
+			")\n"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -423,23 +495,23 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scripts/UIObj.cs",
+					"file": "Scripts/GameManager.cs",
 					"settings":
 					{
-						"buffer_size": 11212,
+						"buffer_size": 5785,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2185,
-								2185
+								3076,
+								3076
 							]
 						],
 						"settings":
@@ -448,25 +520,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1160.0,
+						"translation.y": 1534.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scripts/Generator/GreatGrand.cs",
+					"file": "Scripts/UIManager.cs",
 					"settings":
 					{
-						"buffer_size": 10141,
+						"buffer_size": 13056,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1449,
-								1449
+								11834,
+								11834
 							]
 						],
 						"settings":
@@ -475,25 +547,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1217.0,
+						"translation.y": 7717.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Scripts/TableManager.cs",
+					"file": "Scripts/Modules/Bowls.cs",
 					"settings":
 					{
-						"buffer_size": 9915,
+						"buffer_size": 8779,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1149,
-								1149
+								4270,
+								4270
 							]
 						],
 						"settings":
@@ -502,25 +574,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 57.0,
+						"translation.y": 2565.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Scripts/Modules/Dinner.cs",
+					"file": "Scripts/Modules/Module.cs",
 					"settings":
 					{
-						"buffer_size": 15856,
+						"buffer_size": 3040,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								334,
-								334
+								1641,
+								1641
 							]
 						],
 						"settings":
@@ -529,34 +601,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Scripts/GameData.cs",
-					"settings":
-					{
-						"buffer_size": 16905,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5860,
-								5860
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3060.0,
+						"translation.y": 1083.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -606,32 +651,96 @@
 		"selected_items":
 		[
 			[
-				"gamedata",
-				"Main/GameData.cs"
+				"modul",
+				"Main/Modules/Module.cs"
+			],
+			[
+				"bowls",
+				"Main/Modules/Bowls.cs"
+			],
+			[
+				"dinn",
+				"Main/Modules/Dinner.cs"
+			],
+			[
+				"module",
+				"Main/Modules/Module.cs"
+			],
+			[
+				"ui",
+				"Main/UIManager.cs"
 			],
 			[
 				"dinner",
 				"Main/Modules/Dinner.cs"
 			],
 			[
-				"tableman",
-				"Main/TableManager.cs"
+				"gameman",
+				"Main/GameManager.cs"
+			],
+			[
+				"gamedata",
+				"Main/GameData.cs"
 			],
 			[
 				"menu",
 				"Main/Modules/Menu.cs"
 			],
 			[
-				"uimana",
-				"Main/UIManager.cs"
+				"uiobj",
+				"Main/UIObj.cs"
+			],
+			[
+				"gamemana",
+				"Main/GameManager.cs"
+			],
+			[
+				"uialert",
+				"Main/UIAlert.cs"
+			],
+			[
+				"uialer",
+				"Main/UIAlert.cs"
+			],
+			[
+				"grumpobj",
+				"Main/Generator/GrumpObj.cs"
+			],
+			[
+				"input",
+				"Main/InputController.cs"
+			],
+			[
+				"table",
+				"Main/TableManager.cs"
+			],
+			[
+				"gamed",
+				"Main/GameData.cs"
 			],
 			[
 				"gener",
 				"Main/Generator/Generator.cs"
 			],
 			[
-				"module",
-				"Main/Modules/Module.cs"
+				"uiob",
+				"Main/UIObj.cs"
+			],
+			[
+				"g",
+				"Main/Generator/FaceObj.cs"
+			],
+			[
+				"uim",
+				"Main/UIManager.cs"
+			],
+			[
+				"tableman",
+				"Main/TableManager.cs"
+			],
+			[
+				"uimana",
+				"Main/UIManager.cs"
 			],
 			[
 				"gamemanager",
@@ -644,14 +753,6 @@
 			[
 				"faceobj",
 				"Main/Generator/FaceObj.cs"
-			],
-			[
-				"gamemana",
-				"Main/GameManager.cs"
-			],
-			[
-				"input",
-				"Main/InputController.cs"
 			],
 			[
 				"great",
@@ -676,10 +777,6 @@
 			[
 				"grear",
 				"Main/Generator/GreatGrand.cs"
-			],
-			[
-				"uiobj",
-				"Main/UIObj.cs"
 			]
 		],
 		"width": 0.0

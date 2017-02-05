@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using DG.Tweening;
 using Vectrosity;
@@ -18,17 +19,15 @@ public class UIManager : MonoBehaviour {
 
 	public UIObj Module_Menu, Module_Dinner;
 
-	public UIObj GrandAlertObj;
 	public UIObj Options;
-	public UIObj WinMenu;
+	//public UIObj WinMenu;
 	public UIObj PermUI;
 	public UIObj ResUI;
 	public UIObj FaceParent;
 	public UIObj WorldObjects, QuoteObjects;
-
 	private Material QuoteMat;
 	
-	public FaceObj ActiveFace;
+	//public FaceObj ActiveFace;
 
 	public ObjectContainer Sprites;
 	public ObjectContainer Prefabs;
@@ -36,6 +35,23 @@ public class UIManager : MonoBehaviour {
 
 	public void Init()
 	{
+		int index = 0;
+		for(int i = 0; i < Modules.Length; i++)
+		{
+			Modules[i].Init(index, null);
+			index++;
+		}
+
+		UIObj._UICamera = Camera.main;
+		UIObj._UICanvas = Canvas;
+
+		Options.Init(index++, null);
+		PermUI.Init(index++, null);
+		ResUI.Init(index++, null);
+		FaceParent.Init(index++, null);
+		WorldObjects.Init(index++, null);
+		QuoteObjects.Init(index++, null);
+
 		QuoteMat = QuoteObjects.Img[0].material;
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
 
@@ -119,24 +135,8 @@ public class UIManager : MonoBehaviour {
 	}
 
 
-
-	public void ShowEndGame()
-	{
-		WinMenu[0].TweenActive(true);
-		WinMenu[0].ClearActions();
-		WinMenu[0].AddAction(UIAction.MouseUp, () => 
-		{
-			GameManager.Module.Clear();
-			StartCoroutine(GameManager.Module.Enter(false, new IntVector(0,0)));
-		});
-	}
-
 	public void Update()
 	{
-		if(ActiveFace)
-		{
-			ActiveFace.CheckAnims();
-		}
 	}
 
 	public void SetGrandUI(GreatGrand g)
@@ -180,7 +180,7 @@ public class UIManager : MonoBehaviour {
 		final.Txt[0].text = s;
 		final.Txt[0].fontSize = size;
 		final.Img[0].enabled = false;
-		final.Setup(lifetime, speed);
+		final.Init(-1, WorldObjects, lifetime, speed);
 		return final;
 	}
 
@@ -195,7 +195,7 @@ public class UIManager : MonoBehaviour {
 		final.Txt[0].text = ""; 
 		final.Img[0].enabled = true;
 		final.Img[0].sprite = s;
-		final.Setup(lifetime, speed);
+		final.Init(-1, WorldObjects, lifetime, speed);
 		return final;
 	}
 
@@ -249,7 +249,7 @@ public class UIManager : MonoBehaviour {
 
 		     qobj["textbox"].Txt[0].text = target.Value;
 		     qobj["textbox"].Txt[0].color = Color.white;
-		      qobj["textbox"].Txt[0].fontSize = 20;
+		      qobj["textbox"].Txt[0].fontSize = 60;
 		     while(Input.GetMouseButton(0)) yield return null;
 		     while(!Input.GetMouseButtonDown(0)) yield return null;
 		  
@@ -268,23 +268,22 @@ public class UIManager : MonoBehaviour {
 
 	public IEnumerator ResourceAlert(Resource r, int num)
 	{
-		UIObj res = ResUI.Child[(int)r.Index];
-		UIAlert alert = Instantiate(UIResObj);
-		WorldObjects.AddChild(alert);
-		alert.ResetRect();
-
-		alert.transform.position = res.Txt[0].transform.position -
-									res.Txt[0].transform.up*0.5F;
-
 		float time_start = 0.2F;
 		float time_adding = 0.8F;
 		float time_end_pause = 0.3F;
 		float time_end = 0.2F;
 		float time_total = time_start + time_adding + time_end;
-
 		float time_curr = 0.0F;
 
-		alert.Setup(time_total);
+		UIObj res = ResUI.Child[(int)r.Index];
+		UIAlert alert = Instantiate(UIResObj);
+		alert.Init(-1, WorldObjects, time_total);
+		WorldObjects.AddChild(alert);
+		
+		alert.ResetRect();
+		alert.transform.position = res.Txt[0].transform.position -
+									res.Txt[0].transform.up*0.5F;
+
 		Tweens.Bounce(alert.transform);
 		
 		int init = r.Current;
@@ -304,8 +303,6 @@ public class UIManager : MonoBehaviour {
 			
 			yield return null;
 		}*/
-
-		Tweens.Bounce(res.transform);
 		r.Add(num);
 		res.Txt[0].text = r.ToString();
 
@@ -316,56 +313,83 @@ public class UIManager : MonoBehaviour {
 		yield return null;
 	}
 
-	public IEnumerator ShowGrandAlert(GrandAlert g)
+	public UIObj FrameObj;
+	public IEnumerator HungerAlert(List<GrandAlert> g)
 	{
 		UIObj alert = PermUI["grandalert"];
-		GrandData grand = g.Grand;
-
-		switch(g.Type)
-		{
-			case AlertType.Ageup:
-				alert.Txt[0].text = grand.Info.Name + " Aged Up!";
-				alert.Txt[1].text = grand.Info.Age - g.Values[0] + "";
-			break;
-			case AlertType.Hungry:
-				alert.Txt[0].text = grand.Info.Name + " is Hungry!";
-				alert.Txt[1].text = "";
-			break;
-		}
-
-		FaceObj f = GameManager.instance.Generator.GenerateFace(grand.GrandObj);
-		alert.Child[0][0].AddChild(f);
-		f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
-		f.transform.localScale = Vector3.one * 0.15F;
-
+	
+		GameManager.IgnoreInput = true;
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = true;
 		alert.TweenActive(true);
 
-		switch(g.Type)
+		for(int i = 0; i < g.Count; i++)
 		{
-			case AlertType.Ageup:
-				yield return new WaitForSeconds(0.8F);
-				int init = grand.Info.Age - g.Values[0];
-				for(int i = 0; i < g.Values[0]; i++)
-				{
-					init ++;
-					alert.Txt[1].text = init + "";
-					Tweens.Bounce(alert.Txt[1].transform);
-					yield return new WaitForSeconds(0.07F);
-				}
-				alert.Txt[1].text = grand.Info.Age + "";
-				
-				yield return new WaitForSeconds(1.0F);
-			break;
-			case AlertType.Hungry:
-				yield return new WaitForSeconds(2.0F);
-			break;
-		}
+			UIObj frame = (UIObj) Instantiate(FrameObj);
+			alert.Child[0].AddChild(frame);
+			FaceObj f = GameManager.instance.Generator.GenerateFace(g[i].Grand.GrandObj);
+			frame.AddChild(f);
+			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
+			f.transform.localScale = Vector3.one * 0.15F;
+			Tweens.Bounce(f.Txt[0].transform);
+			f.Txt[0].text = g[i].Grand.Hunger.Ratio*100 + "%";
+			f.Txt[0].color = Color.red;
+			f.Txt[0].fontSize = 130;
 
-		
+			alert.Txt[0].text = g[i].Grand.Info.Name + " is Hungry!";
+			yield return new WaitForSeconds(0.45F);		
+
+		}		
+		alert.Txt[2].text = "Hunger makes Grands Grumpy!";	
+		yield return new WaitForSeconds(1.5F);
 		alert.TweenActive(false);
 		yield return new WaitForSeconds(0.3F);
 
-		alert.Child[0][0].DestroyChildren();
+		alert.Child[0].DestroyChildren();
+
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+		//QuoteMat.DOFloat(0, "_Size", 0.25F);
+		QuoteObjects.Img[0].raycastTarget = false;
+		GameManager.IgnoreInput = false;
+		yield return null;
+	}
+
+	public IEnumerator AgeAlert(List<GrandAlert> g)
+	{
+		UIObj alert = PermUI["grandalert"];
+	
+		GameManager.IgnoreInput = true;
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = true;
+		alert.TweenActive(true);	
+
+		for(int i = 0; i < g.Count; i++)
+		{
+			UIObj frame = (UIObj) Instantiate(FrameObj);
+			alert.Child[0].AddChild(frame);
+			FaceObj f = GameManager.instance.Generator.GenerateFace(g[i].Grand.GrandObj);
+			frame.AddChild(f);
+			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
+			f.transform.localScale = Vector3.one * 0.15F;
+			f.Txt[0].text = g[i].Grand.Info.Age-g[i].Values[0] + "";
+
+			alert.Txt[0].text = g[i].Grand.Info.Name + " Aged up!";
+
+			yield return new WaitForSeconds(0.45F);		
+			Tweens.Bounce(f.Txt[0].transform);
+			f.Txt[0].text = g[i].Grand.Info.Age + "";
+		}		
+		alert.Txt[2].text = "";	
+		yield return new WaitForSeconds(1.5F);
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.3F);
+
+		alert.Child[0].DestroyChildren();
+
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+		//QuoteMat.DOFloat(0, "_Size", 0.25F);
+		QuoteObjects.Img[0].raycastTarget = false;
+		GameManager.IgnoreInput = false;
 		yield return null;
 	}
 
@@ -424,9 +448,9 @@ public class Tweens
 		vel.Normalize();
 
 		Sequence s = DOTween.Sequence();
-		s.Append(t.DOMove(t.position - vel * 0.3F, 0.2F));
-		s.Append(t.DOMove(target + vel * 0.05F, 0.2F));
-		s.Append(t.DOMove(target + vel * 0.25F, 0.2F));
+		s.Append(t.DOMove(t.position - vel * 100.0F, 0.2F));
+		s.Append(t.DOMove(target + vel * 25.0F, 0.2F));
+		s.Append(t.DOMove(target + vel * 50.0F, 0.2F));
 		s.Append(t.DOMove(target, 0.1F));
 		return s;
 	}
@@ -442,6 +466,20 @@ public class Tweens
 		s.Append(t.DOLocalRotate(init, 0.2F));
 
 		return s;
+	}
+
+	public static Sequence SetToState(UIObj u, UIState s, float time = 0.15F)
+	{
+
+		Sequence seq = DOTween.Sequence();
+		if(!u.isActive)return seq;
+		//seq.Append(u.transform.DOLocalMove(s.Position, time))
+		   seq.Append(u.transform.DOScale(s.Scale, time));
+		if(u.Img.Length > 0) 
+			seq.Append(DOTween.To(() => u.Img[0].color, x => u.Img[0].color = x, s.Col, time));
+		else if (u.Svg.Length > 0) 
+			seq.Append(DOTween.To(() => u.Svg[0].color, x => u.Img[0].color = x, s.Col, time));
+		return seq;
 	}
 }
 

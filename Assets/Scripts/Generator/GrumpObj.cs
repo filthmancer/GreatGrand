@@ -13,6 +13,11 @@ public class GrumpObj : InputTarget {
 		get{return trans.position;}
 	}
 
+	public virtual UIObj UIObject
+	{
+		get{return null;}
+	}
+
 	void Start()
 	{
 		trans = this.transform;

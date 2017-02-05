@@ -17,7 +17,7 @@ public class Dinner : Module {
 
 	private float [] Difficulty_Timer = new float []
 	{
-		20.0F, 30.0F, 40.0F
+		35.0F, 50.0F, 60.0F
 	};
 	public float Timer {get {return Difficulty_Timer[Difficulty];} }
 
@@ -56,7 +56,6 @@ public class Dinner : Module {
 	{
 		if(Running)
 		{
-
 		//TIMER
 			Timer_current += Time.deltaTime;
 			if(Timer_current >= Timer)
@@ -69,6 +68,7 @@ public class Dinner : Module {
 			float timer_ui = (Timer - Timer_current);
 			int secs = (int) timer_ui % 60;
 
+			timerobj.Txt[1].text = "SERVING IN";
 			timerobj.Txt[0].text = (int) timer_ui + "";
 			timerobj.Txt[0].color = (Timer_current > Timer*0.75F) ? Color.red : Color.white;
 
@@ -87,8 +87,7 @@ public class Dinner : Module {
 				if(isDragging)
 				{
 					if(drag_targ == null) drag_targ = Target.Seat;
-					_Seat n = _TableManager.NearestSeat(GameManager.InputPos);
-
+					_Seat n = _TableManager.NearestSeat(Input.mousePosition);
 					if(n != drag_targ)
 					{
 						drag_targ.Reset();
@@ -96,13 +95,10 @@ public class Dinner : Module {
 						drag_targ.Highlight(true);	
 					}
 
-					Vector3 dpos = GameManager.InputPos;
-					dpos.y = Target.Face.transform.position.y;
-					//dpos += new Vector3(0.0F, 0.0F, -0.5F);
-
-					Target.Face.transform.position = Vector3.Lerp(Target.Face.transform.position, dpos, Time.deltaTime * 20);
-					Target.Face.transform.LookAt(_TableManager.TableObj.transform, Vector3.up);
-					Target.Face.transform.rotation *= Quaternion.Euler(-30, 0,0);
+					Vector2 npos = Vector2.Lerp(Target.Face.GetUIPosition(), Input.mousePosition, Time.deltaTime * 30);
+					Target.Face.SetUIPosition(npos);
+					Target.Face.transform.LookAt(_TableManager.TableObj.transform, Vector3.forward);
+					Target.Face.transform.rotation *= Quaternion.Euler(80, 0,180);
 					Target.GrumpLines(0.8F, true); 
 				}
 				else 
@@ -111,7 +107,7 @@ public class Dinner : Module {
 					dpos.y = Target.Face.transform.position.y;
 
 					Target.Face.transform.position = Target.Seat.Position;
-					Target.Face.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(4, 0,0);
+					Target.Face.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(5, 0,0);
 					Target.GrumpLines(0.8F, true); 
 					if(Vector3.Distance(dpos, Target.Face.transform.position) > drag_distance)
 					{
@@ -164,8 +160,8 @@ public class Dinner : Module {
 			yield return new WaitForSeconds(1.0F);
 			MUI["endgame"][0].TweenActive(false);
 		}
-		CreateDinnerGame();
-		yield return StartCoroutine(StartDinner(GG_Indexes));
+		CreateDinner();
+		yield return StartCoroutine(StartGame(GG_Indexes));
 		yield return StartCoroutine(CheckForIntro());
 	}
 
@@ -188,16 +184,262 @@ public class Dinner : Module {
 		f.Append(MUI[7].transform.DOLocalRotate(new Vector3(0, 25,0), 0.1F));
 		f.Append(MUI[7].transform.DOLocalRotate(new Vector3(0, 35,0), 0.2F));
 		f.Append(MUI[7].transform.DOLocalRotate(new Vector3(0, 0,0), 0.15F));
+		f.Insert(0.0F, Tweens.PictureSway(MUI["thirdeye"].transform, new Vector3(0,0,12 * v.x)));
 
 		s.Insert(0.35F, f);
 
 		return s;
 	}
 
+	public FaceObj [] Faces;
+	public void CreateDinner(int d = 0)
+	{
+		Running = false;
+
+		UIObj fparent = MUI["faceparent"];
+		Difficulty = d;
+		Grands = new GreatGrand[GGNum];
+
+		_TableManager.SetupTable(Difficulty);
+		Faces = new FaceObj[GGNum];
+		for(int i = 0; i < GGNum; i++)
+		{
+			if(i < GameManager.instance.Grands.Length && GameManager.instance.Grands[i].Hunger.Current > 60)
+				Grands[i] = GameManager.instance.Grands[i].GrandObj;
+			else Grands[i] = GameManager.instance.Generator.Generate(i);
+
+			Grands[i].gameObject.SetActive(true);
+
+			Faces[i] = GameManager.instance.Generator.GenerateFace(Grands[i]);
+			fparent.AddChild(Faces[i]);
+			SetupFace(Faces[i], Grands[i]);
+		}
+
+		for(int i = 0; i < GGNum; i++)
+		{
+			Grands[i].SitImmediate(_TableManager.Seat[i]);
+		}
+
+		for(int i = 0; i < GGNum; i++)
+		{
+			int gnum = 1 + Random.Range(0, Difficulty);
+			//if(Random.value > 0.8F) gnum ++;
+			GenerateGrumpsReal(Grands[i], gnum);
+		}
+
+		GG_Indexes = new int[0];
+		while(NumberHappy > GGNum/2) GG_Indexes = ShuffleGG();
+
+		for(int i = 0; i < GGNum; i++)
+		{
+			Faces[i].SetActive(false);
+		}
+	}
+
+	IEnumerator StartGame(int [] index)
+	{
+		yield return null;
+		for(int i = 0; i < Grands.Length; i++)
+		{
+			Faces[i].SetActive(true);
+			//Faces[i].transform.position = _TableManager.EntryDoor.position;
+		}
+
+		for(int i = Grands.Length-1; i >= 0; i--)
+		//for(int i = 0; i < _TableManager.Seat.Length; i++)
+		{
+			StartCoroutine(_TableManager.DoorToSeat(Grands[i], index[i], 0.35F));
+			//yield return new WaitForSeconds(Time.deltaTime * 10);
+		}
+
+		while(!AllSeated) yield return null;
+
+		Ability_ThirdEye(1.3F);
+		Running = true;
+		Timer_current = 0.0F;
+
+		timerobj.Txt[0].text = "";
+		timerobj.transform.localScale = Vector3.one;
+		timerobj.TweenActive(true);
+		
+		yield return null;
+	}
+
+	int FinalScore = 0;
+	float final_timer = 0.8F;
+	public float Bonus_DifficultyMultiplier = 1.0F;
+	public float Bonus_TimerMax = 1.0F;
+	public float Bonus_TimerDecay = 1.0F;
+	public float Bonus_Perfect = 2.0F;
+
+	IEnumerator EndGame()
+	{
+		while(!AllSeated) yield return null;
+
+		UIObj endgame = MUI["endgame"];
+		Running = false;
+		GameManager.IgnoreInput = true;
+		timerobj.Txt[0].text = "";
+		timerobj.Txt[1].text = "";
+
+		if(!GameManager.WorldRes.Funds.Charge(DinnerCost))
+		{
+			endgame[0].TweenActive(true);
+			endgame[1].SetActive(false);
+			endgame[2].SetActive(false);
+
+			endgame[0].Txt[0].text = "No Funds!";
+
+			FinalScore = 0;
+
+			yield return new WaitForSeconds(0.8F);
+
+			endgame[0].TweenActive(false);
+
+			yield return StartCoroutine(FinishDinner());
+
+			yield break;
+		}
+
+		endgame[0].TweenActive(true);
+		endgame[1].SetActive(false);
+		endgame[2].SetActive(false);
+
+		endgame[0].Txt[0].text = "Let's Eat!";
+
+		FinalScore = 0;
+
+		yield return new WaitForSeconds(0.8F);
+
+		endgame[0].TweenActive(false);
+
+		List<UIAlert> correct = new List<UIAlert>();
+		List<UIAlert> wrong = new List<UIAlert>();
+
+		for(int i = 0; i < _TableManager.Seat.Length; i++)
+		{
+			GreatGrand grand = _TableManager.Seat[i].Target;
+
+			if(grand == null) continue;
+
+			int targ_grumps = grand.GetGrumps(false);
+			yield return new WaitForSeconds(Time.deltaTime  * 5);
+
+			Sprite s = targ_grumps >= 0 ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
+								         GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
+
+			UIAlert a = GameManager.UI.ImgAlert(s, grand.Face.transform.position, -1.0F);
+			a.SetActive(false);
+			a.transform.localScale = Vector3.one * 0.5F;
+			a.TweenActive(true);
+
+			if(targ_grumps >= 0) correct.Add(a);
+			else wrong.Add(a);
+
+			yield return new WaitForSeconds(0.22F);
+		}
+
+		UIObj info = endgame[1];
+		UIObj points = endgame[2];
+		info.Txt[0].text = "HAPPY GRANDS";
+		points.Txt[0].text = FinalScore + "";
+		info.Txt[0].color = Color.white;
+
+		info.TweenActive(true);
+		points.TweenActive(true);
+	
+		yield return new WaitForSeconds(0.5F);
+
+		bool isCounting = true;
+
+		for(int i = 0; i < correct.Count; i++)
+		{
+			SendCorrectAlert(correct[i],points.transform);
+		}
+
+		for(int i = 0; i < wrong.Count; i++)
+		{
+			wrong[i].transform.DOScale(Vector3.zero, 0.3F).OnComplete(()=>{});
+		}
+
+		while(isCounting)
+		{
+			points.Txt[0].text = FinalScore + "";
+			bool complete = true;
+			for(int i = 0; i < correct.Count; i++)
+			{
+				if(correct[i] != null) 
+				{
+					complete = false;
+					break;
+				}
+			}
+			if(complete) isCounting = false;
+			yield return null;
+		}
+
+		yield return new WaitForSeconds(0.2F);
+
+		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
+		points.Txt[0].text = rep + "";
+		
+		if(Timer_current < Timer)
+		{
+			yield return new WaitForSeconds(0.5F);
+
+			float mult = 1.0F - (Timer_current/Timer*Bonus_TimerDecay);
+			mult = Mathf.Clamp(1.0F + mult, 1.0F, Bonus_TimerMax);
+			rep = (int) ((float) rep * mult);
+			points.Txt[0].text = rep + "";
+			info.Txt[0].text = "TIME BONUS";
+			info.Txt[0].color = Color.green;
+
+			Tweens.Bounce(info.transform);
+			yield return null;
+			Tweens.Bounce(points.transform);
+		}
+		
+		if(FinalScore == GGNum)
+		{
+			yield return new WaitForSeconds(0.5F);
+			rep = (int) ((float)rep * Bonus_Perfect);
+			points.Txt[0].text = rep + "";
+			info.Txt[0].text = "PERFECT!";
+			info.Txt[0].color = Color.blue;
+
+			Tweens.Bounce(info.transform);
+			yield return null;
+			Tweens.Bounce(points.transform);
+		}
+
+		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
+		yield return StartCoroutine(FinishDinner());
+	}
+
+	IEnumerator FinishDinner()
+	{
+		for(int i = Grands.Length-1; i >= 0; i--)
+		{
+			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
+			Grands[i].Data.Hunger.Add(-50);
+			UIAlert a = GameManager.UI.StringAlert("-50% Hunger", Faces[i].transform.position, 1.2F);
+			a.Txt[0].color = Color.white;
+			a.Txt[0].fontSize = 40;
+
+			a.TweenActive(true);
+		}
+
+		yield return new WaitForSeconds(final_timer);
+		GameManager.IgnoreInput = false;
+		Clear();
+		StartCoroutine(Enter(false, new IntVector(0,0)));
+		yield return null;
+	}
+
 	public override void Complete()
 	{
 		if(!Running) return;
-		StartCoroutine(EndDinner());
+		StartCoroutine(EndGame());
 	}
 
 	public override void Clear()
@@ -248,12 +490,13 @@ public class Dinner : Module {
 	public void SetTarget(GreatGrand g)
 	{
 		Target = g;
-		Target.ShowGrumpLines();
+		StartCoroutine(GrumpAlert(Target.Grumps[0]));
+		//Target.ShowGrumpLines();
 	}
 
 	public void ReleaseTarget()
 	{
-		drag_targ = _TableManager.NearestSeat(GameManager.InputPos);
+		drag_targ = _TableManager.NearestSeat(Input.mousePosition);
 		DragSit(Target, drag_targ);	
 
 		//if(drag_targ.CanSeat(Target) && drag_targ != Target.Seat) Target.DragSit(drag_targ);
@@ -276,12 +519,9 @@ public class Dinner : Module {
 		t.Seat = s;
 		t.Seat.SetTarget(t);
 
-		Vector3 sitpos = t.Seat.transform.position;
-		t.transform.position = sitpos;
-
 		t.Face.transform.position = t.Seat.Position;
 		t.Face.transform.rotation = t.Seat.Rotation;
-		//t.Face.transform.localScale = new Vector3(0.2F, 0.2F, 1.0F);
+		t.Face.transform.rotation *= Quaternion.Euler(0, 0,180);
 		t.isSeated = true;
 	}
 
@@ -301,266 +541,12 @@ public class Dinner : Module {
 		t.Seat = s;
 		t.Seat.SetTarget(t);
 
-		Vector3 sitpos = t.Seat.transform.position;
-		sitpos.y -= 0.5F;
-		t.transform.position = sitpos;
-
 		t.Face.transform.position = t.Seat.Position;
 		t.Face.transform.rotation = t.Seat.Rotation;
-		//Face.transform.localScale = new Vector3(0.35F, 0.35F, 1.0F);
-		
+		t.Face.transform.rotation *= Quaternion.Euler(0, 0,180);		
 		t.isSeated = true;
-		//GameManager.instance.CheckGrumps();
 	}
 
-	public void CreateDinnerGame(int d = 0)
-	{
-		Running = false;
-
-		UIObj fparent = MUI["faceparent"];
-		Difficulty = d;
-		Grands = new GreatGrand[GGNum];
-
-		_TableManager.SetupTable(Difficulty);
-		for(int i = 0; i < GGNum; i++)
-		{
-			if(i < GameManager.instance.Grands.Length)
-				Grands[i] = GameManager.instance.Grands[i].GrandObj;
-			else Grands[i] = GameManager.instance.Generator.Generate(i);
-
-			Grands[i].gameObject.SetActive(true);
-
-			FaceObj f = GameManager.instance.Generator.GenerateFace(Grands[i]);
-			fparent.AddChild(f);
-			f.transform.localScale = Vector3.one * 0.29F;
-			SetupFace(f, Grands[i]);
-		}
-
-		for(int i = 0; i < GGNum; i++)
-		{
-			Grands[i].SitImmediate(_TableManager.Seat[i]);
-		}
-
-		for(int i = 0; i < GGNum; i++)
-		{
-			int gnum = 1 + Random.Range(0, Difficulty);
-			//if(Random.value > 0.8F) gnum ++;
-			GenerateGrumpsReal(Grands[i], gnum);
-		}
-
-		GG_Indexes = new int[0];
-		while(NumberHappy > GGNum/2) GG_Indexes = ShuffleGG();
-
-		for(int i = 0; i < GGNum; i++)
-		{
-			Grands[i].Face.SetActive(false);
-		}
-	}
-
-	IEnumerator StartDinner(int [] index)
-	{
-		yield return null;
-		GameManager.UI.WinMenu.SetActive(false);
-		for(int i = 0; i < Grands.Length; i++)
-		{
-			Grands[i].Face.SetActive(true);
-			Grands[i].Face.transform.position = _TableManager.EntryDoor.position;
-		}
-
-		for(int i = Grands.Length-1; i >= 0; i--)
-		//for(int i = 0; i < _TableManager.Seat.Length; i++)
-		{
-			StartCoroutine(_TableManager.DoorToSeat(Grands[i], index[i], 0.35F));
-			//yield return new WaitForSeconds(Time.deltaTime * 10);
-		}
-
-		while(!AllSeated) yield return null;
-
-		Ability_ThirdEye(1.3F);
-		Running = true;
-		Timer_current = 0.0F;
-
-		timerobj.Txt[0].text = "";
-		timerobj.Svg[0].transform.localScale = Vector3.one;
-		timerobj.TweenActive(true);
-		
-		yield return null;
-	}
-
-	int FinalScore = 0;
-	float final_timer = 0.8F;
-	public float Bonus_DifficultyMultiplier = 1.0F;
-	public float Bonus_TimerMax = 1.0F;
-	public float Bonus_TimerDecay = 1.0F;
-	public float Bonus_Perfect = 2.0F;
-
-	IEnumerator EndDinner()
-	{
-		while(!AllSeated) yield return null;
-
-		UIObj endgame = MUI["endgame"];
-		Running = false;
-		GameManager.IgnoreInput = true;
-		timerobj.TweenActive(false);
-
-		if(!GameManager.WorldRes.Funds.Charge(DinnerCost))
-		{
-			endgame[0].TweenActive(true);
-			endgame[1].SetActive(false);
-			endgame[2].SetActive(false);
-
-			endgame[0].Txt[0].text = "No Funds!";
-
-			FinalScore = 0;
-
-			yield return new WaitForSeconds(0.8F);
-
-			endgame[0].TweenActive(false);
-
-			yield return StartCoroutine(FinishDinner());
-
-			yield break;
-		}
-
-		endgame[0].TweenActive(true);
-		endgame[1].SetActive(false);
-		endgame[2].SetActive(false);
-
-		endgame[0].Txt[0].text = "Let's Eat!";
-
-		FinalScore = 0;
-
-		yield return new WaitForSeconds(0.8F);
-
-		endgame[0].TweenActive(false);
-
-		List<UIAlert> correct = new List<UIAlert>();
-		List<UIAlert> wrong = new List<UIAlert>();
-
-		for(int i = 0; i < _TableManager.Seat.Length; i++)
-		{
-			GreatGrand grand = _TableManager.Seat[i].Target;
-
-			if(grand == null) continue;
-
-			int targ_grumps = grand.GetGrumps(false);
-			yield return new WaitForSeconds(Time.deltaTime  * 5);
-
-			Sprite s = targ_grumps >= 0 ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
-								         GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
-
-			UIAlert a = GameManager.UI.ImgAlert(s, grand.Face.transform.position, -1.0F);
-			a.transform.localScale = Vector3.one * 0.5F;
-			a.TweenActive(true);
-
-			if(targ_grumps >= 0) correct.Add(a);
-			else wrong.Add(a);
-
-			yield return new WaitForSeconds(0.22F);
-		}
-
-		UIObj total = endgame[1];
-		total.Txt[0].text = FinalScore + "";
-		total.Txt[1].text = "HAPPY\nGRANDS";
-		total.Txt[1].color = Color.white;
-		total.transform.localScale = Vector3.one * 1.6F;
-		total.TweenActive(true);
-	
-		yield return new WaitForSeconds(0.5F);
-
-		bool isCounting = true;
-
-		for(int i = 0; i < correct.Count; i++)
-		{
-			SendCorrectAlert(correct[i],total.transform);
-		}
-
-		for(int i = 0; i < wrong.Count; i++)
-		{
-			wrong[i].transform.DOScale(Vector3.zero, 0.3F).OnComplete(()=>{});
-		}
-
-		while(isCounting)
-		{
-			total.Txt[0].text = FinalScore + "";
-			bool complete = true;
-			for(int i = 0; i < correct.Count; i++)
-			{
-				if(correct[i] != null) 
-				{
-					complete = false;
-					break;
-				}
-			}
-			if(complete) isCounting = false;
-			yield return null;
-		}
-
-		yield return new WaitForSeconds(0.2F);
-
-		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
-
-		//total.Img[0].color = Color.
-		total.Txt[0].text = rep + "";
-		total.Txt[1].text = "REP";
-		
-		float repscale = 1.6F + ((float)rep / 150);
-		repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
-		Tweens.Bounce(total.transform, Vector3.one * repscale);
-
-		if(Timer_current < Timer)
-		{
-			yield return new WaitForSeconds(0.5F);
-
-			float mult = 1.0F - (Timer_current/Timer*Bonus_TimerDecay);
-			mult = Mathf.Clamp(1.0F + mult, 1.0F, Bonus_TimerMax);
-			rep = (int) ((float) rep * mult);
-			total.Txt[0].text = rep + "";
-			total.Txt[1].text = "TIME";
-			total.Txt[1].color = Color.red;
-
-			repscale = 1.6F + ((float)rep / 150);
-			repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
-			Tweens.Bounce(total.transform, Vector3.one * repscale);
-		}
-		
-		if(FinalScore == GGNum)
-		{
-			yield return new WaitForSeconds(0.5F);
-			rep = (int) ((float)rep * Bonus_Perfect);
-			total.Txt[0].text = rep + "";
-			total.Txt[1].text = "PERFECT!";
-			total.Txt[1].color = Color.blue;
-
-			repscale = 1.6F + ((float)rep / 150);
-			repscale = Mathf.Clamp(repscale, 1.05F, 3.4F);
-			Tweens.Bounce(total.transform, Vector3.one * repscale);
-		}
-
-		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
-		yield return StartCoroutine(FinishDinner());
-		/*endgame[2].TweenActive(true);
-		endgame[2].ClearActions();
-		endgame[2].AddAction(UIAction.MouseUp, () => 
-		{
-			
-		});*/
-	}
-
-	IEnumerator FinishDinner()
-	{
-		for(int i = Grands.Length-1; i >= 0; i--)
-		{
-			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
-			Grands[i].Data.Hunger.Add(-100);
-		}
-
-		yield return new WaitForSeconds(final_timer);
-		GameManager.IgnoreInput = false;
-		Clear();
-		StartCoroutine(Enter(false, new IntVector(0,0)));
-		yield return null;
-	}
 
 	public void SendCorrectAlert(UIAlert u, Transform t)
 	{
@@ -611,6 +597,48 @@ public class Dinner : Module {
 		}
 		g.Grumps = final;	
 	}
+
+
+	public IEnumerator GrumpAlert(_Grump g)
+	{
+		float time_pause = 1.2F;
+
+		UIObj alert = Instantiate(GameManager.UI.Prefabs.GetObject("grump") as GameObject).GetComponent<UIObj>();
+		GameManager.UI.WorldObjects.AddChild(alert);
+		alert.Init(-1,	GameManager.UI.WorldObjects, 1.0F, 0.0F);
+
+		alert.Child[0].AddChild(Instantiate(g.Target.UIObject));
+		alert.Img[0].sprite = g.LikesIt ? 
+		GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
+		GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
+
+		alert.SetActive(false);
+		alert.transform.localScale = Vector3.one * 1.7F;
+		alert.TweenActive(true);
+
+		float t = 0.0F;
+		while( Target == g.Parent)
+		{
+			Vector3 targpos = g.Parent.Position;
+			/*if(targpos.x + alert.RectT.rect.width > Screen.width)
+			{
+				Vector3 sc = new Vector3(-1,1,1);
+				alert.transform.localScale = sc;
+				alert.Img[0].transform.localScale = sc;
+				alert.Child[0].transform.localScale = sc;
+			}*/
+			alert.transform.position = targpos;
+			alert.Child[0].transform.rotation = Quaternion.identity;
+			alert.Img[0].transform.rotation = Quaternion.identity;
+			yield return null;
+		}
+
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.4F);
+		if(alert != null) alert.PoolDestroy();
+		yield return null;
+	}
+
 
 	public int [] ShuffleGG()
 	{	

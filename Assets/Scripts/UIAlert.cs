@@ -13,9 +13,11 @@ public class UIAlert : UIObj {
 	public ActionStep Stepper;
 	private float _lifetimeoverride;
 	private bool DestroyOnDeath = true;
-	public override void Setup(params float [] args)
+	public override void Init(int index, UIObj p, params float [] args)
 	{
+		base.Init(index, p, args);
 		Stepper.Setup(this.transform);
+		if(args.Length == 0) return;
 		_lifetimeoverride = args[0];
 		if(_lifetimeoverride < 0.0F) DestroyOnDeath = false;
 		played_startaction = false;

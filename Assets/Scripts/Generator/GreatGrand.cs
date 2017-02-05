@@ -23,14 +23,16 @@ public class GreatGrand : GrumpObj {
 	}
 
 	public GreatGrand Relation;
-
-	public SpriteRenderer Emotion;
-
 	public override Vector3 Position
 	{
 		get{
-			return Face.transform.position;
+			return Face.GetUIPosition();
 		}
+	}
+
+	public override UIObj UIObject
+	{
+		get{return Face;}
 	}
 
 	public bool IsHappy
@@ -58,11 +60,6 @@ public class GreatGrand : GrumpObj {
 	}
 	public bool isSeated = false;
 
-	private _Seat drag_targ;
-	private Vector3 FacePos
-	{
-		get{return Face.transform.position + Face.transform.up * 0.3F;}
-	}
 	public override void Drag(Vector3 pos)
 	{
 		base.Drag(pos);
@@ -186,7 +183,7 @@ public class GreatGrand : GrumpObj {
 
 	public int GetGrumps(bool allgrumps = true)
 	{
-		GrumpLines(0.55F, allgrumps);
+		//GrumpLines(0.55F, allgrumps);
 		return GrumpMeter;
 	}
 
@@ -231,7 +228,7 @@ public class GreatGrand : GrumpObj {
 	{
 		Face = f;
 
-		Face.Start();
+		Face.Init(0, null);
 		Face.Reset(Info.Base);
 		(Face.Child[0] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
 		(Face.Child[1] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
@@ -242,8 +239,6 @@ public class GreatGrand : GrumpObj {
 		(Face.Child[6] as FaceObj).SetInfo( Info.Hair, GameManager.GetGenerator().Hair[Info.Hair.Index].Prefab);
 		(Face.Child[8] as FaceObj).SetInfo( Info.Nose, GameManager.GetGenerator().Nose[Info.Nose.Index].Prefab);
 		(Face.Child[7] as FaceObj).SetInfo( Info.Jaw, GameManager.GetGenerator().Jaw[Info.Jaw.Index].Prefab);
-
-		Emotion.transform.position = Face.transform.position + Face.transform.up;
 		
 		Face.Child[0][0].Svg[1].transform.localScale = Info.PupilScale;
 		Face.Child[1][0].Svg[1].transform.localScale = Info.PupilScale;
@@ -259,7 +254,7 @@ public class GreatGrand : GrumpObj {
 	{
 		FaceObj final = (FaceObj) Instantiate(Face);
 
-		final.Start();
+		final.Init(0, null);
 
 		final.SetSkinColor(Info.C_Skin);
 		final.SetHairColor(Info.C_Hair);
@@ -281,7 +276,7 @@ public class GreatGrand : GrumpObj {
 	bool lines_drawing = false;
 	public void ShowGrumpLines(float time = 0.8F)
 	{
-		GrumpLines(time, true);
+		//GrumpLines(time, true);
 	}
 
 	public void GrumpLines(float time, bool allgrumps)

@@ -20,8 +20,7 @@ public class InputController : MonoBehaviour {
 		if(Input.GetMouseButton(0))
 		{
 			InputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			baseplane = new Plane(Vector3.up, Vector3.zero);
+			baseplane = new Plane(-Vector3.forward, Vector3.zero);
 			float d;
 			baseplane.Raycast(InputRay, out d);
 			GameManager.InputPos = InputRay.GetPoint(d);

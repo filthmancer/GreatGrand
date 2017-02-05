@@ -23,30 +23,34 @@ public class Menu : Module {
 	FaceObj [] faces;
 	public override void InitUI()
 	{
-		MUI[0].ClearActions();
-		MUI[0].AddAction(UIAction.MouseUp, () => 
+		MUI[1].ClearActions();
+		MUI[1].AddAction(UIAction.MouseUp, () => 
 		{
 			StartCoroutine(GameManager.instance.LoadModule("Dinner"));
+		});
+		MUI[2].ClearActions();
+		MUI[2].AddAction(UIAction.MouseUp, () => 
+		{
+			StartCoroutine(GameManager.instance.LoadModule("Bowls"));
 		});
 	}
 
 	public override IEnumerator Load()
 	{
-		faces = new FaceObj[MUI[1].Child.Length];
+		faces = new FaceObj[MUI[0].Child.Length];
 		List<GrandData> allgrands = new List<GrandData>();
 		allgrands.AddRange(GameManager.instance.Grands);
 
-		for(int i = 0; i < MUI[1].Child.Length; i++)
+		for(int i = 0; i < MUI[0].Child.Length; i++)
 		{
 			int num = Random.Range(0, allgrands.Count);
 			GreatGrand f = allgrands[num].GrandObj;
 			faces[i] = GameManager.instance.Generator.GenerateFace(f);
+			MUI[0].Child[i][0].AddChild(faces[i]);
 
-			MUI[1].Child[i][0].AddChild(faces[i]);
-
-			faces[i].transform.position = MUI[1].Child[i][0].transform.position;
-			faces[i].transform.localScale = Vector3.one * 0.65F;
-			f.gameObject.SetActive(false);
+			faces[i].transform.position = MUI[0].Child[i][0].transform.position;
+			//faces[i].Scale(Vector3.one * 0.45F);
+			//f.gameObject.SetActive(false);
 
 			allgrands.RemoveAt(num);
 
@@ -70,9 +74,9 @@ public class Menu : Module {
 
 		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
 
-		for(int i = 0; i < MUI[1].Child.Length; i++)
+		for(int i = 0; i < MUI[0].Child.Length; i++)
 		{
-			s.Insert(0.4F, Tweens.PictureSway(MUI[1].Child[i].transform, new Vector3(0,0,12 * v.x)));
+			s.Insert(0.4F, Tweens.PictureSway(MUI[0].Child[i].transform, new Vector3(0,0,12 * v.x)));
 		}
 
 		return s;
@@ -80,9 +84,9 @@ public class Menu : Module {
 
 	public override void Clear()
 	{
-		for(int i = 0; i < MUI[1].Child.Length; i++)
+		for(int i = 0; i < MUI[0].Child.Length; i++)
 		{
-			MUI[1].Child[i][0].DestroyChildren();
+			MUI[0].Child[i][0].DestroyChildren();
 		}
 	}
 

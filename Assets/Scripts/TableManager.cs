@@ -54,20 +54,20 @@ public class TableManager : MonoBehaviour {
 	 		Seat[i].Index = i;
 	 		Seat[i].Object = TableUI.Child[i+1].transform.gameObject;
 	 		Vector3 p = TableUI.Child[i+1].transform.position + TableUI.Child[i+1].transform.forward * 1.7F;
-			splinepoints.Add(new Vector2(p.x, p.z));
+			splinepoints.Add(new Vector2(p.x, p.y));
 	 	}
 	 	VectorLine.Destroy(ref Movement);
 	 	
 	 	Movement = new VectorLine("Movement Path", new List<Vector2>(mvmt_segments+1), 4.0F, LineType.Continuous);
 		Movement.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, true);
-		Movement.Draw();
+		//Movement.Draw();
 	}
 
 	public Vector3 GetMovementPoint(float ratio)
 	{
 		int index = 0;
 		Vector2 a = Movement.GetPoint01(ratio, out index);
-		Vector3 fin = new Vector3(a.x, Seat[0].Object.transform.position.y, a.y);
+		Vector3 fin = new Vector3(a.x, a.y, Seat[0].Object.transform.position.z);
 		return fin;
 	}
 
@@ -75,7 +75,7 @@ public class TableManager : MonoBehaviour {
 	{
 		float norm = (float)s/(float)Seat.Length;
 		Vector2 mpos = Movement.GetPoint01(norm);
-		Vector3 fin = new Vector3(mpos.x, Seat[0].Object.transform.position.y, mpos.y);
+		Vector3 fin = new Vector3(mpos.x, mpos.y, Seat[0].Object.transform.position.z);
 		return fin;
 	}
 
@@ -125,15 +125,15 @@ public class TableManager : MonoBehaviour {
 		while((getup_time += Time.deltaTime) < getup_init)
 		{
 			t.position = Vector3.Lerp(Seat[from].transform.position, start, getup_time/getup_init);
-			t.LookAt(TableObj.transform.position, Vector3.up);
-			//t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			t.LookAt(TableObj.transform.position, Vector3.forward);
+			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			yield return null;
 		}
 
 		while((timer += Time.deltaTime) < timer_total)
 		{
 			t.position = GetMovementPoint(norm);
-			t.LookAt(TableObj.transform.position);
+			t.LookAt(TableObj.transform.position, Vector3.forward);
 			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 
 			norm += norm_rate * Time.deltaTime;
@@ -148,7 +148,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[to].Position, sitdown_time/sitdown_init);
 			t.transform.rotation = Quaternion.Slerp(t.transform.rotation,
-													Seat[to].Rotation * Quaternion.Euler(5, 0,0),
+													Seat[to].Rotation * Quaternion.Euler(5, 180,180),
 													sitdown_time/sitdown_init);
 			//t.LookAt(TableObj.transform.position);
 			//t.rotation *= Quaternion.Euler(x_rot, 0,180);
@@ -176,7 +176,7 @@ public class TableManager : MonoBehaviour {
 		while((getup_time += Time.deltaTime) < getup_init)
 		{
 			t.position = Vector3.Lerp(d, start, getup_time/getup_init);
-			t.LookAt(TableObj.transform.position);
+			t.LookAt(TableObj.transform.position, Vector3.forward);
 			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			yield return null;
 		}
@@ -188,7 +188,7 @@ public class TableManager : MonoBehaviour {
 		while((timer += Time.deltaTime) < time)
 		{
 			t.position = GetMovementPoint(norm);
-			t.LookAt(TableObj.transform.position);
+			t.LookAt(TableObj.transform.position, Vector3.forward);
 			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 
 			norm += norm_rate * Time.deltaTime;
@@ -203,7 +203,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[seat].Position, sitdown_time/sitdown_init);
 			t.rotation = Quaternion.Slerp(t.rotation,
-										Seat[seat].Rotation * Quaternion.Euler(5, 0,0),
+										Seat[seat].Rotation * Quaternion.Euler(5, 180,180),
 										sitdown_time/sitdown_init);
 
 			yield return null;
@@ -242,7 +242,7 @@ public class TableManager : MonoBehaviour {
 		while((timer += Time.deltaTime) < time)
 		{
 			t.position = GetMovementPoint(norm);
-			t.LookAt(ExitDoor.transform.position);
+			t.LookAt(ExitDoor.transform.position, Vector3.forward);
 			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			norm += norm_rate * Time.deltaTime;
 			if(norm < 0.0F) norm = 1.0F;
@@ -256,10 +256,8 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, d, sitdown_time/sitdown_init);
 			//t.rotation = Quaternion.Slerp(t.rotation,
-			//							Seat[seat].Rotation * Quaternion.Euler(5, 0,0),
+			//							Seat[seat].Rotation * Quaternion.Euler(5, 180,180),
 			//							sitdown_time/sitdown_init);
-			t.LookAt(ExitDoor.transform.position);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
 			yield return null;
 		}
 		//g.isSeated = true;
@@ -302,13 +300,29 @@ public class TableManager : MonoBehaviour {
 		return Mathf.Abs(ai - bi);
 	}
 
-	public _Seat NearestSeat(Vector3 pos)
+	/*public _Seat NearestSeat(Vector3 pos)
 	{
 		float dist = 1000;
 		_Seat nearest = null;
 		for(int i = 0; i < Seat.Length; i++)
 		{
 			float d = Vector3.Distance(Seat[i].transform.position, pos);
+			if(d < dist)
+			{
+				dist = d;
+				nearest = Seat[i];
+			}
+		}
+		return nearest;
+	}*/
+
+	public _Seat NearestSeat(Vector2 pos)
+	{
+		float dist = 1000;
+		_Seat nearest = null;
+		for(int i = 0; i < Seat.Length; i++)
+		{
+			float d = Vector2.Distance(Seat[i].Position, pos);
 			if(d < dist)
 			{
 				dist = d;

@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	public Module CurrentModule;
-	public Module Menu, Dinner;
+	public Module Menu, Dinner, Bowls;
 	public Module [] AllModules
 	{
 		get{
-			return new Module[] {Menu, Dinner};
+			return new Module[] {Menu, Dinner, Bowls};
 		}
 	}
 	public string StartingModule = "";
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour {
 		if(StartingModule == string.Empty) StartingModule = "menu";
 		yield return StartCoroutine(LoadModule(StartingModule));
 
-		int amt = 100;
+		int amt = 0;
 		while(Data.FundsDaily.Claim(()=>{
 			amt += Data.Grands.Count * 40;
 			}));
@@ -141,10 +141,18 @@ public class GameManager : MonoBehaviour {
 		for(int i = 0; i < Data.Grands.Count; i++) 
 			alerts.AddRange(Data.Grands[i].CheckTime(span));
 
-		for(int i = 0; i < alerts.Count; i++)
+		List<GrandAlert> hunger = new List<GrandAlert>();
+		List<GrandAlert> ageup = new List<GrandAlert>();
+
+		for(int a = 0; a < alerts.Count; a++)
 		{
-			yield return StartCoroutine(UI.ShowGrandAlert(alerts[i]));
+			if(alerts[a].Type == AlertType.Hungry) hunger.Add(alerts[a]);
+			else if(alerts[a].Type == AlertType.Ageup) ageup.Add(alerts[a]);
 		}
+
+		if(hunger.Count > 0) yield return StartCoroutine(UI.HungerAlert(hunger));
+
+		if(ageup.Count > 0) yield return StartCoroutine(UI.AgeAlert(ageup));
 
 		yield return null;
 	}
@@ -164,6 +172,9 @@ public class GameManager : MonoBehaviour {
 			break;
 			case "menu":
 			target = Menu;
+			break;
+			case "bowls":
+			target = Bowls;
 			break;
 		}
 
@@ -196,6 +207,12 @@ public class GameManager : MonoBehaviour {
 		if(t is GreatGrand) UI.SetGrandUI(t as GreatGrand);
 	}
 
+	public static Vector2 InputPos_Screen
+	{
+		get{
+			return Input.mousePosition;
+		}
+	}
 	public static Vector3 InputPos;
 	public static GreatGrand TargetGrand;
 	public void SetTargetGrand(GreatGrand g)

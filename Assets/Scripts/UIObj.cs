@@ -9,23 +9,36 @@ using DG.Tweening;
 using SVGImporter;
 
 public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler,IPointerEnterHandler, IPointerExitHandler{
+
 	public string _Name;
 	[HideInInspector]
 	public int Index = 100;
-	//[HideInInspector]
+	[HideInInspector]
 	public UIObj ParentObj;
+
+	private static bool LogUIObjs = false;
+
 	public Image [] Img;
 	public SVGImage [] Svg;
 	public TextMeshProUGUI [] Txt;
 	public UIObj [] Child;
 
+	public UIState StateWhenPressed = new UIState(Vector2.zero, Vector3.one, Color.white);
+	
+// REMEMBER THAT THIS STATE SHIT IS SET UP FOR MY STUPID ASS IDEA TO MAKE GG A GAME ON
+// X AND Z AXIS INSTEAD OF X AND Y YOU DUMB FUCK
+	private UIState State_init;
 
 	public bool SetInactiveAfterLoading;
+	public bool RaycastTarget = false;
+	public bool isActive;
+
 	public TextMeshProUGUI _Text
 	{get{
 			if(Txt.Length > 0) return Txt[0];
 			else return null;
 	}}
+
 	public Image _Image
 	{get{
 			if(Img.Length > 0) return Img[0];
@@ -40,10 +53,27 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			}
 	}}
 
+	public SVGImage _SVG
+	{
+		get{
+			if(Svg.Length > 0 && Svg[0] != null) return Svg[0];
+			else 
+			{
+				if(GetComponent<SVGImage>()) 
+				{
+					Svg = new SVGImage[]{GetComponent<SVGImage>()};
+					return Svg[0];
+				}
+				else return null;
+			}
+		}
+	}
+
+
 	protected ObjectPoolerReference poolref;
 	public ObjectPoolerReference GetPoolRef(){return poolref;}
 
-	public bool RaycastTarget = true;
+	
 
 	public void PoolDestroy()
 	{
@@ -55,28 +85,31 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		else Destroy(this.gameObject);
 	}
 
-	public virtual void Start()
+	public virtual void Init(int ind, UIObj p, params float [] args)
 	{
+		if(ind != -1) Index = ind;
+		ParentObj = p;
+
 		if(_Name == string.Empty) _Name = gameObject.name;
 		else gameObject.name = _Name;
 		
-		if(Img.Length == 0 && GetComponent<Image>()) Img = new Image[]{GetComponent<Image>()};
-		if(Txt.Length == 0 && GetComponent<TextMeshProUGUI>()) Txt = new TextMeshProUGUI[]{GetComponent<TextMeshProUGUI>()};
 		for(int i = 0; i < Child.Length; i++)
 		{
 			if(Child[i] == null) continue;
-			Child[i].Index = i;
-			Child[i].ParentObj = this;
+			Child[i].Init(i, this);
 		}
+
+		if(Img.Length == 0 && GetComponent<Image>()) Img = new Image[]{GetComponent<Image>()};
+		if(Svg.Length == 0 && GetComponent<SVGImage>()) Svg = new SVGImage[]{GetComponent<SVGImage>()};
+		if(Txt.Length == 0 && GetComponent<TextMeshProUGUI>()) Txt = new TextMeshProUGUI[]{GetComponent<TextMeshProUGUI>()};
+		
+		State_init = new UIState(this);
+		if(_Image != null) StateWhenPressed.Col = _Image.color;
+		else if(_SVG) StateWhenPressed.Col = _SVG.color;
+	
 		if(SetInactiveAfterLoading) SetActive(false);
 		else isActive = this.gameObject.activeSelf;
 	}
-
-	public virtual void Setup(params float [] args)
-	{
-
-	}
-
 
 	public virtual void SetActive(bool? active = null)
 	{
@@ -89,8 +122,9 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	public virtual void TweenActive(bool ? active = null)
 	{
 		bool actual = active ?? !this.gameObject.activeSelf;
-		isActive = actual;
+		if(actual == this.gameObject.activeSelf) return;
 
+		isActive = actual;
 		if(actual)
 		{
 			this.gameObject.SetActive(true);
@@ -107,12 +141,27 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		}
 		else
 		{
-			//if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
 			this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
 		}
 	}
 
-	public bool isActive;
+	public void SetUIPositionFromWorld(Vector3 wpos)
+	{
+		Vector2 ViewportPosition= _UICamera.WorldToViewportPoint(wpos);
+
+		Vector2 WorldObject_ScreenPosition=new Vector2(
+		((ViewportPosition.x*_UICanvasRect.sizeDelta.x)-(_UICanvasRect.sizeDelta.x*0.5f)),
+		((ViewportPosition.y*_UICanvasRect.sizeDelta.y)-(_UICanvasRect.sizeDelta.y*0.5f)));
+		
+		//now you can set the position of the ui element
+		RectT.anchoredPosition=WorldObject_ScreenPosition;
+	}
+
+	public void SetUIPosition(Vector2 spos){
+		transform.position = spos;
+	}
+	public Vector2 GetUIPosition(){return RectT.position;}
+
 
 	public UIObj this[int i]
 	{
@@ -179,8 +228,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		for(int i = Child.Length; i < Child.Length + c.Length; i++)
 		{
 			newchild[i] = c[x];
-			newchild[i].Index = i;
-			newchild[i].ParentObj = this;
+			newchild[i].Init(i, this);
 			newchild[i].transform.SetParent(this.transform, false);
 			newchild[i].transform.localRotation = Quaternion.identity;
 			newchild[i].transform.localPosition = Vector3.zero;
@@ -231,16 +279,9 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	}
 	public void ResetRect()
 	{
-
-		//RectT.anchorMax = Vector2.zero;
-		//RectT.anchorMax = Vector2.one;
 		RectT.sizeDelta = Vector3.zero;
 		RectT.anchoredPosition = Vector3.zero;
-
-		//transform.localPosition = Vector3.zero;
-
 		transform.localRotation = Quaternion.Euler(0,0,0);
-		
 		transform.localScale = Vector3.one;
 	}
 
@@ -269,7 +310,6 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		if(Img.Length == 0) return;
 		Color col = good ? Color.green : Color.red;
 		Img[0].color = col;
-		init = col;
 	}
 
 	public virtual void LateUpdate()
@@ -287,7 +327,8 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		if(GameManager.IgnoreInput) return;
+		if(GameManager.IgnoreInput || !RaycastTarget) return;
+		if(LogUIObjs) print(this + ": Mouse Enter - " + Actions_MouseOver.Count + " actions");
 		foreach(Action child in Actions_MouseOver)
 		{
 			child();
@@ -296,13 +337,13 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		{
 			child.Act();
 		}
-		if(Img.Length > 0) init = Img[0].color;
-		if(Svg.Length > 0) init = Svg[0].color;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if(GameManager.IgnoreInput) return;
+		if(GameManager.IgnoreInput || !RaycastTarget) return;
+		if(LogUIObjs) print(this + ": Mouse Exit - " + Actions_MouseOut.Count + " actions");
+
 		foreach(Action child in Actions_MouseOut)
 		{
 			child();
@@ -313,17 +354,15 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		}
 		isPressed = false;
 		time_over = 0.0F;
-		if(Img.Length > 0 && init.a == 1.0F) Img[0].color = init;
-		if(Svg.Length > 0 && init.a == 1.0F) Svg[0].color = init;
+		Tweens.SetToState(this, State_init, 0.1F);
 	}
 
 
 	public bool PlayClickDown = true, PlayClickUp = true;
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		if(GameManager.IgnoreInput) return;
-		//if(Application.isMobilePlatform) return;
-		//if(UIManager.instance.LogUIObjs) print(Actions_MouseDown.Count + ":" +  this);
+		if(GameManager.IgnoreInput || !RaycastTarget) return;
+		if(LogUIObjs) print(this + ": Mouse Down - " + Actions_MouseDown.Count + " actions");
 
 		if((Actions_MouseUp.Count > 0 || TypeActions_MouseUp.Count > 0) || PlayClickDown)
 		{
@@ -338,23 +377,16 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		{
 			child.Act();
 		}
+
 		isPressed = true;
 		time_over += Time.deltaTime;
-		if(Img.Length > 0) 
-		{
-			init = Img[0].color;
-			Img[0].color = Color.Lerp(init, Color.black, 0.2F);
-		}
-		else if(Svg.Length > 0) 
-		{
-			init = Svg[0].color;
-			Svg[0].color = Color.Lerp(init, Color.black, 0.2F);
-		}
+		Tweens.SetToState(this, StateWhenPressed);
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if(GameManager.IgnoreInput) return;
+		if(GameManager.IgnoreInput || !RaycastTarget) return;
+		if(LogUIObjs) print(this + ": Mouse Up - " + Actions_MouseUp.Count + " actions");
 		foreach(UIAction_Method child in TypeActions_MouseUp)
 		{
 			child.Act();
@@ -370,9 +402,9 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		}
 		isPressed = false;
 		time_over = 0.0F;
-		if(Img.Length > 0 && init.a == 1.0F) Img[0].color = init;	
-		if(Svg.Length > 0 && init.a == 1.0F) Svg[0].color = init;	
+		Tweens.SetToState(this, State_init, 0.1F);
 	}
+
 	List<Action>	Actions_MouseOut = new List<Action>(), 
 					Actions_MouseOver = new List<Action>(),
 					Actions_MouseUp = new List<Action>(),
@@ -384,8 +416,9 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 						TypeActions_MouseDown = new List<UIAction_Method>(),
 						TypeActions_MouseClick = new List<UIAction_Method>();
 
-	protected Color init;
-	public void SetInitCol(Color c) {init = c;}
+	protected Color col_init;
+	protected Color col_when_pressed;
+	public void SetInitCol(Color c) {col_init = c;}
 	protected float time_over = 0.0F;
 	public bool isPressed;
 
@@ -474,6 +507,24 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 			break;
 		}
 	}
+
+
+	public static Canvas _UICanvas;
+	public static Camera _UICamera;
+	private static RectTransform _UICanvas_rect;
+	public static RectTransform _UICanvasRect
+	{
+		get{
+			if(_UICanvas_rect == null) _UICanvas_rect = _UICanvas.GetComponent<RectTransform>();
+			return _UICanvas_rect;}
+	}
+	private static CanvasScaler _UICanvas_scaler;
+	public static CanvasScaler _UICanvasScaler
+	{
+		get{
+			if(_UICanvas_scaler == null) _UICanvas_scaler = _UICanvas.GetComponent<CanvasScaler>();
+			return _UICanvas_scaler;}
+	}
 }
 
 public enum UIAction
@@ -499,5 +550,32 @@ public class UIAction_Method
 	{
 		Values = v;
 		Method = m;
+	}
+}
+
+[System.Serializable]
+public class UIState
+{
+	public Vector2 Position;
+	public Vector3 Scale;
+	public Color Col;
+
+	public UIState(UIObj u)
+	{
+		Position = new Vector2(u.transform.localPosition.x, u.transform.localPosition.z);
+		Scale = u.transform.localScale;
+
+		Color c = Color.white;
+		if(u.Img.Length > 0 && u.Img[0] != null) c = u.Img[0].color;
+		else if (u.Svg.Length > 0 && u.Svg[0] != null) c = u.Svg[0].color;
+	
+		Col = c;
+	}
+
+	public UIState(Vector2 p, Vector3 s, Color c)
+	{
+		Position = p;
+		Scale = s;
+		Col = c;
 	}
 }

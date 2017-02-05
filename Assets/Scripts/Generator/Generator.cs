@@ -195,14 +195,13 @@ public class Generator : MonoBehaviour {
 		GameObject _base = (GameObject) Instantiate(Base[targ.Data.Info.Base.Index].Prefab);
 
 		FaceObj final = _base.GetComponent<FaceObj>();
-
 		final.SetSkinColor(targ.Data.Info.C_Skin);
 		final.SetHairColor(targ.Data.Info.C_Hair);
 		final.SetOffsetColor(targ.Data.Info.C_Offset);
 		final.SetNoseColor (targ.Data.Info.C_Nose);
 
 		targ.SetFace(final);
-
+		final._Name = targ.Data.Info.Name;
 		_base.name = targ.Data.Info.Name;
 		return final;
 	}

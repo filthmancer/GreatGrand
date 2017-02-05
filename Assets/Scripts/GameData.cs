@@ -289,7 +289,7 @@ public class GrandData
 	{
 		List<GrandAlert> fin = new List<GrandAlert>();
 	//HOUR CHECK
-		for(int h = 0; h < 10; h++)
+		for(int h = 0; h < (int) t.TotalHours; h++)
 		{
 			Hunger.Check();
 		}
@@ -611,15 +611,12 @@ public class _Grump
 		Target = t;
 		LikesIt = like;
 
-		Line = new VectorLine("Grump - " + Parent + ":" + Target, new List<Vector3>(), 4.5F, LineType.Discrete, Joins.Weld);
-		Vector3 a = Parent.Face.transform.position;
-		Vector3 b = Target.transform.position;
+		Vector3 a = new Vector3(0,0,0);//Parent.Face.transform.position;
+		Vector3 b = new Vector3(100,100,0);//Target.transform.position;
 		Vector3 vel = b - a;
 		vel.Normalize();
 
-		float d = Vector3.Distance(a,b);
-		int steps = (int) (d/0.3F);
-		
+		Line = new VectorLine("Grump - " + Parent + ":" + Target, new List<Vector3>(), 4.5F, LineType.Discrete, Joins.Weld);
 		Line.points3.Add(Vector3.Lerp(a, b, 0.15F));
 		Line.points3.Add(Vector3.Lerp(a, b, 0.85F));
 		Line.SetColor(new Color(0,0,0,0));
@@ -636,16 +633,17 @@ public class _Grump
 
 	public void Update()
 	{
+		/*
 		if((line_time -= Time.deltaTime) > -0.1F)
 		{
 			Color c = (LikesIt ? Color.green : Color.red);
 			float a = (line_time > 0.0F) ? line_time * 3 : 0.0F;
 			c.a = Mathf.Clamp01(a);
-			Line.SetColor(c);
-			Line.Draw();
-			Arrow.SetColor(c);
-			Arrow.Draw();
-		}
+			//Line.SetColor(c);
+			//Line.Draw();
+			//Arrow.SetColor(c);
+			//Arrow.Draw();
+		}*/
 	}
 
 	public void Trace(float spawn, float fade = 1.3F)
@@ -655,8 +653,8 @@ public class _Grump
 
 		Line.SetColor(c);
 
-		Vector3 startpos = Parent.Position;
-		Vector3 endpos = Target.Position;
+		Vector3 startpos = new Vector3(0,0,0);//Parent.Position;
+		Vector3 endpos = new Vector3(100,100,0);//Target.Position;
 		Vector3 vel = endpos - startpos;
 		vel.Normalize();
 
@@ -669,7 +667,7 @@ public class _Grump
 
 		DOTween.To(()=> Line.points3[1], x=>Line.points3[1] = x, point, spawn);
 
-		Vector3 arrowoffset = Vector3.Cross(vel, Vector3.up).normalized * 0.2F;
+		Vector3 arrowoffset = Vector3.Cross(vel, Vector3.forward).normalized * 0.2F;
 		Vector3 arrowpushback = point - (vel*0.2F);
 
 		Arrow.points3[0] = start;
