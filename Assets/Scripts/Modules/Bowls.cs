@@ -13,7 +13,7 @@ public class Bowls : Module {
 			return new UIQuote[]
 			{
 				new UIQuote("Carer", "A Grand has sprained their back!",
-									"Guide them to the ambulance, quickly!")
+									"Tilt the screen to guide them to the ambulance!")
 			};
 		}
 	}
@@ -113,8 +113,7 @@ public class Bowls : Module {
 		if(Application.isMobilePlatform)
 		{
 			Vector2 inacc = Input.acceleration;
-			print(inacc);
-			Control_Velocity = new Vector3(inacc.x, 0.0F, 0.0F);
+			Control_Velocity = new Vector3(inacc.x*1.4F, 0.0F, 0.0F);
 		}    
 		else
 		{
@@ -196,8 +195,8 @@ public class Bowls : Module {
 		WinObj.Txt[0].text = med + " MEDS";
 		Tweens.Bounce(WinObj.Txt[0].transform);
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Meds, med));
-
 		EndButton.TweenActive(true);
+		TargetGrand.Data.Fitness.Add(-50);
 	}
 
 	public void Lose()
@@ -246,7 +245,7 @@ public class Bowls : Module {
 			Sequence f = OpeningSequence(v);
 			yield return f.WaitForCompletion();
 		}
-		
+		yield return StartCoroutine(CheckForIntro());
 		yield return StartCoroutine(StartGame());
 	}
 
@@ -277,8 +276,15 @@ public class Bowls : Module {
 		Pathway.transform.position = Pathway_init;
 		MoveSpeed_actual = MoveSpeed;
 
-		int r = Random.Range(0, GameManager.instance.Grands.Length);
-		TargetGrand = GameManager.instance.Grands[r].GrandObj;
+		int checks = 0;
+		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio < 0.3F || checks > 4)
+		{
+			int r = Random.Range(0, GameManager.instance.Grands.Length);
+			TargetGrand = GameManager.instance.Grands[r].GrandObj;
+			yield return null;
+		}
+		if(TargetGrand == null) TargetGrand = GameManager.instance.Generator.Generate(0);
+		
 
 		TargetGrand_Face = GameManager.instance.Generator.GenerateFace(TargetGrand);
 		FaceParent.AddChild(TargetGrand_Face);

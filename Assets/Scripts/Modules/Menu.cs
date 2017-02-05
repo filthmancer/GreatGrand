@@ -11,11 +11,9 @@ public class Menu : Module {
 			return new UIQuote[]
 			{
 				new UIQuote("Carer", "Welcome to " + GameManager.WorldRes.VillageName + " retirement village!",
-									 "We pride ourselves on giving the best care and experience for your Grand.",
-									 "I assume you've brought your Grand along?",
-									 "Great! We'll get started on setting up your room!",
-									 "Why don't you and your Grand take a look around?",
-									 "It's just about dinner time, head to the dining hall to meet some other residents!")
+									 "We pride ourselves on giving the best care and experience for Grands.",
+									 "Why don't you take a look around?",
+									 "It's just about dinner time, head to the dining hall to meet the residents!")
 			};
 		}
 	}
@@ -49,8 +47,7 @@ public class Menu : Module {
 			MUI[0].Child[i][0].AddChild(faces[i]);
 
 			faces[i].transform.position = MUI[0].Child[i][0].transform.position;
-			//faces[i].Scale(Vector3.one * 0.45F);
-			//f.gameObject.SetActive(false);
+			SetupFace(faces[i], f);
 
 			allgrands.RemoveAt(num);
 
@@ -58,6 +55,26 @@ public class Menu : Module {
 		}
 
 		GameManager.UI.PermUI["exit"].TweenActive(false);
+	}
+
+	public void SetupFace(FaceObj f, GreatGrand g)
+	{
+		f.AddAction(UIAction.MouseDown, ()=>
+		{
+			UIObj u = GameManager.UI.GrandInfo(g);
+			u.FitUIPosition(f.transform.position + Vector3.down*50);
+			u.SetActive(false);
+			u.TweenActive(true);
+			f.Alerts.Add(u);
+		});
+		f.AddAction(UIAction.MouseUp, ()=>
+		{
+			for(int i = 0; i < f.Alerts.Count; i++)
+			{
+				Destroy(f.Alerts[i].gameObject);
+			}
+			f.Alerts.Clear();
+		});
 	}
 
 	public override Sequence OpeningSequence(IntVector v)

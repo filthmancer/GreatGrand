@@ -18,6 +18,8 @@ public class FaceObj : UIObj {
 	private FaceObj [] _obj;
 	private RectTransform trans;
 
+	public List<UIObj> Alerts = new List<UIObj>();
+
 	public List<AnimTrigger> Anims = new List<AnimTrigger>();
 	
 	public FaceInfo Info;

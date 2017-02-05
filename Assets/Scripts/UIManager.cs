@@ -72,6 +72,12 @@ public class UIManager : MonoBehaviour {
 				GameManager.instance.AllModules[i].SetIntro(false);
 			}
 		});
+
+
+		Options["resetgrands"].AddAction(UIAction.MouseUp, ()=>
+		{
+			PlayerPrefs.SetInt("FirstTime", 0);
+		});
 		
 		
 		CheckResourcesUI();
@@ -391,6 +397,34 @@ public class UIManager : MonoBehaviour {
 		QuoteObjects.Img[0].raycastTarget = false;
 		GameManager.IgnoreInput = false;
 		yield return null;
+	}
+
+	public UIObj GrandInfo(GreatGrand g)
+	{
+		UIObj final = Instantiate(Prefabs.GetObject("grandinfo") as GameObject).GetComponent<UIObj>();
+		final.Init(-1, WorldObjects);
+		WorldObjects.AddChild(final);
+		
+		final.ResetRect();
+		final.transform.localPosition = Vector3.zero;
+
+		final[0].Txt[0].text = g.Info.Name;
+		final[0].Txt[1].text = "Age " + g.Info.Age;
+		final[0].Txt[2].text = g.Data.RoleType + "";
+
+		final[1][0].Txt[0].text = "Hungry ";
+		final[1][0].Svg[0].transform.localScale = new Vector3(g.Data.Hunger.Ratio, 1, 1);
+		final[1][0].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Hunger.Ratio);
+
+		final[1][1].Txt[0].text = "Fitness ";
+		final[1][1].Svg[0].transform.localScale = new Vector3(g.Data.Fitness.Ratio, 1, 1);
+		final[1][1].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Fitness.Ratio);
+
+		final[1][2].Txt[0].text = "Social ";
+		final[1][2].Svg[0].transform.localScale = new Vector3(g.Data.Social.Ratio, 1, 1);
+		final[1][2].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Social.Ratio);
+
+		return final;
 	}
 
 	public void CheckResourcesUI()

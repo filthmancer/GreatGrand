@@ -39,8 +39,9 @@ public class Dinner : Module {
 		get{
 			return new UIQuote[]
 			{
-				new UIQuote("Carer", "Many residents have strong feelings about each other...",
-									 "They may get rowdy if seated close to enemies, or away from friends!")
+				new UIQuote("Carer", "Many Grands have strong feelings about each other...",
+									 "They may get rowdy if seated close to enemies, or away from friends!",
+									 "Tap a Grand to see their feelings, and drag them around the table until everyone is happy!")
 			};
 		}
 	}
@@ -421,8 +422,8 @@ public class Dinner : Module {
 		for(int i = Grands.Length-1; i >= 0; i--)
 		{
 			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
-			Grands[i].Data.Hunger.Add(-50);
-			UIAlert a = GameManager.UI.StringAlert("-50% Hunger", Faces[i].transform.position, 1.2F);
+			Grands[i].Data.Hunger.Add(-25);
+			UIAlert a = GameManager.UI.StringAlert("-25% Hunger", Faces[i].transform.position, 1.2F);
 			a.Txt[0].color = Color.white;
 			a.Txt[0].fontSize = 40;
 

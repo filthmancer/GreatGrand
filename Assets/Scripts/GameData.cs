@@ -122,7 +122,7 @@ public class GameData : MonoBehaviour {
 		print("Loading from " + Save_Target);
 		if(!System.IO.File.Exists(Save_Target)) return;
 		Save_Data =  SaveData.Load(Save_Target);
-		//if(Save_Data == null) return;
+		if(Save_Data == null) return;
 
 		if(!Save_Data.TryGetValue<System.DateTime>("Time", out LastTime)) 
 		{
@@ -165,24 +165,24 @@ public class GameData : MonoBehaviour {
 
 				string pref = "Grand:" + prevhex[i].ToString();
 
-				g.Info.Name = Save_Data.GetValue<string>(pref+"-Name");
-				g.Info.Gender = Save_Data.GetValue<bool>(pref+"-Gender");
-				g.Info.Age = Save_Data.GetValue<int>(pref+"-Age");
-				g.Info.PupilScale = Save_Data.GetValue<Vector3>(pref+"-Pupils");
-				g.Info.Nation = Save_Data.GetValue<NationStatus>(pref+"-Nation");
+				g.Info.Name = Save_Data.TryGetValue<string>(pref+"-Name");
+				g.Info.Gender = Save_Data.TryGetValue<bool>(pref+"-Gender");
+				g.Info.Age = Save_Data.TryGetValue<int>(pref+"-Age");
+				g.Info.PupilScale = Save_Data.TryGetValue<Vector3>(pref+"-Pupils");
+				g.Info.Nation = Save_Data.TryGetValue<NationStatus>(pref+"-Nation");
 
-				g.Info.C_Skin = Save_Data.GetValue<Color>(pref+"-C_Skin");
-				g.Info.C_Hair = Save_Data.GetValue<Color>(pref+"-C_Hair");
-				g.Info.C_Eye = Save_Data.GetValue<Color>(pref+"-C_Eye");
-				g.Info.C_Offset = Save_Data.GetValue<Color>(pref+"-C_Offset");
-				g.Info.C_Nose = Save_Data.GetValue<Color>(pref+"-C_Nose");
+				g.Info.C_Skin = Save_Data.TryGetValue<Color>(pref+"-C_Skin");
+				g.Info.C_Hair = Save_Data.TryGetValue<Color>(pref+"-C_Hair");
+				g.Info.C_Eye = Save_Data.TryGetValue<Color>(pref+"-C_Eye");
+				g.Info.C_Offset = Save_Data.TryGetValue<Color>(pref+"-C_Offset");
+				g.Info.C_Nose = Save_Data.TryGetValue<Color>(pref+"-C_Nose");
 
 				for(int a = 0; a < f_inf.Length; a++)
 				{
 					g.SetFaceInfo(f_inf[a], new FaceInfo(
-						Save_Data.GetValue<int>(pref+"-"+f_inf[a]+":Index"),
-						Save_Data.GetValue<Vector3[]>(pref+"-"+f_inf[a]+":Values"),
-						Save_Data.GetValue<ColorType>(pref+"-"+f_inf[a]+":Colour")));
+						Save_Data.TryGetValue<int>(pref+"-"+f_inf[a]+":Index"),
+						Save_Data.TryGetValue<Vector3[]>(pref+"-"+f_inf[a]+":Values"),
+						Save_Data.TryGetValue<ColorType>(pref+"-"+f_inf[a]+":Colour")));
 				}
 
 				for(int r = 0; r < g.Resources.Length; r++)
@@ -401,6 +401,14 @@ public class GrandInfo
 	public FaceInfo Eye, Ear, Brow, Base, Hair, Jaw, Nose;
 	public Vector3 PupilScale;
 	public Color C_Skin, C_Hair, C_Offset, C_Nose, C_Eye;
+	public GrandInfo()
+	{
+		Name = "";
+		Gender = false;
+		Age = 60;
+		Nation = NationStatus.Australian;
+		Military = false;
+	}
 }
 
 public class FaceInfo
