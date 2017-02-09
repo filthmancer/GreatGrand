@@ -390,7 +390,7 @@ public class Dinner : Module {
 			yield return null;
 		}
 
-		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
+		int rep = (int) ((FinalScore*5) * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
 		info.Txt[0].text = rep + "";
 		
 		if(Timer_current < Timer)

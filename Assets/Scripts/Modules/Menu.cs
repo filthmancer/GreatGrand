@@ -18,7 +18,9 @@ public class Menu : Module {
 		}
 	}
 
-	FaceObj [] faces;
+	FaceObj [] Faces;
+	UIObj [] Frames;
+
 	public override void InitUI()
 	{
 		MUI[1].ClearActions();
@@ -48,20 +50,29 @@ public class Menu : Module {
 
 	public override IEnumerator Load()
 	{
-		faces = new FaceObj[MUI[0].Child.Length];
+		Faces = new FaceObj[GameManager.WorldRes.Population];
+		Frames = new UIObj[GameManager.WorldRes.Population];
+
 		List<GrandData> allgrands = new List<GrandData>();
 		allgrands.AddRange(GameManager.instance.Grands);
 
-		for(int i = 0; i < MUI.Child[0].Child.Length; i++)
+		for(int i = 0; i < Faces.Length; i++)
 		{
+			if(allgrands.Count <= 0) continue;
 			int num = Random.Range(0, allgrands.Count);
 			GreatGrand f = allgrands[num].GrandObj;
 			if(f == null) continue;
-			faces[i] = GameManager.Generator.GenerateFace(f);
-			MUI[0].Child[i][0].AddChild(faces[i]);
+			Frames[i] = (UIObj) Instantiate(GameManager.Data.RandomFrame());
+			Frames[i].SetParent(MUI[0]);
+			Frames[i].transform.position = MUI[0].Img[i].transform.position;
+			Frames[i].Svg[1].color = f.Info.C_Eye;
+			Frames[i].Svg[0].color = GameManager.Generator.RandomSkin();
 
-			faces[i].transform.position = MUI[0].Child[i][0].transform.position;
-			SetupFace(faces[i], f);
+			Faces[i] = GameManager.Generator.GenerateFace(f);
+			Frames[i][0].AddChild(Faces[i]);
+
+			Faces[i].transform.position = Frames[i][0].transform.position;
+			SetupFace(Faces[i], f);
 
 			allgrands.RemoveAt(num);
 
@@ -100,7 +111,7 @@ public class Menu : Module {
 				ginfo_target = g;
 				ginfo = GameManager.UI.GrandInfo(g);
 				ginfo.SetParent(MUI["back"]);
-				ginfo.FitUIPosition(f.transform.position + Vector3.down*50);
+				ginfo.FitUIPosition(f.transform.position + Vector3.down*50, null, 1.0F);
 				ginfo.SetActive(false);
 				ginfo.TweenActive(true);
 			}
@@ -127,9 +138,9 @@ public class Menu : Module {
 
 		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
 
-		for(int i = 0; i < MUI[0].Child.Length; i++)
+		for(int i = 0; i < Frames.Length; i++)
 		{
-			s.Insert(0.4F, Tweens.PictureSway(MUI[0].Child[i].transform, new Vector3(0,0,12 * v.x)));
+			s.Insert(0.4F, Tweens.PictureSway(Frames[i].transform, new Vector3(0,0,12 * v.x)));
 		}
 
 		return s;
@@ -137,9 +148,9 @@ public class Menu : Module {
 
 	public override void Clear()
 	{
-		for(int i = 0; i < MUI[0].Child.Length; i++)
+		for(int i = 0; i < Frames.Length; i++)
 		{
-			MUI[0].Child[i][0].DestroyChildren();
+			Frames[i].Destroy();
 		}
 	}
 

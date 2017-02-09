@@ -439,6 +439,51 @@ public class UIManager : MonoBehaviour {
 		yield return null;
 	}
 
+	public IEnumerator RepAlert(RewardCon r)
+	{
+		UIObj alert = PermUI["grandalert"];
+	
+		GameManager.IgnoreInput = true;
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = true;
+		alert.TweenActive(true);	
+		alert.Txt[0].text = GameManager.WorldRes.VillageName + "\nREP UP!";
+		alert.Txt[1].text = "";
+		alert.Txt[2].text = "Lvl. " + (GameManager.WorldRes.Rep.Level - 1);	
+		yield return new WaitForSeconds(0.5F);
+		alert.Txt[2].text = "Lvl. " + (GameManager.WorldRes.Rep.Level);
+		yield return new WaitForSeconds(0.4F);
+
+		if(r.Rep > 0)
+		{
+			StartCoroutine(ResourceAlert(GameManager.WorldRes.Rep, r.Rep));
+			alert.Txt[1].text += "+" + r.Rep + " REP\n";
+			yield return null;
+		} 
+		if(r.Funds > 0)
+		{
+			StartCoroutine(ResourceAlert(GameManager.WorldRes.Funds, r.Funds));
+			alert.Txt[1].text += "+" + r.Funds + " FUNDS\n";
+			yield return null;
+		} 
+		if(r.Meds > 0)
+		{
+			StartCoroutine(ResourceAlert(GameManager.WorldRes.Meds, r.Meds));
+			alert.Txt[1].text += "+" + r.Meds + " MEDS\n";
+			yield return null;
+		} 
+
+		yield return new WaitForSeconds(0.8F);
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.2F);
+		alert.Child[0].DestroyChildren();
+
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = false;
+		GameManager.IgnoreInput = false;
+		yield return null;
+	}
+
 	public UIObj GrandInfo(GreatGrand g)
 	{
 		UIObj final = Instantiate(Prefabs.GetObject("grandinfo") as GameObject).GetComponent<UIObj>();

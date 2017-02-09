@@ -161,7 +161,7 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		transform.position = spos;
 	}
 
-	public void FitUIPosition(Vector2 spos, Rect? f = null, float ratio = 0.5F)
+	public void FitUIPosition(Vector2 spos, Rect? f = null, float ratio = 1.0F)
 	{
 		Rect r = RectT.rect;
 		if(f.HasValue) r = f.Value;

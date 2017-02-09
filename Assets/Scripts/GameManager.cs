@@ -93,7 +93,6 @@ public class GameManager : MonoBehaviour {
 	bool gameStart = false;
 	// Use this for initialization
 	void Start () {
-		Debug.Log("STARTING GAME");
 		Application.targetFrameRate = 48;
 		Data = this.GetComponent<GameData>();
 		Data.Init();
@@ -106,9 +105,9 @@ public class GameManager : MonoBehaviour {
 
 		CheckForFirstTime();
 		
-		if(Data.Grands.Count == 0)
+		if(Data.Grands.Count < WorldRes.Population)
 		{
-			for(int i = 0; i < WorldRes.Population; i++)
+			for(int i = Data.Grands.Count; i < WorldRes.Population; i++)
 			{
 				Data.Grands.Add(Generator.GenerateGrand());
 			}
@@ -134,7 +133,6 @@ public class GameManager : MonoBehaviour {
 	{
 		if(StartingModule == string.Empty) StartingModule = "menu";
 		yield return StartCoroutine(LoadModule(StartingModule));
-
 	//	yield return StartCoroutine(TimeChecks());
 
 		yield return null;
@@ -151,11 +149,17 @@ public class GameManager : MonoBehaviour {
 
 		if(amt > 0) yield return StartCoroutine(UI.ResourceAlert(WorldRes.Funds, amt));
 
-		System.TimeSpan span = System.DateTime.Now.Subtract(Data.LastTime);
+		System.TimeSpan span = System.DateTime.Now.Subtract(Data.TimeLast);
 
 		Alerts = new List<GrandAlert>();
 		for(int i = 0; i < Data.Grands.Count; i++) 
 			Alerts.AddRange(Data.Grands[i].CheckTime(span));
+
+		if(Data.RepLast != WorldRes.Rep.Level)
+		{
+			Alerts.Add(new GrandAlert(AlertType.Repup, null, WorldRes.Rep.Level));
+			Data.RepLast = WorldRes.Rep.Level;
+		}
 	}
 
 	public List<GrandAlert> Alerts = new List<GrandAlert>();
@@ -164,6 +168,7 @@ public class GameManager : MonoBehaviour {
 		List<GrandAlert> hunger = new List<GrandAlert>();
 		List<GrandAlert> fitness = new List<GrandAlert>();
 		List<GrandAlert> ageup = new List<GrandAlert>();
+		List<GrandAlert> repup = new List<GrandAlert>();
 
 		for(int a = 0; a < Alerts.Count; a++)
 		{
@@ -172,12 +177,24 @@ public class GameManager : MonoBehaviour {
 				case AlertType.Hungry: hunger.Add(Alerts[a]); break;
 				case AlertType.Fitness: fitness.Add(Alerts[a]); break;
 				case AlertType.Ageup: ageup.Add(Alerts[a]); break;
+				case AlertType.Repup: repup.Add(Alerts[a]); break;
 			}
 		}
 
 		if(hunger.Count > 0) yield return StartCoroutine(UI.HungerAlert(hunger));
 		if(fitness.Count > 0) yield return StartCoroutine(UI.FitnessAlert(fitness));
 		if(ageup.Count > 0) yield return StartCoroutine(UI.AgeAlert(ageup));
+		if(repup.Count > 0) 
+		{
+			for(int i = 0; i < repup.Count; i++) 
+			{
+				yield return StartCoroutine(UI.RepAlert(new RewardCon(
+					WorldRes.VillageName + " REP UP!", "LVL. " + WorldRes.Rep.Level,
+					new int [] {0, WorldRes.Rep.Level * 50, 1 + WorldRes.Rep.Level / 5}
+					)));
+			}
+				
+		}
 
 		Alerts.Clear();
 	}

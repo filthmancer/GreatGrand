@@ -11,7 +11,14 @@ public class GameData : MonoBehaviour {
 	public WorldResources World;
 	public List<GrandData> Grands;
 
-	public System.DateTime LastTime;
+	public UIObj [] Frames;
+	public UIObj RandomFrame()
+	{
+		return Frames[Random.Range(0, Frames.Length)];
+	}
+
+	public System.DateTime TimeLast;
+	public int RepLast = 0;
 
 	public GoodBoy FundsHourly;
 
@@ -25,6 +32,7 @@ public class GameData : MonoBehaviour {
     		//Save_Location + "\\" + Save_File;
     	}
     }
+
  
 	// Use this for initialization
 	void Start () {
@@ -137,6 +145,7 @@ public class GameData : MonoBehaviour {
 			}
 		}
 
+		Save_Data["Rep Last"] = RepLast;
 		Save_Data["Prev Grands"] = prevgrands;
 		Save_Data.Save(Save_Target);
 
@@ -156,6 +165,7 @@ public class GameData : MonoBehaviour {
 			Save();
 			return;
 		}
+
 		Save_Data =  SaveData.Load(Save_Target);
 		Debug.Log("--LOADING SAVE DATA: " + Save_Data);
 		if(Save_Data == null) 
@@ -165,12 +175,12 @@ public class GameData : MonoBehaviour {
 			return;
 		}
 
-		if(!Save_Data.TryGetValue<System.DateTime>("Time", out LastTime)) 
+		if(!Save_Data.TryGetValue<System.DateTime>("Time", out TimeLast)) 
 		{
-			LastTime = System.DateTime.Now;
+			TimeLast = System.DateTime.Now;
 		}
 
-		FundsHourly = new GoodBoy(LastTime, new System.TimeSpan(1, 0, 0));
+		FundsHourly = new GoodBoy(TimeLast, new System.TimeSpan(1, 0, 0));
 
 		//Loading World
 		string [] s;
@@ -192,6 +202,7 @@ public class GameData : MonoBehaviour {
 				else World[i].Max = Save_Data.GetValue<int>("World-"+s[i]+"-Max");
 			}
 		}
+		RepLast = Save_Data.TryGetValue<int>("Rep Last");
 		
 		
 		//Loading Grands
@@ -430,7 +441,7 @@ public struct GrandAlert
 		Values = v;
 	}
 }
-public enum AlertType{None, Hungry, Fitness, Ageup, Senile, Fight, Gift}
+public enum AlertType{None, Hungry, Fitness, Ageup, Senile, Fight, Gift, Repup}
 
 [System.Serializable]
 public class GrandInfo
@@ -645,6 +656,21 @@ public class Stat:Resource
 	}
 }
 
+
+public class RewardCon
+{
+	public string Title = "";
+	public string Description = "";
+	public int Rep = 0, Funds = 0, Meds = 0;
+	public RewardCon(string t, string d, int [] re)
+	{
+		Title = t;
+		Description = d;
+		Rep = re[0];
+		Funds = re[1];
+		Meds = re[2];
+	}
+}
 
 
 [System.Serializable]

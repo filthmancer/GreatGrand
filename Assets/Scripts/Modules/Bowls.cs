@@ -125,7 +125,10 @@ public class Bowls : Module {
 		if(Stopped && !Input.GetMouseButton(0)) MoveSpeed_actual = MoveSpeed;
 		Stopped = Input.GetMouseButton(0);
 
-		MoveSpeed_actual += !Stopped ? MoveSpeed_inc : - MoveSpeed_actual/2;
+		float moveinc = MoveSpeed_inc;
+		moveinc *= Mathf.Clamp(1.0F + Vector2.Distance(BalancePoint, TargetGrand_Face.GetUIPosition())/4,
+								0.7F, 1.6F);
+		MoveSpeed_actual += Stopped ? -MoveSpeed_actual/2 : moveinc;
 		Pathway.transform.position += 
 			Pathway.transform.up * MoveSpeed_actual * Time.deltaTime;
 
@@ -284,10 +287,11 @@ public class Bowls : Module {
 		MoveSpeed_actual = MoveSpeed;
 
 		int checks = 0;
-		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio < 0.3F || checks > 4)
+		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio > 0.8F || checks > 4)
 		{
 			int r = Random.Range(0, GameManager.instance.Grands.Length);
 			TargetGrand = GameManager.instance.Grands[r].GrandObj;
+			checks ++;
 			yield return null;
 		}
 		if(TargetGrand == null) TargetGrand = GameManager.Generator.Generate(0);
