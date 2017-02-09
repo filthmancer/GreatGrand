@@ -54,18 +54,27 @@ public class GameManager : MonoBehaviour {
 		return _generator;
 	}
 
+	public static Generator Generator
+	{
+		get
+		{
+			if(_generator == null)
+			{
+				_generator = GameObject.Find("Generator").GetComponent<Generator>();
+			}
+			return _generator;
+		}
+	}
 	private static Generator _generator;
-
-
 	public static GameData Data;
+	public static InputController _Input;
 
-	public InputController _Input;
 	public GrandData [] Grands
 	{
 		get{return Data.Grands.ToArray();}
 	}
 
-	public Generator Generator;
+	//public Generator Generator;
 	public VectorObject2D GrumpLine;
 
 	public static bool Paused = false;
@@ -84,8 +93,11 @@ public class GameManager : MonoBehaviour {
 	bool gameStart = false;
 	// Use this for initialization
 	void Start () {
+		Debug.Log("STARTING GAME");
+		Application.targetFrameRate = 48;
 		Data = this.GetComponent<GameData>();
 		Data.Init();
+		_Input = Camera.main.GetComponent<InputController>();
 		_Input.Init();
 		UI.Init();
 		for(int i = 0; i < AllModules.Length; i++) AllModules[i].Init();
@@ -98,16 +110,13 @@ public class GameManager : MonoBehaviour {
 		{
 			for(int i = 0; i < WorldRes.Population; i++)
 			{
-				AddGrand(Generator.GenerateGrand());
+				Data.Grands.Add(Generator.GenerateGrand());
 			}
 		}
-		else
+
+		for(int i = 0; i < Data.Grands.Count; i++)
 		{
-			for(int i = 0; i < Data.Grands.Count; i++)
-			{
-				Data.Grands[i].GrandObj = Generator.Generate(Data.Grands[i]);
-				
-			}
+			Generator.Generate(Data.Grands[i]);
 		}
 
 		StartCoroutine(StartGame());
@@ -121,44 +130,62 @@ public class GameManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
 	}
 
-
-
 	public IEnumerator StartGame()
 	{
 		if(StartingModule == string.Empty) StartingModule = "menu";
 		yield return StartCoroutine(LoadModule(StartingModule));
 
+	//	yield return StartCoroutine(TimeChecks());
+
+		yield return null;
+	}
+
+	public IEnumerator TimeChecks()
+	{
+		int funds_per_hour = 40;
+		int meds_per_hour = 0;
 		int amt = 0;
-		while(Data.FundsDaily.Claim(()=>{
-			amt += Data.Grands.Count * 40;
+		while(Data.FundsHourly.Claim(()=>{
+			amt += Data.Grands.Count * funds_per_hour;
 			}));
 
 		if(amt > 0) yield return StartCoroutine(UI.ResourceAlert(WorldRes.Funds, amt));
 
 		System.TimeSpan span = System.DateTime.Now.Subtract(Data.LastTime);
 
-		List<GrandAlert> alerts = new List<GrandAlert>();
+		Alerts = new List<GrandAlert>();
 		for(int i = 0; i < Data.Grands.Count; i++) 
-			alerts.AddRange(Data.Grands[i].CheckTime(span));
+			Alerts.AddRange(Data.Grands[i].CheckTime(span));
+	}
 
+	public List<GrandAlert> Alerts = new List<GrandAlert>();
+	public IEnumerator ShowAlerts()
+	{
 		List<GrandAlert> hunger = new List<GrandAlert>();
+		List<GrandAlert> fitness = new List<GrandAlert>();
 		List<GrandAlert> ageup = new List<GrandAlert>();
 
-		for(int a = 0; a < alerts.Count; a++)
+		for(int a = 0; a < Alerts.Count; a++)
 		{
-			if(alerts[a].Type == AlertType.Hungry) hunger.Add(alerts[a]);
-			else if(alerts[a].Type == AlertType.Ageup) ageup.Add(alerts[a]);
+			switch(Alerts[a].Type)
+			{
+				case AlertType.Hungry: hunger.Add(Alerts[a]); break;
+				case AlertType.Fitness: fitness.Add(Alerts[a]); break;
+				case AlertType.Ageup: ageup.Add(Alerts[a]); break;
+			}
 		}
 
 		if(hunger.Count > 0) yield return StartCoroutine(UI.HungerAlert(hunger));
-
+		if(fitness.Count > 0) yield return StartCoroutine(UI.FitnessAlert(fitness));
 		if(ageup.Count > 0) yield return StartCoroutine(UI.AgeAlert(ageup));
 
-		yield return null;
+		Alerts.Clear();
 	}
 
 	public IEnumerator LoadModule(string n)
 	{
+		yield return StartCoroutine(TimeChecks());
+
 		bool entry = false;
 		Module target = null;
 
@@ -188,6 +215,7 @@ public class GameManager : MonoBehaviour {
 			if(temp != null) StartCoroutine(temp.Exit(-velocity));
 			yield return StartCoroutine(CurrentModule.Enter(true, velocity));
 		}
+
 		yield return null;
 
 	}
@@ -250,30 +278,12 @@ public class GameManager : MonoBehaviour {
 				AllModules[i].SetIntro(false);
 			}
 
-			WorldRes.VillageName = "Tall Trees";
-			WorldRes[0].Name = "Rep";
-			//WorldRes[0].Col = Color.red;
-			WorldRes[0].Set(0);
-			(WorldRes[0] as Stat).SetLevel(1);
-
-			WorldRes[1].Name = "Funds";
-			//WorldRes[1].Col = Color.green;
-			WorldRes[1].Set(0);
-
-			WorldRes[2].Name = "Meds";
-			//WorldRes[2].Col = Color.blue;
-			WorldRes[2].Set(0);
-
 			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
 			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
 			StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
 
-			Data.Grands = new List<GrandData>();
+			Data.SetupData();
 
-			for(int i = 0; i < WorldRes.Population; i++)
-			{
-				AddGrand(Generator.GenerateGrand());
-			}
 		}
 	}
 }

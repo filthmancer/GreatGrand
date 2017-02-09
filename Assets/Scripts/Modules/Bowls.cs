@@ -196,7 +196,7 @@ public class Bowls : Module {
 		Tweens.Bounce(WinObj.Txt[0].transform);
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Meds, med));
 		EndButton.TweenActive(true);
-		TargetGrand.Data.Fitness.Add(-50);
+		TargetGrand.Data.Fitness.Add(50);
 	}
 
 	public void Lose()
@@ -240,6 +240,13 @@ public class Bowls : Module {
 		
 		MUI.SetActive(true);
 		GameManager.UI.PermUI["exit"].TweenActive(true);
+		GameManager.UI.PermUI["exit"].ClearActions();
+		GameManager.UI.PermUI["exit"].AddAction(UIAction.MouseUp, () =>
+		{
+			StartCoroutine(GameManager.instance.LoadModule("Menu"));
+		});
+		GameManager.UI.PermUI["exit"][0].TweenActive(false);
+
 		if(entry)
 		{
 			Sequence f = OpeningSequence(v);
@@ -283,10 +290,10 @@ public class Bowls : Module {
 			TargetGrand = GameManager.instance.Grands[r].GrandObj;
 			yield return null;
 		}
-		if(TargetGrand == null) TargetGrand = GameManager.instance.Generator.Generate(0);
+		if(TargetGrand == null) TargetGrand = GameManager.Generator.Generate(0);
 		
 
-		TargetGrand_Face = GameManager.instance.Generator.GenerateFace(TargetGrand);
+		TargetGrand_Face = GameManager.Generator.GenerateFace(TargetGrand);
 		FaceParent.AddChild(TargetGrand_Face);
 
 		TargetGrand_Face.transform.localPosition = Vector3.zero;// StartPoint.position;

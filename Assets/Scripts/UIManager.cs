@@ -333,20 +333,60 @@ public class UIManager : MonoBehaviour {
 		{
 			UIObj frame = (UIObj) Instantiate(FrameObj);
 			alert.Child[0].AddChild(frame);
-			FaceObj f = GameManager.instance.Generator.GenerateFace(g[i].Grand.GrandObj);
+			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
 			frame.AddChild(f);
 			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
 			f.transform.localScale = Vector3.one * 0.15F;
 			Tweens.Bounce(f.Txt[0].transform);
 			f.Txt[0].text = g[i].Grand.Hunger.Ratio*100 + "%";
 			f.Txt[0].color = Color.red;
-			f.Txt[0].fontSize = 130;
+			f.Txt[0].fontSize = 200;
 
 			alert.Txt[0].text = g[i].Grand.Info.Name + " is Hungry!";
 			yield return new WaitForSeconds(0.45F);		
 
 		}		
+		yield return new WaitForSeconds(0.3F);
 		alert.Txt[2].text = "Hunger makes Grands Grumpy!";	
+
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.3F);
+		alert.Child[0].DestroyChildren();
+
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
+		//QuoteMat.DOFloat(0, "_Size", 0.25F);
+		QuoteObjects.Img[0].raycastTarget = false;
+		GameManager.IgnoreInput = false;
+		yield return null;
+	}
+
+	public IEnumerator FitnessAlert(List<GrandAlert> g)
+	{
+		UIObj alert = PermUI["grandalert"];
+	
+		GameManager.IgnoreInput = true;
+		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
+		QuoteObjects.Img[0].raycastTarget = true;
+		alert.TweenActive(true);
+
+		for(int i = 0; i < g.Count; i++)
+		{
+			UIObj frame = (UIObj) Instantiate(FrameObj);
+			alert.Child[0].AddChild(frame);
+			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
+			frame.AddChild(f);
+			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
+			f.transform.localScale = Vector3.one * 0.15F;
+			Tweens.Bounce(f.Txt[0].transform);
+			f.Txt[0].text = g[i].Grand.Fitness.Ratio*100 + "%";
+			f.Txt[0].color = Color.red;
+			f.Txt[0].fontSize = 200;
+
+			alert.Txt[0].text = g[i].Grand.Info.Name + " has Low Fitness!";
+			yield return new WaitForSeconds(0.45F);		
+
+		}		
+		alert.Txt[2].text = "Low fitness makes Grands Grumpy!";	
 		yield return new WaitForSeconds(1.5F);
 		alert.TweenActive(false);
 		yield return new WaitForSeconds(0.3F);
@@ -373,7 +413,7 @@ public class UIManager : MonoBehaviour {
 		{
 			UIObj frame = (UIObj) Instantiate(FrameObj);
 			alert.Child[0].AddChild(frame);
-			FaceObj f = GameManager.instance.Generator.GenerateFace(g[i].Grand.GrandObj);
+			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
 			frame.AddChild(f);
 			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
 			f.transform.localScale = Vector3.one * 0.15F;
@@ -414,15 +454,15 @@ public class UIManager : MonoBehaviour {
 
 		final[1][0].Txt[0].text = "Hungry ";
 		final[1][0].Svg[0].transform.localScale = new Vector3(g.Data.Hunger.Ratio, 1, 1);
-		final[1][0].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Hunger.Ratio);
+		final[1][0].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Hunger.Ratio);
 
 		final[1][1].Txt[0].text = "Fitness ";
 		final[1][1].Svg[0].transform.localScale = new Vector3(g.Data.Fitness.Ratio, 1, 1);
-		final[1][1].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Fitness.Ratio);
+		final[1][1].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Fitness.Ratio);
 
 		final[1][2].Txt[0].text = "Social ";
 		final[1][2].Svg[0].transform.localScale = new Vector3(g.Data.Social.Ratio, 1, 1);
-		final[1][2].Svg[0].color = Color.Lerp(Color.green, Color.red, g.Data.Social.Ratio);
+		final[1][2].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Social.Ratio);
 
 		return final;
 	}

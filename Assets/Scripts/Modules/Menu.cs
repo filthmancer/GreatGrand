@@ -31,6 +31,19 @@ public class Menu : Module {
 		{
 			StartCoroutine(GameManager.instance.LoadModule("Bowls"));
 		});
+		menuobj = MUI["back"];
+	}
+
+	public RectTransform ScrollTrack;
+	public UIObj menuobj;
+	public override void ControlledUpdate()
+	{
+		Vector2 v = GameManager._Input.GetScroll();
+		v.x = 0.0F;
+
+		Vector2 newpos = menuobj.GetUIPosition() + v;
+		newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
+		menuobj.SetUIPosition(newpos);
 	}
 
 	public override IEnumerator Load()
@@ -39,11 +52,12 @@ public class Menu : Module {
 		List<GrandData> allgrands = new List<GrandData>();
 		allgrands.AddRange(GameManager.instance.Grands);
 
-		for(int i = 0; i < MUI[0].Child.Length; i++)
+		for(int i = 0; i < MUI.Child[0].Child.Length; i++)
 		{
 			int num = Random.Range(0, allgrands.Count);
 			GreatGrand f = allgrands[num].GrandObj;
-			faces[i] = GameManager.instance.Generator.GenerateFace(f);
+			if(f == null) continue;
+			faces[i] = GameManager.Generator.GenerateFace(f);
 			MUI[0].Child[i][0].AddChild(faces[i]);
 
 			faces[i].transform.position = MUI[0].Child[i][0].transform.position;
@@ -54,26 +68,48 @@ public class Menu : Module {
 			yield return null;
 		}
 
-		GameManager.UI.PermUI["exit"].TweenActive(false);
+		if(GameManager.instance.Alerts.Count > 0)
+		{
+			UIObj alert = GameManager.UI.PermUI["exit"];
+			alert.SetActive(false);
+			alert.TweenActive(true);
+			alert[0].TweenActive(true);
+			alert[0].Txt[0].text = "" + GameManager.instance.Alerts.Count;
+
+			alert.ClearActions();
+			alert.AddAction(UIAction.MouseUp, () =>
+			{
+				StartCoroutine(GameManager.instance.ShowAlerts());
+				GameManager.UI.PermUI["exit"].TweenActive(false);
+				GameManager.UI.PermUI["exit"][0].SetActive(false);
+			});
+		}
+		else GameManager.UI.PermUI["exit"].SetActive(false);
 	}
+
+	private UIObj ginfo;
+	private GreatGrand ginfo_target;
 
 	public void SetupFace(FaceObj f, GreatGrand g)
 	{
 		f.AddAction(UIAction.MouseDown, ()=>
 		{
-			UIObj u = GameManager.UI.GrandInfo(g);
-			u.FitUIPosition(f.transform.position + Vector3.down*50);
-			u.SetActive(false);
-			u.TweenActive(true);
-			f.Alerts.Add(u);
-		});
-		f.AddAction(UIAction.MouseUp, ()=>
-		{
-			for(int i = 0; i < f.Alerts.Count; i++)
+			if(ginfo_target != g)
 			{
-				Destroy(f.Alerts[i].gameObject);
+				if(ginfo != null) ginfo.PoolDestroy();
+				ginfo_target = g;
+				ginfo = GameManager.UI.GrandInfo(g);
+				ginfo.SetParent(MUI["back"]);
+				ginfo.FitUIPosition(f.transform.position + Vector3.down*50);
+				ginfo.SetActive(false);
+				ginfo.TweenActive(true);
 			}
-			f.Alerts.Clear();
+			else if(ginfo != null) 
+			{
+				ginfo.PoolDestroy();
+				ginfo_target = null;
+			}
+			
 		});
 	}
 

@@ -160,12 +160,13 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 	public void SetUIPosition(Vector2 spos){
 		transform.position = spos;
 	}
-	public void FitUIPosition(Vector2 spos)
+
+	public void FitUIPosition(Vector2 spos, Rect? f = null, float ratio = 0.5F)
 	{
 		Rect r = RectT.rect;
-		spos.x = Mathf.Clamp(spos.x, r.width, Screen.width - r.width);
-		spos.y = Mathf.Clamp(spos.y, r.height, Screen.height - r.height);
-
+		if(f.HasValue) r = f.Value;
+		spos.x = Mathf.Clamp(spos.x, r.width*ratio, Screen.width - r.width*ratio);
+		spos.y = Mathf.Clamp(spos.y, r.height*ratio, Screen.height - r.height*ratio);
 		transform.position = spos;
 	}
 

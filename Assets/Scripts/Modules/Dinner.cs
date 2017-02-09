@@ -70,6 +70,7 @@ public class Dinner : Module {
 			int secs = (int) timer_ui % 60;
 
 			timerobj.Txt[1].text = "SERVING IN";
+			timerobj.Txt[1].color = Color.white;
 			timerobj.Txt[0].text = (int) timer_ui + "";
 			timerobj.Txt[0].color = (Timer_current > Timer*0.75F) ? Color.red : Color.white;
 
@@ -150,16 +151,17 @@ public class Dinner : Module {
 		
 		MUI.SetActive(true);
 		GameManager.UI.PermUI["exit"].TweenActive(true);
+		GameManager.UI.PermUI["exit"].ClearActions();
+		GameManager.UI.PermUI["exit"].AddAction(UIAction.MouseUp, () =>
+		{
+			StartCoroutine(GameManager.instance.LoadModule("Menu"));
+		});
+		GameManager.UI.PermUI["exit"][0].TweenActive(false);
+
 		if(entry)
 		{
 			Sequence f = OpeningSequence(v);
 			yield return f.WaitForCompletion();
-
-			yield return new WaitForSeconds(0.3F);	
-			MUI["endgame"][0].Txt[0].text = "DINNERTIME!";
-			MUI["endgame"][0].TweenActive(true);
-			yield return new WaitForSeconds(1.0F);
-			MUI["endgame"][0].TweenActive(false);
 		}
 		CreateDinner();
 		yield return StartCoroutine(StartGame(GG_Indexes));
@@ -205,13 +207,13 @@ public class Dinner : Module {
 		Faces = new FaceObj[GGNum];
 		for(int i = 0; i < GGNum; i++)
 		{
-			if(i < GameManager.instance.Grands.Length && GameManager.instance.Grands[i].Hunger.Current > 60)
+			if(i < GameManager.instance.Grands.Length && GameManager.instance.Grands[i].Hunger.Current < 60)
 				Grands[i] = GameManager.instance.Grands[i].GrandObj;
-			else Grands[i] = GameManager.instance.Generator.Generate(i);
+			else Grands[i] = GameManager.Generator.Generate(i);
 
 			Grands[i].gameObject.SetActive(true);
 
-			Faces[i] = GameManager.instance.Generator.GenerateFace(Grands[i]);
+			Faces[i] = GameManager.Generator.GenerateFace(Grands[i]);
 			fparent.AddChild(Faces[i]);
 			SetupFace(Faces[i], Grands[i]);
 		}
@@ -239,11 +241,17 @@ public class Dinner : Module {
 
 	IEnumerator StartGame(int [] index)
 	{
-		yield return null;
+		yield return new WaitForSeconds(0.3F);	
+		MUI["endgame"][0].Txt[0].text = "DINNERTIME!";
+		MUI["endgame"][0].TweenActive(true);
+		//yield return new WaitForSeconds(1.0F);
+		
+
+		//yield return null;
 		for(int i = 0; i < Grands.Length; i++)
 		{
 			Faces[i].SetActive(true);
-			//Faces[i].transform.position = _TableManager.EntryDoor.position;
+			Faces[i].transform.position = _TableManager.EntryDoor.position;
 		}
 
 		for(int i = Grands.Length-1; i >= 0; i--)
@@ -254,6 +262,8 @@ public class Dinner : Module {
 		}
 
 		while(!AllSeated) yield return null;
+
+		MUI["endgame"][0].TweenActive(false);
 
 		Ability_ThirdEye(1.3F);
 		Running = true;
@@ -310,7 +320,7 @@ public class Dinner : Module {
 
 		FinalScore = 0;
 
-		yield return new WaitForSeconds(0.8F);
+		yield return new WaitForSeconds(0.85F);
 
 		endgame[0].TweenActive(false);
 
@@ -337,17 +347,18 @@ public class Dinner : Module {
 			if(targ_grumps >= 0) correct.Add(a);
 			else wrong.Add(a);
 
-			yield return new WaitForSeconds(0.22F);
+			yield return new WaitForSeconds(0.12F);
 		}
 
-		UIObj info = endgame[1];
-		UIObj points = endgame[2];
-		info.Txt[0].text = "HAPPY GRANDS";
-		points.Txt[0].text = FinalScore + "";
-		info.Txt[0].color = Color.white;
+		UIObj info = MUI["kitchen"];//endgame[1];
+		//UIObj points = endgame[2];
+		info.Txt[1].text = "HAPPY\nGRANDS";
+		info.Txt[0].text = FinalScore + "";
+		//info.Txt[0].color = Color.white;
 
+		Tweens.Bounce(info.transform);
 		info.TweenActive(true);
-		points.TweenActive(true);
+		//points.TweenActive(true);
 	
 		yield return new WaitForSeconds(0.5F);
 
@@ -355,7 +366,7 @@ public class Dinner : Module {
 
 		for(int i = 0; i < correct.Count; i++)
 		{
-			SendCorrectAlert(correct[i],points.transform);
+			SendCorrectAlert(correct[i],info.transform);
 		}
 
 		for(int i = 0; i < wrong.Count; i++)
@@ -365,7 +376,7 @@ public class Dinner : Module {
 
 		while(isCounting)
 		{
-			points.Txt[0].text = FinalScore + "";
+			info.Txt[0].text = FinalScore + "";
 			bool complete = true;
 			for(int i = 0; i < correct.Count; i++)
 			{
@@ -379,55 +390,54 @@ public class Dinner : Module {
 			yield return null;
 		}
 
-		yield return new WaitForSeconds(0.2F);
-
 		int rep = (int) (FinalScore * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
-		points.Txt[0].text = rep + "";
+		info.Txt[0].text = rep + "";
 		
 		if(Timer_current < Timer)
 		{
-			yield return new WaitForSeconds(0.5F);
+			yield return new WaitForSeconds(0.3F);
 
 			float mult = 1.0F - (Timer_current/Timer*Bonus_TimerDecay);
 			mult = Mathf.Clamp(1.0F + mult, 1.0F, Bonus_TimerMax);
 			rep = (int) ((float) rep * mult);
-			points.Txt[0].text = rep + "";
-			info.Txt[0].text = "TIME BONUS";
-			info.Txt[0].color = Color.green;
+			info.Txt[0].text = rep + "";
+			info.Txt[1].text = "TIME\nBONUS";
+			info.Txt[1].color = Color.green;
 
 			Tweens.Bounce(info.transform);
 			yield return null;
-			Tweens.Bounce(points.transform);
+			//Tweens.Bounce(points.transform);
 		}
 		
 		if(FinalScore == GGNum)
 		{
-			yield return new WaitForSeconds(0.5F);
+			yield return new WaitForSeconds(0.3F);
 			rep = (int) ((float)rep * Bonus_Perfect);
-			points.Txt[0].text = rep + "";
-			info.Txt[0].text = "PERFECT!";
-			info.Txt[0].color = Color.blue;
+			info.Txt[0].text = rep + "";
+			info.Txt[1].text = "PERFECT!";
+			info.Txt[1].color = Color.blue;
 
 			Tweens.Bounce(info.transform);
 			yield return null;
-			Tweens.Bounce(points.transform);
+			//Tweens.Bounce(points.transform);
 		}
 
+
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
+		yield return new WaitForSeconds(0.2F);
 		yield return StartCoroutine(FinishDinner());
 	}
 
 	IEnumerator FinishDinner()
 	{
-		for(int i = Grands.Length-1; i >= 0; i--)
+		for(int i = 0; i < _TableManager.Seat.Length; i++)
 		{
-			StartCoroutine(_TableManager.Exit(Grands[i], 0.3F));
-			Grands[i].Data.Hunger.Add(-25);
-			UIAlert a = GameManager.UI.StringAlert("-25% Hunger", Faces[i].transform.position, 1.2F);
+			StartCoroutine(_TableManager.Exit(_TableManager.Seat[i].Target, 0.3F));
+			Grands[i].Data.Hunger.Add(25);
+			UIAlert a = GameManager.UI.StringAlert("25%\nHunger", Faces[i].transform.position, 0.7F);
 			a.Txt[0].color = Color.white;
-			a.Txt[0].fontSize = 40;
-
-			a.TweenActive(true);
+			a.Txt[0].fontSize = 45;
+			Tweens.Bounce(a.transform);
 		}
 
 		yield return new WaitForSeconds(final_timer);
@@ -551,9 +561,8 @@ public class Dinner : Module {
 
 	public void SendCorrectAlert(UIAlert u, Transform t)
 	{
-		u.transform.DOScale(Vector3.one * 0.4F, 0.23F);
-		u.transform.DOMove(t.position, 0.3F).OnComplete(()=>{
-			//Tweens.Bounce(t);
+		u.transform.DOScale(Vector3.one * 0.4F, 0.18F);
+		u.transform.DOMove(t.position, 0.25F).OnComplete(()=>{
 			FinalScore++;
 			u.PoolDestroy();
 		});
@@ -618,17 +627,10 @@ public class Dinner : Module {
 		alert.TweenActive(true);
 
 		float t = 0.0F;
-		while( Target == g.Parent)
+		while((t+=Time.deltaTime) < time_pause || Target == g.Parent)
 		{
 			Vector3 targpos = g.Parent.Position;
-			/*if(targpos.x + alert.RectT.rect.width > Screen.width)
-			{
-				Vector3 sc = new Vector3(-1,1,1);
-				alert.transform.localScale = sc;
-				alert.Img[0].transform.localScale = sc;
-				alert.Child[0].transform.localScale = sc;
-			}*/
-			alert.transform.position = targpos;
+			alert.FitUIPosition(targpos, null, 0.2F);//, alert.Child[0].GetComponent<RectTransform>().rect);
 			alert.Child[0].transform.rotation = Quaternion.identity;
 			alert.Img[0].transform.rotation = Quaternion.identity;
 			yield return null;

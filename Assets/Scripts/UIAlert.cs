@@ -18,6 +18,7 @@ public class UIAlert : UIObj {
 		base.Init(index, p, args);
 		Stepper.Setup(this.transform);
 		if(args.Length == 0) return;
+
 		_lifetimeoverride = args[0];
 		if(_lifetimeoverride < 0.0F) DestroyOnDeath = false;
 		played_startaction = false;
@@ -32,28 +33,29 @@ public class UIAlert : UIObj {
 	public Action<string []> EndAction;
 	public string [] EndArgs, StartArgs;
 
+	private bool _Completed;
+	private Sequence _Sequence;
 	private bool played_startaction= false;
 
 	public void Update()
 	{
 		if(!played_startaction)
 		{
-			played_startaction = true;
-			if(Stepper.Empty) 
+			if(_Sequence == null && _lifetimeoverride > 0.0F) 
 			{
-				if(DestroyOnDeath) Stepper.AddStep(_lifetimeoverride);
+				_Sequence = DOTween.Sequence();
+				_Sequence.AppendInterval(_lifetimeoverride);
+				//_Sequence.Append(transform.DOLocalMove(transform.position, _lifetimeoverride));
+				_Sequence.OnComplete(() =>
+				{
+					_Completed = true;
+				});
 			}
-			Stepper.AdvanceStep();
+			played_startaction = true;
 			if(StartAction != null) StartAction(StartArgs);
-			return;
 		}
 
-		if(Stepper.Empty)
-		{
-			return;
-		}
-
-		if(Stepper.Update())
+		if(!_Completed)
 		{
 			
 		}	

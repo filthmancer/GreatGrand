@@ -65,6 +65,7 @@ public class Generator : MonoBehaviour {
 
 		final.Data.Hex = System.Guid.NewGuid();
 		final.Data.RoleType = Role.Visitor;
+		final.Data.GrandObj = final;
 		GRandomise(final.Data);
 		final.gameObject.name = final.Data.Info.Name + "-" + final.Data.RoleType;
 		return final;
@@ -78,11 +79,11 @@ public class Generator : MonoBehaviour {
 		final.Social.Set((int)Random.Range(30, 70));
 		final.Social.SetRate(Random.Range(-0.5F, 0.5F));
 		final.Fitness.Set((int)Random.Range(30, 70));
-		final.Fitness.SetRate(Random.Range(-0.5F, 0.5F));
-		final.Hunger.Set(0);
-		final.Hunger.SetRate(5);
+		final.Fitness.SetRate(Random.Range(-0.1F, 5.0F));
+		final.Hunger.Set(100);
+		final.Hunger.SetRate(Random.Range(2, 10));
 
-		final.Info.Age = Random.Range(60, 102);
+		final.Info.Age = Random.Range(70, 80);
 		//Add grump based on age if male, remove if female
 		//float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);
 		//final.Info.GFactor += gender ? agefactor : -agefactor;

@@ -13,14 +13,17 @@ public class GameData : MonoBehaviour {
 
 	public System.DateTime LastTime;
 
-	public GoodBoy FundsDaily;
+	public GoodBoy FundsHourly;
 
 	public SaveData Save_Data;
 	private string Save_Location; 
     private string Save_File = "SaveData"; 
     private string Save_Target
     {
-    	get{return Save_Location + "\\" + Save_File +".uml";}
+    	get{
+    		return System.IO.Path.Combine(Save_Location, Save_File + ".uml") ;
+    		//Save_Location + "\\" + Save_File;
+    	}
     }
  
 	// Use this for initialization
@@ -35,9 +38,33 @@ public class GameData : MonoBehaviour {
 
 	public void Init()
 	{
+		Debug.Log("INITIALISING");
 		World.Init();
 		Save_Location=Application.persistentDataPath;
+		
 		Load();
+	}
+
+	public void SetupData()
+	{
+		World.VillageName = "Tall Trees";
+		World[0].Name = "Rep";
+		//World[0].Col = Color.red;
+		World[0].Set(0);
+		(World[0] as Stat).SetLevel(1);
+
+		World[1].Name = "Funds";
+		//World[1].Col = Color.green;
+		World[1].Set(0);
+
+		World[2].Name = "Meds";
+		//World[2].Col = Color.blue;
+		World[2].Set(0);
+
+		for(int i = 0; i < World.Population; i++)
+		{
+			Grands.Add(GameManager.Generator.GenerateGrand());
+		}
 	}
 
 	private string [] f_inf = new string[]
@@ -51,7 +78,7 @@ public class GameData : MonoBehaviour {
 
 		Save_Data["Time"] = System.DateTime.Now;
 
-	//Saving World
+		//Saving World
 		Save_Data["World-Resources"] = World.Names;
 		for(int i = 0; i < World.Length; i++)
 		{
@@ -67,7 +94,7 @@ public class GameData : MonoBehaviour {
 		}
 
 
-	//Saving Grands
+		//Saving Grands
 		GrandData [] prev_GG = GameManager.instance.Grands;
 		System.Guid [] prevgrands = new System.Guid[prev_GG.Length];
 		for(int i = 0; i < prev_GG.Length; i++)
@@ -119,19 +146,33 @@ public class GameData : MonoBehaviour {
 
 	public void Load()
 	{
-		print("Loading from " + Save_Target);
-		if(!System.IO.File.Exists(Save_Target)) return;
+		Debug.Log("---- LOADING FROM " + Save_Target);
+		Grands = new List<GrandData>();
+
+		if(!System.IO.File.Exists(Save_Target))
+		{
+			Debug.Log("COULDN'T FIND SAVE FILE");
+			SetupData();
+			Save();
+			return;
+		}
 		Save_Data =  SaveData.Load(Save_Target);
-		if(Save_Data == null) return;
+		Debug.Log("--LOADING SAVE DATA: " + Save_Data);
+		if(Save_Data == null) 
+		{
+			Debug.Log("COULDN'T FIND SAVE FILE");
+			SetupData();
+			return;
+		}
 
 		if(!Save_Data.TryGetValue<System.DateTime>("Time", out LastTime)) 
 		{
 			LastTime = System.DateTime.Now;
 		}
 
-		FundsDaily = new GoodBoy(LastTime, new System.TimeSpan(24, 0, 0));
+		FundsHourly = new GoodBoy(LastTime, new System.TimeSpan(1, 0, 0));
 
-	//Loading World
+		//Loading World
 		string [] s;
 		if(Save_Data.TryGetValue<string[]>("World-Resources", out s))
 		{
@@ -153,9 +194,9 @@ public class GameData : MonoBehaviour {
 		}
 		
 		
-	//Loading Grands
+		//Loading Grands
 		System.Guid [] prevhex;
-		Grands = new List<GrandData>();
+		
 
 		if(Save_Data.TryGetValue<System.Guid[]>("Prev Grands", out prevhex))
 		{
@@ -292,8 +333,11 @@ public class GrandData
 		for(int h = 0; h < (int) t.TotalHours; h++)
 		{
 			Hunger.Check();
+			Fitness.Check();
 		}
-		if(Hunger.Ratio > 0.8F) fin.Add(new GrandAlert(AlertType.Hungry,this));
+		if(Hunger.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Hungry,this));
+		if(Fitness.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Fitness,this));
+	
 		int ageinc = 0;
 		for(int d = 0; d < (int) t.TotalDays; d++)
 		{
@@ -386,7 +430,7 @@ public struct GrandAlert
 		Values = v;
 	}
 }
-public enum AlertType{None, Hungry, Ageup, Senile, Fight, Gift}
+public enum AlertType{None, Hungry, Fitness, Ageup, Senile, Fight, Gift}
 
 [System.Serializable]
 public class GrandInfo
@@ -533,7 +577,7 @@ public class Resource
 	public virtual void Check()
 	{
 		float m = (Max == -1) ? 99999 : Max;
-		Current_soft = Mathf.Clamp(Current_soft + Rate, 0.0F, Max);
+		Current_soft = Mathf.Clamp(Current_soft - Rate, 0.0F, Max);
 		Current = (int) Mathf.Round(Current_soft);
 	}
 
