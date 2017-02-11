@@ -40,12 +40,24 @@ public class Menu : Module {
 	public UIObj menuobj;
 	public override void ControlledUpdate()
 	{
-		Vector2 v = GameManager._Input.GetScroll();
-		v.x = 0.0F;
+		if(!GameManager.IgnoreInput && Input.GetMouseButton(0))
+		{
+			Vector2 v = GameManager._Input.GetScroll();
+			v.x = 0.0F;
 
-		Vector2 newpos = menuobj.GetUIPosition() + v;
-		newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
-		menuobj.SetUIPosition(newpos);
+			Vector2 newpos = menuobj.GetUIPosition() + v;
+			newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
+			menuobj.SetUIPosition(newpos);	
+		}
+		
+
+		if(GameManager.instance.AlertsTotal > 0)
+		{
+			GameManager.UI.PermUI["exit"].TweenActive(true);
+			GameManager.UI.PermUI["exit"][0].TweenActive(true);
+			GameManager.UI.PermUI["exit"][0].Txt[0].text = "" + GameManager.instance.AlertsTotal;
+		}
+		else GameManager.UI.PermUI["exit"].TweenActive(false);
 	}
 
 	public override IEnumerator Load()
@@ -72,20 +84,15 @@ public class Menu : Module {
 			Frames[i][0].AddChild(Faces[i]);
 
 			Faces[i].transform.position = Frames[i][0].transform.position;
-			SetupFace(Faces[i], f);
+			SetupFace(Faces[i], Frames[i], f);
 
 			allgrands.RemoveAt(num);
 
 			yield return null;
 		}
 
-		if(GameManager.instance.Alerts.Count > 0)
-		{
+		GameManager.instance.InitTimeChecks();
 			UIObj alert = GameManager.UI.PermUI["exit"];
-			alert.SetActive(false);
-			alert.TweenActive(true);
-			alert[0].TweenActive(true);
-			alert[0].Txt[0].text = "" + GameManager.instance.Alerts.Count;
 
 			alert.ClearActions();
 			alert.AddAction(UIAction.MouseUp, () =>
@@ -94,14 +101,13 @@ public class Menu : Module {
 				GameManager.UI.PermUI["exit"].TweenActive(false);
 				GameManager.UI.PermUI["exit"][0].SetActive(false);
 			});
-		}
-		else GameManager.UI.PermUI["exit"].SetActive(false);
+	
 	}
 
 	private UIObj ginfo;
 	private GreatGrand ginfo_target;
 
-	public void SetupFace(FaceObj f, GreatGrand g)
+	public void SetupFace(FaceObj f, UIObj frame, GreatGrand g)
 	{
 		f.AddAction(UIAction.MouseDown, ()=>
 		{
@@ -114,13 +120,13 @@ public class Menu : Module {
 				ginfo.FitUIPosition(f.transform.position + Vector3.down*50, null, 1.0F);
 				ginfo.SetActive(false);
 				ginfo.TweenActive(true);
+				Tweens.Bounce(frame.transform);
 			}
 			else if(ginfo != null) 
 			{
 				ginfo.PoolDestroy();
 				ginfo_target = null;
 			}
-			
 		});
 	}
 

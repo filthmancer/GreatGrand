@@ -77,13 +77,17 @@ public class Generator : MonoBehaviour {
 		final.Info.Name = final.Info.Gender ? GrandData.Names_Male_Random : GrandData.Names_Female_Random;
 		
 		final.Social.Set((int)Random.Range(30, 70));
-		final.Social.SetRate(Random.Range(-0.5F, 0.5F));
-		final.Fitness.Set((int)Random.Range(30, 70));
-		final.Fitness.SetRate(Random.Range(-0.1F, 5.0F));
-		final.Hunger.Set(100);
-		final.Hunger.SetRate(Random.Range(2, 10));
+		final.Social.SetRate(-4.0F + Random.Range(-2.5F, 4.5F), new System.TimeSpan(0,10,0));
 
-		final.Info.Age = Random.Range(70, 80);
+		final.Fitness.Set((int)Random.Range(30, 70));
+		final.Fitness.SetRate(-2.0F + Random.Range(-3.0F, -1.0F), new System.TimeSpan(0,10,0));
+
+		final.Hunger.Set(100);
+		final.Hunger.SetRate(-2.0F + Random.Range(-3.0F, -1.0F), new System.TimeSpan(0,10,0));
+
+		final.Age.Set(Random.Range(60, 70));
+		final.Age.SetRate(1,new System.TimeSpan(24,0,0));
+		
 		//Add grump based on age if male, remove if female
 		//float agefactor = Mathf.Clamp((float)Info.Age/100.0F, 0.0F, 0.2F);
 		//final.Info.GFactor += gender ? agefactor : -agefactor;
@@ -177,7 +181,7 @@ public class Generator : MonoBehaviour {
 
 		FaceObj _base = RandomiseFace(final);
 		final.SetFace(_base);
-		TitleObj.text = final.Data.Info.Name + "\nAge " + final.Data.Info.Age;
+		TitleObj.text = final.Data.Info.Name + "\nAge " + final.Data.Age.Value;
 		return final;
 	}
 

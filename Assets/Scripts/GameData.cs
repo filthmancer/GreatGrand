@@ -51,6 +51,14 @@ public class GameData : MonoBehaviour {
 		Save_Location=Application.persistentDataPath;
 		
 		Load();
+
+		for(int i = 0; i < Grands.Count; i++)
+		{
+			for(int a = 0; a < Grands[i].Resources.Length; a++)
+			{
+				Grands[i].Resources[a].TimeLast = TimeLast;
+			}
+		}
 	}
 
 	public void SetupData()
@@ -69,6 +77,7 @@ public class GameData : MonoBehaviour {
 		//World[2].Col = Color.blue;
 		World[2].Set(0);
 
+		Grands.Clear();
 		for(int i = 0; i < World.Population; i++)
 		{
 			Grands.Add(GameManager.Generator.GenerateGrand());
@@ -113,7 +122,6 @@ public class GameData : MonoBehaviour {
 			prevgrands[i] = Data.Hex;
 
 			Save_Data[pref+"-Name"] = Data.Info.Name;
-			Save_Data[pref+"-Age"] = Data.Info.Age;
 			Save_Data[pref+"-Gender"] = Data.Info.Gender;
 			Save_Data[pref+"-Pupils"] = Data.Info.PupilScale;
 			Save_Data[pref+"-Nation"] = Data.Info.Nation;
@@ -142,6 +150,11 @@ public class GameData : MonoBehaviour {
 				Save_Data[s+":Max"] = res.Max;
 				Save_Data[s+":Index"] = res.Index;
 				Save_Data[s+":Rate"] = res.Rate;
+
+				Save_Data[s+":SpanHours"] = res.Span.TotalHours;
+				Save_Data[s+":SpanMins"] = res.Span.Minutes;
+				Save_Data[s+":SpanSecs"] = res.Span.TotalSeconds;
+				Save_Data[s+":TimeLast"] = res.TimeLast;
 			}
 		}
 
@@ -181,7 +194,6 @@ public class GameData : MonoBehaviour {
 		}
 
 		FundsHourly = new GoodBoy(TimeLast, new System.TimeSpan(1, 0, 0));
-
 		//Loading World
 		string [] s;
 		if(Save_Data.TryGetValue<string[]>("World-Resources", out s))
@@ -208,18 +220,17 @@ public class GameData : MonoBehaviour {
 		//Loading Grands
 		System.Guid [] prevhex;
 		
-
 		if(Save_Data.TryGetValue<System.Guid[]>("Prev Grands", out prevhex))
 		{
-			for(int i = 0; i < prevhex.Length; i++)
+			for(int i = 0; i < World.Population; i++)
 			{
+				if(i >= prevhex.Length || prevhex[i] == null) continue;
 				GrandData g =  new GrandData(prevhex[i]);
 
 				string pref = "Grand:" + prevhex[i].ToString();
 
 				g.Info.Name = Save_Data.TryGetValue<string>(pref+"-Name");
 				g.Info.Gender = Save_Data.TryGetValue<bool>(pref+"-Gender");
-				g.Info.Age = Save_Data.TryGetValue<int>(pref+"-Age");
 				g.Info.PupilScale = Save_Data.TryGetValue<Vector3>(pref+"-Pupils");
 				g.Info.Nation = Save_Data.TryGetValue<NationStatus>(pref+"-Nation");
 
@@ -245,7 +256,9 @@ public class GameData : MonoBehaviour {
 						Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Max")
 						);
 					g.Resources[r].Set(Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Current"));
-					g.Resources[r].SetRate(Save_Data.TryGetValue<float>(pref+"-Res " + r + ":Rate"));
+					System.TimeSpan span = System.TimeSpan.FromSeconds(Save_Data.GetValue<double>(pref + "-Res " + r + ":SpanSecs"));
+					g.Resources[r].SetRate(Save_Data.TryGetValue<float>(pref+"-Res " + r + ":Rate"), span);
+					g.Resources[r].TimeLast = Save_Data.TryGetValue<System.DateTime>(pref+"-Res " + r + ":TimeLast");
 				}
 			
 				Grands.Add(g);
@@ -326,37 +339,30 @@ public class GrandData
 	public Resource Smiles, Grumps;
 	public Resource Fitness, Social;
 	public Resource Hunger;
+	public Resource Age;
 
 	public Resource [] Resources
 	{
-		get{return new Resource[] {Smiles, Grumps, Fitness, Social, Hunger};}
+		get{return new Resource[] {Age, Smiles, Grumps, Fitness, Social, Hunger};}
 	}
 
-	public void AgeUp()
-	{
-		Info.Age++;
-	}
 
-	public GrandAlert [] CheckTime(System.TimeSpan t)
+	public GrandAlert [] CheckTime(System.DateTime t)
 	{
 		List<GrandAlert> fin = new List<GrandAlert>();
-	//HOUR CHECK
-		for(int h = 0; h < (int) t.TotalHours; h++)
-		{
-			Hunger.Check();
-			Fitness.Check();
-		}
+	
+		int A = Age.Check(t);
+		if(A > 0)	fin.Add(new GrandAlert(AlertType.Ageup, this, new int [1] {A}));
+
+		int S = Smiles.Check(t);
+		int G = Grumps.Check(t);
+
+		int F = Fitness.Check(t);
+		int soc = Social.Check(t);
+		int H = Hunger.Check(t);
+
 		if(Hunger.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Hungry,this));
 		if(Fitness.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Fitness,this));
-	
-		int ageinc = 0;
-		for(int d = 0; d < (int) t.TotalDays; d++)
-		{
-			ageinc++;
-		}
-		if(ageinc > 0) fin.Add(new GrandAlert(AlertType.Ageup, this, 
-							   new int [1] {ageinc}));
-		Info.Age += ageinc;
 
 		return fin.ToArray();
 	}
@@ -364,11 +370,12 @@ public class GrandData
 	public GrandData(System.Guid h){
 		Hex = h;
 		Info = new GrandInfo();
-		Hunger = new Resource(1, 0, 100);
-		Fitness = new Resource(2, 0, 100);
-		Social = new Resource(3, 0, 100);
-		Smiles = new Resource(0,10,-1);
-		Grumps = new Resource(1,10,-1);
+		Age = new Resource(0, 60, -1);
+		Smiles = new Resource(1,10,-1);
+		Grumps = new Resource(2,10,-1);
+		Hunger = new Resource(3, 0, 100);
+		Fitness = new Resource(4, 0, 100);
+		Social = new Resource(5, 0, 100);
 	}
 	public FaceInfo GetFaceInfo(string s)
 	{
@@ -448,7 +455,6 @@ public class GrandInfo
 {
 	public string Name;
 	public bool Gender;
-	public int Age;
 	public NationStatus Nation;
 	public MaritalStatus MStat;
 	public bool Military;
@@ -460,7 +466,6 @@ public class GrandInfo
 	{
 		Name = "";
 		Gender = false;
-		Age = 60;
 		Nation = NationStatus.Australian;
 		Military = false;
 	}
@@ -543,6 +548,11 @@ public class Resource
 		}
 	}
 
+	public string RatioToString()
+	{
+		return (Ratio * 100).ToString("0");
+	}
+
 	public virtual string ToString()
 	{
 		return Value+"";
@@ -580,16 +590,27 @@ public class Resource
 	}
 
 	public float Rate = 0.0F;
-	public virtual void SetRate(float r)
+	public System.DateTime TimeLast;
+	public System.TimeSpan Span;
+	public virtual void SetRate(float r, System.TimeSpan t)
 	{
 		Rate = r;
+		Span = t;
 	}
 
-	public virtual void Check()
+	public virtual int Check(System.DateTime t)
 	{
-		float m = (Max == -1) ? 99999 : Max;
-		Current_soft = Mathf.Clamp(Current_soft - Rate, 0.0F, Max);
-		Current = (int) Mathf.Round(Current_soft);
+		if((System.DateTime.Compare(t, TimeLast.Add(Span)) > 0))
+		{
+			float m = (Max == -1) ? 99999 : Max;
+			Current_soft = Mathf.Clamp(Current_soft + Rate, 0.0F, m);
+			int diff = (int) Mathf.Round(Current_soft) - Current;
+			Current = (int) Mathf.Round(Current_soft);
+			
+			TimeLast = t;
+			return diff;
+		}
+		return 0;
 	}
 
 	public virtual bool Charge(int n)

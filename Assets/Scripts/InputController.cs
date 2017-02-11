@@ -29,10 +29,10 @@ public class InputController : MonoBehaviour {
 		Position = Input.mousePosition;
 		Vector_nonnormal = (Position - Position_last);
 		Vector = Vector_nonnormal.normalized;
-
+		UpdateScroll();
 		if(GameManager.Paused || GameManager.IgnoreInput) return;
 		CheckInput();
-		UpdateScroll();
+		
 	}
 
 	public void CheckInput()

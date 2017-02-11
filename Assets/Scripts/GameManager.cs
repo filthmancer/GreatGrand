@@ -121,10 +121,14 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(StartGame());
 	}
 
-	
+	private int funds_per_hour = 40;
 	// Update is called once per frame
 	void Update () {
 		if(CurrentModule != null) CurrentModule.ControlledUpdate();
+
+		TimeChecks();
+		Resource g = Data.Grands[0].Hunger;
+		//print(g.Ratio + " -- " + System.DateTime.Now + " -- " + g.TimeLast.Add(g.Span) + " :: " + System.DateTime.Compare(System.DateTime.Now, g.TimeLast.Add(g.Span)));
 		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
 		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
 	}
@@ -138,37 +142,58 @@ public class GameManager : MonoBehaviour {
 		yield return null;
 	}
 
-	public IEnumerator TimeChecks()
+	public void InitTimeChecks()
 	{
-		int funds_per_hour = 40;
-		int meds_per_hour = 0;
-		int amt = 0;
-		while(Data.FundsHourly.Claim(()=>{
-			amt += Data.Grands.Count * funds_per_hour;
-			}));
-
-		if(amt > 0) yield return StartCoroutine(UI.ResourceAlert(WorldRes.Funds, amt));
-
-		System.TimeSpan span = System.DateTime.Now.Subtract(Data.TimeLast);
-
 		Alerts = new List<GrandAlert>();
 		for(int i = 0; i < Data.Grands.Count; i++) 
-			Alerts.AddRange(Data.Grands[i].CheckTime(span));
+			Alerts.AddRange(Data.Grands[i].CheckTime(System.DateTime.Now));
+	}
 
-		if(Data.RepLast != WorldRes.Rep.Level)
+	public void TimeChecks()
+	{
+		System.TimeSpan span = System.DateTime.Now.Subtract(Data.TimeLast);
+		if(span.TotalSeconds > 10)
 		{
-			Alerts.Add(new GrandAlert(AlertType.Repup, null, WorldRes.Rep.Level));
-			Data.RepLast = WorldRes.Rep.Level;
-		}
+			for(int i = 0; i < Data.Grands.Count; i++) 
+				Data.Grands[i].CheckTime(System.DateTime.Now);
+
+			if(Data.FundsHourly.Claim(() =>
+			{
+				if(FundsAlert == null) FundsAlert = new RewardCon("FUNDS INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
+				else FundsAlert.Funds += Data.Grands.Count * funds_per_hour;
+			}));
+
+			if(Data.RepLast != WorldRes.Rep.Level)
+			{
+				RepAlert = new RewardCon(WorldRes.VillageName + " Rep Up!", "Lvl. " + WorldRes.Rep.Level, 
+										new int [] {0, WorldRes.Rep.Level * 50, 1 + WorldRes.Rep.Level /5});
+				Data.RepLast = WorldRes.Rep.Level;
+			}
+
+			Data.TimeLast = System.DateTime.Now;
+		}	
 	}
 
 	public List<GrandAlert> Alerts = new List<GrandAlert>();
+	public RewardCon FundsAlert, RepAlert;
+	public List<RewardCon> Rewards
+	{
+		get
+		{
+			List<RewardCon> fin = new List<RewardCon>();
+			if(FundsAlert != null) fin.Add(FundsAlert);
+			if(RepAlert != null) fin.Add(RepAlert);
+			return fin;
+		}
+	}
+	public int AlertsTotal{get{return Alerts.Count + Rewards.Count;}}
+
 	public IEnumerator ShowAlerts()
 	{
 		List<GrandAlert> hunger = new List<GrandAlert>();
 		List<GrandAlert> fitness = new List<GrandAlert>();
 		List<GrandAlert> ageup = new List<GrandAlert>();
-		List<GrandAlert> repup = new List<GrandAlert>();
+		//List<GrandAlert> repup = new List<GrandAlert>();
 
 		for(int a = 0; a < Alerts.Count; a++)
 		{
@@ -177,32 +202,28 @@ public class GameManager : MonoBehaviour {
 				case AlertType.Hungry: hunger.Add(Alerts[a]); break;
 				case AlertType.Fitness: fitness.Add(Alerts[a]); break;
 				case AlertType.Ageup: ageup.Add(Alerts[a]); break;
-				case AlertType.Repup: repup.Add(Alerts[a]); break;
+				//case AlertType.Repup: repup.Add(Alerts[a]); break;
 			}
 		}
-
+	
 		if(hunger.Count > 0) yield return StartCoroutine(UI.HungerAlert(hunger));
 		if(fitness.Count > 0) yield return StartCoroutine(UI.FitnessAlert(fitness));
 		if(ageup.Count > 0) yield return StartCoroutine(UI.AgeAlert(ageup));
-		if(repup.Count > 0) 
-		{
-			for(int i = 0; i < repup.Count; i++) 
-			{
-				yield return StartCoroutine(UI.RepAlert(new RewardCon(
-					WorldRes.VillageName + " REP UP!", "LVL. " + WorldRes.Rep.Level,
-					new int [] {0, WorldRes.Rep.Level * 50, 1 + WorldRes.Rep.Level / 5}
-					)));
-			}
-				
-		}
 
 		Alerts.Clear();
+
+		for(int i = 0; i < Rewards.Count; i++)
+		{
+			yield return StartCoroutine(UI.RepAlert(Rewards[i]));
+		}
+
+		RepAlert = null;
+		FundsAlert = null;
+
 	}
 
 	public IEnumerator LoadModule(string n)
 	{
-		yield return StartCoroutine(TimeChecks());
-
 		bool entry = false;
 		Module target = null;
 
