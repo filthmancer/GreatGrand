@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 26c8311495ba03849b9dd90e65bcb300
+timeCreated: 1486812999
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 604 387\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-103,-632)\">\n        <g id=\"CArdA\">\n            <path
+    id=\"CardC\" d=\"M686.763,670.617C686.763,655.248 674.285,642.77 658.916,642.77L161.611,642.77C146.242,642.77
+    133.764,655.248 133.764,670.617L133.764,990.113C133.764,1005.48 146.242,1017.96
+    161.611,1017.96L658.916,1017.96C674.285,1017.96 686.763,1005.48 686.763,990.113L686.763,670.617Z\"
+    style=\"fill:rgb(255,220,130);stroke:black;stroke-width:0.41px;\"/>\n            <g
+    transform=\"matrix(1.10024,0,0,1.47153,-38.5359,-188.846)\">\n                <path
+    d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.10024,0,0,1.47153,-38.5359,-102.878)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(0.720764,0,0,1.47153,198.253,-374.065)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.5px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(0.720764,0,0,1.47153,198.253,-289.568)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.5px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.16949,0,0,1.37765,-26.4873,-249.493)\">\n
+    \               <rect x=\"156.275\" y=\"660.648\" width=\"123.193\" height=\"123.193\"
+    style=\"fill:rgb(0,157,255);fill-opacity:0.14902;stroke:black;stroke-width:0.18px;stroke-linecap:butt;\"/>\n
+    \           </g>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

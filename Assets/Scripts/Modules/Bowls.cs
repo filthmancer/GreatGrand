@@ -33,7 +33,13 @@ public class Bowls : Module {
 	//Vectored path you must follow to guide the grand
 	public VectorLine Safeway;
 	//The distance you can get from the path before failing
-	public float Safeway_Threshold = 1.5F;
+	public float Safeway_Threshold
+	{
+		get{
+			int [] d = new int[]{150, 100, 60};
+			return d[Difficulty];
+		}
+	}
 	private float Safeway_Threshold_actual = 100.0F;
 
 	//If the player has 'stopped' the grand (any input)
@@ -66,10 +72,12 @@ public class Bowls : Module {
 	private Vector2 Sway_TimeBracket = new Vector2(0.2F, 0.5F);
 
 	private Vector3 Control_Velocity;
-	private float Control_Speed = 170F;
+	private float Control_Speed = 190F;
 	private Vector2 BalancePoint;
 
 	private float GameTime;
+	private UIObj FitnessObj;
+	private float FitnessPerTick = 0.01F;
 
 	public float DistanceAlongPath()
 	{
@@ -122,9 +130,14 @@ public class Bowls : Module {
 			else if(Input.GetKey(KeyCode.D)) Control_Velocity = new Vector3(1,0,0);
 			else Control_Velocity = Vector3.zero;
 		}
-		
 		Movement();
-		
+
+		float tickrate = Mathf.Clamp(MoveSpeed_actual / MoveSpeed, 0.5F, 2.0F);
+		if(TargetGrand.Data.Fitness.Ratio < 1.0F)
+			TargetGrand.Data.Fitness.Add(FitnessPerTick * tickrate);
+		else TargetGrand.Data.Fitness.AddMax(FitnessPerTick * tickrate/5);
+
+		FitnessObj.Img[1].transform.localScale = new Vector3(TargetGrand.Data.Fitness.Ratio, 1,1);
 	}
 
 	private void Movement()
@@ -151,7 +164,7 @@ public class Bowls : Module {
 
 			if((Sway_Timer-=Time.deltaTime) < 0.0F)
 			{
-				Sway_Extra = (Random.value - Random.value) * 4;
+				Sway_Extra = (Random.value - Random.value) * 7;
 				Sway_Timer = Random.Range(Sway_TimeBracket.x, Sway_TimeBracket.y);
 			}
 
@@ -163,7 +176,7 @@ public class Bowls : Module {
 			Sway_Speed = Vector2.Distance(BalancePoint, 
 				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor);
 
-			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.5F + 0.05F * MoveSpeed_factor));
+			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.6F + 0.02F * MoveSpeed_factor));
 			Sway_CurrentVelocity.y = 0.0F;
 			Control_Velocity.y = 0.0F;
 
@@ -188,10 +201,10 @@ public class Bowls : Module {
 		
 		float rot = v.x*5;
 
-		rot += Sway_CurrentVelocity.x/4;
+		rot += Sway_CurrentVelocity.x*0.7F;
 		rot += Sway_Extra;
-		rot += Control_Velocity.x /8;
-		rot = Mathf.Clamp(rot, -40, 40);
+		rot += Control_Velocity.x /2;
+		rot = Mathf.Clamp(rot, -65, 65);
 		
 		TargetGrand_Face.transform.rotation = Quaternion.Slerp(
 			TargetGrand_Face.transform.rotation,
@@ -255,6 +268,7 @@ public class Bowls : Module {
 			});		
 
 		EndInfo = MUI["endcond"];
+		FitnessObj = MUI["fitobj"];
 	}
 
 	public override IEnumerator Enter(bool entry, IntVector v)
@@ -298,20 +312,22 @@ public class Bowls : Module {
 	{
 		EndButton.TweenActive(false);
 		EndInfo.TweenActive(false);
-
+		FitnessObj.SetActive(false);
 		yield return StartCoroutine(CreatePath());
 		yield return new WaitForSeconds(0.4F);
-
-		UIObj starttext = MUI["dist"];
-		starttext.TweenActive(true);
 	
 		for(int i = 3; i > 0; i--)
 		{
-			starttext.Txt[0].text = "Balance\nthe screen\n" + i;
-			Tweens.Bounce(starttext.Txt[0].transform);
-			yield return new WaitForSeconds(0.95F);
+			MUI.Txt[0].text = "" + i;
+			Tweens.Bounce(MUI.Txt[0].transform);
+			yield return new WaitForSeconds(0.8F);
 		}
-		starttext.TweenActive(false);
+		MUI.Txt[0].text = "";
+		FitnessObj.TweenActive(true);
+		FitnessObj.Img[0].transform.localScale = new Vector3(
+				Mathf.Clamp(TargetGrand.Data.Fitness.Max / 200, 0.4F, 2.0F),1,1);
+		FitnessObj.Img[1].transform.localScale = new Vector3(
+			TargetGrand.Data.Fitness.Ratio, 1,1);
 		yield return new WaitForSeconds(0.1F);
 
 		GameTime = 0.0F;
@@ -328,8 +344,6 @@ public class Bowls : Module {
 
 		Safeway_Threshold_actual = Safeway_Threshold;
 		if(Application.isMobilePlatform) Safeway_Threshold_actual *= 2;
-		if(Difficulty >= 2) Safeway_Threshold_actual *= 0.7F;
-
 
 		int checks = 0;
 		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio > 0.6F)
@@ -357,12 +371,13 @@ public class Bowls : Module {
 		Velocity.Normalize();
 		CrossVelocity = Vector3.Cross(Velocity, -Vector3.forward).normalized;
 
+		float pathrate = 0.9F/PathPoints;
 		for(int i = 0; i < PathPoints; i++)
 		{
 			GameObject g = new GameObject("Path Point " + i);
 			MiddlePoints[i] = g.transform;
 			MiddlePoints[i].position = Vector3.Lerp(StartPoint.position, EndPoint.position,
-													Mathf.Clamp(0.2F + (0.2F * i), 0.0F, 1.0F));
+													Mathf.Clamp(pathrate + (pathrate * i), 0.0F, 1.0F));
 			MiddlePoints[i].position += CrossVelocity * ((Random.value - Random.value) * Screen.width/2);
 			MiddlePoints[i].SetParent(MUI["pathway"].transform);
 		}
@@ -378,7 +393,7 @@ public class Bowls : Module {
 	 
 		int mvmt_segments = 10 + MiddlePoints.Length * 10;
 
-	 	Safeway = new VectorLine("Safeway Path", new List<Vector2>(mvmt_segments+1), Safeway_Threshold_actual*1.5F, LineType.Continuous);
+	 	Safeway = new VectorLine("Safeway Path", new List<Vector2>(mvmt_segments+1), Safeway_Threshold_actual, LineType.Continuous);
 		Safeway.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, false);
 		Safeway.drawTransform = MUI["pathway"].transform;
 		Safeway.SetCanvas(UIObj._UICanvas);
@@ -386,11 +401,11 @@ public class Bowls : Module {
 		Safeway.SetColor(PathColor);
 		Safeway.joins = Joins.Fill;
 
-		int objnum = 25 + MiddlePoints.Length * 5;
+		int objnum = 20 + MiddlePoints.Length * 5;
 		PathInstances = new UIObj[objnum];
 
 		float point = 0.0F;
-		float objratio = 1.0F/objnum;
+		float objratio = 0.9F/objnum;
 		for(int i = 0; i < objnum; i++)
 		{
 			PathInstances[i] = (UIObj) Instantiate(PathPrefabs[Random.Range(0, PathPrefabs.Length)]);
@@ -403,7 +418,7 @@ public class Bowls : Module {
 			Vector2 vel = (nextpos - pos).normalized;
 
 			Vector3 cross = Vector3.Cross(vel, -Vector3.forward).normalized;
-			float xd = cross.x * Safeway_Threshold_actual * 1.5F;
+			float xd = cross.x * Safeway_Threshold_actual * 1.1F;
 			pos.x += Random.value > 0.5F ? xd : -xd;
 
 			PathInstances[i].SetUIPosition(pos);

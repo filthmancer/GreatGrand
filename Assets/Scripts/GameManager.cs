@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour {
 
 			if(Data.FundsHourly.Claim(() =>
 			{
-				if(FundsAlert == null) FundsAlert = new RewardCon("FUNDS INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
+				if(FundsAlert == null) FundsAlert = new RewardCon("INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
 				else FundsAlert.Funds += Data.Grands.Count * funds_per_hour;
 			}));
 
@@ -206,9 +206,27 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	
-		if(hunger.Count > 0) yield return StartCoroutine(UI.HungerAlert(hunger));
-		if(fitness.Count > 0) yield return StartCoroutine(UI.FitnessAlert(fitness));
-		if(ageup.Count > 0) yield return StartCoroutine(UI.AgeAlert(ageup));
+		if(hunger.Count > 0) 
+		{
+			for(int i = 0; i < hunger.Count ; i++)
+			{
+				yield return StartCoroutine(UI.ShowGrandAlert(hunger[i]));
+			}
+		}
+		if(fitness.Count > 0) 
+		{
+			for(int i = 0; i < fitness.Count ; i++)
+			{
+				yield return StartCoroutine(UI.ShowGrandAlert(fitness[i]));
+			}
+		}
+		if(ageup.Count > 0) 
+		{
+			for(int i = 0; i < ageup.Count ; i++)
+			{
+				yield return StartCoroutine(UI.ShowGrandAlert(ageup[i]));
+			}
+		}
 
 		Alerts.Clear();
 

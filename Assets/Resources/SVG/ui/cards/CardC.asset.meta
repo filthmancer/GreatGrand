@@ -1,0 +1,33 @@
+fileFormatVersion: 2
+guid: 20c55f473beea5c45825edc76c98e30d
+timeCreated: 1486812999
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 604 387\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-103,-632)\">\n        <g id=\"CardC\">\n            <path
+    id=\"CardA\" d=\"M686.763,670.617C686.763,655.248 674.285,642.77 658.916,642.77L161.611,642.77C146.242,642.77
+    133.764,655.248 133.764,670.617L133.764,990.113C133.764,1005.48 146.242,1017.96
+    161.611,1017.96L658.916,1017.96C674.285,1017.96 686.763,1005.48 686.763,990.113L686.763,670.617Z\"
+    style=\"fill:rgb(255,220,130);stroke:black;stroke-width:0.41px;\"/>\n            <g
+    transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-365.125)\">\n                <path
+    d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-191.079)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-280.444)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-104.924)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-409.774)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-235.729)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-325.094)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n            <g transform=\"matrix(1.09547,0,0,1.47475,-34.5134,-149.573)\">\n
+    \               <path d=\"M186.552,739.993L623.992,739.993\" style=\"fill:none;stroke:black;stroke-opacity:0.301961;stroke-width:4.01px;\"/>\n
+    \           </g>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

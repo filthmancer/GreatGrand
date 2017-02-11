@@ -320,126 +320,98 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public UIObj FrameObj;
-	public IEnumerator HungerAlert(List<GrandAlert> g)
-	{
-		UIObj alert = PermUI["grandalert"];
-	
+
+	public IEnumerator ShowGrandAlert(GrandAlert g)
+	{	
 		GameManager.IgnoreInput = true;
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
 		QuoteObjects.Img[0].raycastTarget = true;
-		alert.TweenActive(true);
+
+		UIObj alert = Instantiate(Prefabs.GetObject("grandletter") as GameObject).GetComponent<UIObj>();
+		alert.SetParent(QuoteObjects[1]);
+		alert.SetUIPosition(QuoteObjects[1].GetUIPosition());
+		alert.transform.localScale = Vector3.one;
+		alert.SetActive(false);
+	
+		alert.TweenActive(true);	
 		alert.Txt[0].text = "";
 		alert.Txt[1].text = "";
 		alert.Txt[2].text = "";
 
-		for(int i = 0; i < g.Count; i++)
+		string amt = "";
+		string title = "";
+		string desc = "";
+		switch(g.Type)
 		{
-			UIObj frame = (UIObj) Instantiate(FrameObj);
-			alert.Child[0].AddChild(frame);
-			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
-			frame.AddChild(f);
-			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
-			f.transform.localScale = Vector3.one * 0.15F;
-			Tweens.Bounce(f.Txt[0].transform);
-			f.Txt[0].text = (g[i].Grand.Hunger.Ratio*100).ToString("0") + "%";
-			f.Txt[0].color = Color.red;
-			f.Txt[0].fontSize = 200;
+			case AlertType.Hungry:
+			amt = (g.Grand.Hunger.Ratio * 100).ToString("0") + "%";
+			title = g.Grand.Info.Name + " is Hungry!";
+			desc = "Hungry Grands Get Grumpy!";
+			break;
+			case AlertType.Fitness:
+			amt = (g.Grand.Fitness.Ratio * 100).ToString("0") + "%";
+			title = g.Grand.Info.Name + " is Out of Shape!";
+			desc = "Low Fitness Grands Get Grumpy!";
+			break;
+			case AlertType.Social:
+			amt = (g.Grand.Social.Ratio * 100).ToString("0") + "%";
+			title = g.Grand.Info.Name + " is Anti-Social!";
+			desc = "Anti-Social Grands Get Grumpy!";
+			break;
+			case AlertType.Ageup:
+			amt = g.Grand.Age + "";
+			title = g.Grand.Info.Name + " Aged Up!";
+			desc = "";
+			break;
+		}
 
-			alert.Txt[0].text = g[i].Grand.Info.Name + " is Hungry!";
-			yield return new WaitForSeconds(0.45F);		
-		}		
-		alert.Txt[2].text = "Hungry Grands get Grumpy!";
-		yield return new WaitForSeconds(0.3F);
+		UIObj frame = (UIObj) Instantiate(FrameObj);
+		alert.Child[0].AddChild(frame);
+		FaceObj f = GameManager.Generator.GenerateFace(g.Grand.GrandObj);
+		frame.AddChild(f);
+		f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
+		f.transform.localScale = Vector3.one * 0.15F;
 
-		alert.TweenActive(false);
-		yield return new WaitForSeconds(0.3F);
-		alert.Child[0].DestroyChildren();
+		alert.Txt[0].text = title;
+		alert.Txt[2].text = desc;
 
-		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
-		//QuoteMat.DOFloat(0, "_Size", 0.25F);
-		QuoteObjects.Img[0].raycastTarget = false;
-		GameManager.IgnoreInput = false;
-		yield return null;
-	}
+		yield return new WaitForSeconds(0.45F);		
+		f.Txt[0].text = amt;
+		f.Txt[0].color = Color.red;
+		f.Txt[0].fontSize = 200;	
+		Tweens.Bounce(f.Txt[0].transform);
 
-	public IEnumerator FitnessAlert(List<GrandAlert> g)
-	{
-		UIObj alert = PermUI["grandalert"];
-	
-		GameManager.IgnoreInput = true;
-		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
-		QuoteObjects.Img[0].raycastTarget = true;
-		alert.TweenActive(true);
-		alert.Txt[0].text = "";
-		alert.Txt[1].text = "";
-		alert.Txt[2].text = "";
-
-		for(int i = 0; i < g.Count; i++)
+		bool isAlive = true;		
+		Vector2 finscroll = Vector2.zero;
+		while(isAlive)
 		{
-			UIObj frame = (UIObj) Instantiate(FrameObj);
-			alert.Child[0].AddChild(frame);
-			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
-			frame.AddChild(f);
-			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
-			f.transform.localScale = Vector3.one * 0.15F;
-			Tweens.Bounce(f.Txt[0].transform);
-			f.Txt[0].text = (g[i].Grand.Fitness.Ratio*100).ToString("0") + "%";
-			f.Txt[0].color = Color.red;
-			f.Txt[0].fontSize = 200;
+			Vector2 scroll = Input.GetMouseButton(0) ? GameManager._Input.GetScroll() : Vector2.zero;
+			scroll.y = 0;
 
-			alert.Txt[0].text = g[i].Grand.Info.Name + " has Low Fitness!";
-			yield return new WaitForSeconds(0.45F);		
+			float d = Vector2.Distance(alert.GetUIPosition(), QuoteObjects[1].GetUIPosition());
+			if(scroll == Vector2.zero) alert.SetUIPosition(Vector2.Lerp(alert.GetUIPosition(), QuoteObjects[1].GetUIPosition(), Time.deltaTime *15));
+			else if(d > 100)
+			{
+				isAlive = false;
+				finscroll = scroll;
+			}
+			else 
+			{
+				alert.SetUIPosition(alert.GetUIPosition() + scroll);
+				alert.transform.rotation = Quaternion.Euler(0,0,(d * -scroll.normalized.x)/20);
+			}
 
-		}		
-		alert.Txt[2].text = "Low fitness makes Grands Grumpy!";	
-		yield return new WaitForSeconds(1.5F);
-		alert.TweenActive(false);
-		yield return new WaitForSeconds(0.3F);
+			yield return null;
+		}
 
-		alert.Child[0].DestroyChildren();
-
-		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
-		//QuoteMat.DOFloat(0, "_Size", 0.25F);
-		QuoteObjects.Img[0].raycastTarget = false;
-		GameManager.IgnoreInput = false;
-		yield return null;
-	}
-
-	public IEnumerator AgeAlert(List<GrandAlert> g)
-	{
-		UIObj alert = PermUI["grandalert"];
-	
-		GameManager.IgnoreInput = true;
-		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
-		QuoteObjects.Img[0].raycastTarget = true;
-		alert.TweenActive(true);
-		alert.Txt[0].text = "";
-		alert.Txt[1].text = "";
-		alert.Txt[2].text = "";	
-
-		for(int i = 0; i < g.Count; i++)
+		finscroll.Normalize();
+		float throwtime = 0.3F;
+		while((throwtime -= Time.deltaTime) > 0.0F)
 		{
-			UIObj frame = (UIObj) Instantiate(FrameObj);
-			alert.Child[0].AddChild(frame);
-			FaceObj f = GameManager.Generator.GenerateFace(g[i].Grand.GrandObj);
-			frame.AddChild(f);
-			f.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;//alert.Child[0][0].transform.position;
-			f.transform.localScale = Vector3.one * 0.15F;
-			f.Txt[0].text = g[i].Grand.Age.Value-g[i].Values[0] + "";
-
-			alert.Txt[0].text = g[i].Grand.Info.Name + " Aged up!";
-
-			yield return new WaitForSeconds(0.45F);		
-			Tweens.Bounce(f.Txt[0].transform);
-			f.Txt[0].text = g[i].Grand.Age.Value + "";
-		}		
-		alert.Txt[2].text = "";	
-
-		yield return new WaitForSeconds(1.5F);
-		alert.TweenActive(false);
-		yield return new WaitForSeconds(0.3F);
-
-		alert.Child[0].DestroyChildren();
+			alert.SetUIPosition(alert.GetUIPosition() + finscroll*40 + Vector2.down * 40);
+			yield return null;
+		}
+		alert.PoolDestroy();
 
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0), 0.35F);
 		//QuoteMat.DOFloat(0, "_Size", 0.25F);
@@ -454,7 +426,7 @@ public class UIManager : MonoBehaviour {
 		QuoteObjects.Img[0].DOColor(new Color(1,1,1,0.8F), 0.35F);
 		QuoteObjects.Img[0].raycastTarget = true;
 
-		UIObj alert = Instantiate(Prefabs.GetObject("letter") as GameObject).GetComponent<UIObj>();
+		UIObj alert = Instantiate(Prefabs.GetObject("govletter") as GameObject).GetComponent<UIObj>();
 		alert.SetParent(QuoteObjects[1]);
 		alert.SetUIPosition(QuoteObjects[1].GetUIPosition());
 		alert.transform.localScale = Vector3.one;

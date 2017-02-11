@@ -448,7 +448,7 @@ public struct GrandAlert
 		Values = v;
 	}
 }
-public enum AlertType{None, Hungry, Fitness, Ageup, Senile, Fight, Gift, Repup}
+public enum AlertType{None, Hungry, Fitness, Social, Ageup, Senile, Fight, Gift, Repup}
 
 [System.Serializable]
 public class GrandInfo
@@ -589,6 +589,12 @@ public class Resource
 		Current_soft = (float)i;
 	}
 
+	public virtual void Set (float i)
+	{
+		Current_soft = Mathf.Clamp(i, 0.0F, Max);
+		Current = (int) Mathf.Round(Current_soft);
+	}
+
 	public float Rate = 0.0F;
 	public System.DateTime TimeLast;
 	public System.TimeSpan Span;
@@ -602,10 +608,8 @@ public class Resource
 	{
 		if((System.DateTime.Compare(t, TimeLast.Add(Span)) > 0))
 		{
-			float m = (Max == -1) ? 99999 : Max;
-			Current_soft = Mathf.Clamp(Current_soft + Rate, 0.0F, m);
-			int diff = (int) Mathf.Round(Current_soft) - Current;
-			Current = (int) Mathf.Round(Current_soft);
+			int diff = (int) Mathf.Round(Current_soft + Rate) - Current;
+			Set(Current_soft + Rate);
 			
 			TimeLast = t;
 			return diff;
@@ -628,10 +632,16 @@ public class Resource
 	public virtual void Add(float n)
 	{
 		float m = (Max == -1) ? 99999 : Max;
-		Current_soft = Mathf.Clamp(Current_soft + n, 0.0F, Max);
-
-		Current = (int) Mathf.Round(Current_soft);
+		Set(Current_soft + n);
 		GameManager.UI.CheckResourcesUI();
+	}
+
+	public virtual void AddMax(float n)
+	{
+		if(Max == -1) return;
+		float r = Ratio;
+		Max += (int)n;
+		Set((float)Max * Ratio);
 	}
 }
 
