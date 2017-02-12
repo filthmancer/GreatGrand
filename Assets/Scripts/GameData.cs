@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
@@ -33,6 +34,10 @@ public class GameData : MonoBehaviour {
     	}
     }
 
+    public bool Alert_Letter = false,
+    			Alert_Pigeonhole = false,
+    			Alert_ScrollUp = false;
+
  
 	// Use this for initialization
 	void Start () {
@@ -59,6 +64,9 @@ public class GameData : MonoBehaviour {
 				Grands[i].Resources[a].TimeLast = TimeLast;
 			}
 		}
+		Alert_Pigeonhole = PlayerPrefs.GetInt("Alert_Pigeonhole") == 1;
+		Alert_ScrollUp = PlayerPrefs.GetInt("Alert_ScrollUp") == 1;
+		Alert_Letter = PlayerPrefs.GetInt("Alert_Letter") == 1;
 	}
 
 	public void SetupData()
@@ -68,6 +76,7 @@ public class GameData : MonoBehaviour {
 		//World[0].Col = Color.red;
 		World[0].Set(0);
 		(World[0] as Stat).SetLevel(1);
+		RepLast = 1;
 
 		World[1].Name = "Funds";
 		//World[1].Col = Color.green;
@@ -91,6 +100,11 @@ public class GameData : MonoBehaviour {
 
 	public void Save()
 	{
+
+		PlayerPrefs.SetInt("Alert_Pigeonhole", Alert_Pigeonhole ? 1 : 0);
+		PlayerPrefs.SetInt("Alert_ScrollUp", Alert_ScrollUp ? 1 : 0);
+		PlayerPrefs.SetInt("Alert_Letter", Alert_Letter ? 1 : 0);
+
 		Save_Data = new SaveData(Save_File); 
 
 		Save_Data["Time"] = System.DateTime.Now;
@@ -109,7 +123,6 @@ public class GameData : MonoBehaviour {
 				Save_Data["World-"+World[i].Name+"-Level"] = (World[i] as Stat).Level;
 			}
 		}
-
 
 		//Saving Grands
 		GrandData [] prev_GG = GameManager.instance.Grands;
@@ -341,6 +354,8 @@ public class GrandData
 	public Resource Hunger;
 	public Resource Age;
 
+	public GrandMod [] Mods;
+
 	public Resource [] Resources
 	{
 		get{return new Resource[] {Age, Smiles, Grumps, Fitness, Social, Hunger};}
@@ -354,9 +369,6 @@ public class GrandData
 		int A = Age.Check(t);
 		if(A > 0)	fin.Add(new GrandAlert(AlertType.Ageup, this, new int [1] {A}));
 
-		int S = Smiles.Check(t);
-		int G = Grumps.Check(t);
-
 		int F = Fitness.Check(t);
 		int soc = Social.Check(t);
 		int H = Hunger.Check(t);
@@ -364,6 +376,19 @@ public class GrandData
 		if(Hunger.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Hungry,this));
 		if(Fitness.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Fitness,this));
 
+		float agerate = 1.0F + (float)Age.Value/200.0F;
+		float baserate = 0.2F * agerate;
+		float multrate = 0.2F * agerate;
+
+		float from_hunger = multrate * Hunger.Ratio;
+		float from_fitness = multrate * Fitness.Ratio;
+		float from_social = multrate * Social.Ratio;
+
+		Smiles.Rate = baserate + (from_hunger + from_fitness + from_social);
+		Grumps.Rate = baserate + (multrate - from_hunger) + (multrate - from_fitness) + (multrate - from_social);
+
+		int S = Smiles.Check(t);
+		int G = Grumps.Check(t);
 		return fin.ToArray();
 	}
 
@@ -371,11 +396,20 @@ public class GrandData
 		Hex = h;
 		Info = new GrandInfo();
 		Age = new Resource(0, 60, -1);
+
 		Smiles = new Resource(1,10,-1);
+		Smiles.SetRate(0, new System.TimeSpan(0,0,1));
 		Grumps = new Resource(2,10,-1);
+		Grumps.SetRate(0, new System.TimeSpan(0,0,1));
+
 		Hunger = new Resource(3, 0, 100);
 		Fitness = new Resource(4, 0, 100);
 		Social = new Resource(5, 0, 100);
+	}
+
+	public void SetTimeLast(System.DateTime n)
+	{
+		for(int i = 0; i < Resources.Length; i++) Resources[i].TimeLast = n;
 	}
 	public FaceInfo GetFaceInfo(string s)
 	{
@@ -448,7 +482,10 @@ public struct GrandAlert
 		Values = v;
 	}
 }
-public enum AlertType{None, Hungry, Fitness, Social, Ageup, Senile, Fight, Gift, Repup}
+public enum AlertType{	Ageup, Smiles, Grumps, 
+						Hungry, Fitness, Social, 
+						Senile, Fight, Gift, 
+						Repup, None}
 
 [System.Serializable]
 public class GrandInfo
@@ -575,9 +612,9 @@ public class Resource
 	{
 		Index = ind;
 
-		Current_soft = (float) curr;
-		Current = curr;
 		Max = max;
+
+		Set(curr);
 
 		Multiplier = mult;
 		Col = Color.white;
@@ -585,13 +622,15 @@ public class Resource
 
 	public virtual void Set(int i)
 	{
-		Current = i;
-		Current_soft = (float)i;
+		int m = (Max == -1) ? 99999: Max;
+		Current = Mathf.Clamp(i, 0, m);
+		Current_soft = (float) Current;
 	}
 
 	public virtual void Set (float i)
 	{
-		Current_soft = Mathf.Clamp(i, 0.0F, Max);
+		int m = (Max == -1) ? 99999: Max;
+		Current_soft = Mathf.Clamp(i, 0.0F, m);
 		Current = (int) Mathf.Round(Current_soft);
 	}
 
@@ -703,6 +742,21 @@ public class RewardCon
 	}
 }
 
+public class GrandMod
+{
+	private System.Action<GrandData, float[]> _action;
+	private float [] Values;
+	public GrandMod(System.Action<GrandData, float[]> a, params float [] f)
+	{
+		_action = a;
+		Values = f;
+	}
+	public void Act(GrandData d)
+	{
+		_action(d, Values);
+	}
+}
+
 
 [System.Serializable]
 public class _Grump
@@ -719,106 +773,18 @@ public class _Grump
 		Parent = p;
 		Target = t;
 		LikesIt = like;
-
-		Vector3 a = new Vector3(0,0,0);//Parent.Face.transform.position;
-		Vector3 b = new Vector3(100,100,0);//Target.transform.position;
-		Vector3 vel = b - a;
-		vel.Normalize();
-
-		Line = new VectorLine("Grump - " + Parent + ":" + Target, new List<Vector3>(), 4.5F, LineType.Discrete, Joins.Weld);
-		Line.points3.Add(Vector3.Lerp(a, b, 0.15F));
-		Line.points3.Add(Vector3.Lerp(a, b, 0.85F));
-		Line.SetColor(new Color(0,0,0,0));
-		Line.Draw();
-
-		Arrow = new VectorLine("Arrow - Grump - " + Parent + ":" + Target, new List<Vector3>(), 7.0F, LineType.Continuous, Joins.Weld);
-		Vector3 point  = Vector3.Lerp(a, b, 0.85F);
-		Arrow.points3.Add(point - (vel*0.5F) + (Vector3.Cross(vel, -vel) * 0.5F));
-		Arrow.points3.Add(point);
-		Arrow.points3.Add(point - (vel*0.5F) - (Vector3.Cross(vel, -vel) * 0.5F));
-		Arrow.SetColor(new Color(0,0,0,0));
-		Arrow.Draw();
 	}
 
 	public void Update()
 	{
-		/*
-		if((line_time -= Time.deltaTime) > -0.1F)
-		{
-			Color c = (LikesIt ? Color.green : Color.red);
-			float a = (line_time > 0.0F) ? line_time * 3 : 0.0F;
-			c.a = Mathf.Clamp01(a);
-			//Line.SetColor(c);
-			//Line.Draw();
-			//Arrow.SetColor(c);
-			//Arrow.Draw();
-		}*/
+
 	}
 
 	public void Trace(float spawn, float fade = 1.3F)
 	{
-		Color c = (LikesIt ? Color.green : Color.red);
-		c.a = 1.0F;
 
-		Line.SetColor(c);
-
-		Vector3 startpos = new Vector3(0,0,0);//Parent.Position;
-		Vector3 endpos = new Vector3(100,100,0);//Target.Position;
-		Vector3 vel = endpos - startpos;
-		vel.Normalize();
-
-		Vector3 start = Vector3.Lerp(startpos, endpos, 0.0F);
-		Vector3 point = Vector3.Lerp(startpos, endpos, 0.85F);
-
-		Line.points3[0] = start;
-		Line.points3[1] = start;
-		Line.Draw();
-
-		DOTween.To(()=> Line.points3[1], x=>Line.points3[1] = x, point, spawn);
-
-		Vector3 arrowoffset = Vector3.Cross(vel, Vector3.forward).normalized * 0.2F;
-		Vector3 arrowpushback = point - (vel*0.2F);
-
-		Arrow.points3[0] = start;
-		Arrow.points3[1] = start;
-		Arrow.points3[2] = start;
-
-		DOTween.To(()=>Arrow.points3[0], x=>Arrow.points3[0] = x, arrowpushback + arrowoffset, spawn);
-		DOTween.To(()=>Arrow.points3[2], x=>Arrow.points3[2] = x, arrowpushback - arrowoffset, spawn);
-		DOTween.To(()=>Arrow.points3[1], x=>Arrow.points3[1] = x, point, spawn);
-
-		Arrow.SetColor(c);
-		Arrow.Draw();
-
-		SetLineTime(fade);
 	}
 
-	/*public void TraceLine(float r)
-	{
-		Color c = (LikesIt ? Color.green : Color.red);
-		c.a = 1.0F;
-
-		Line.SetColor(c);
-
-		Vector3 startpos = Parent.Face.transform.position;
-		Vector3 endpos = Target.transform.position;
-		Vector3 vel = endpos - startpos;
-		vel.Normalize();
-
-		float ratio = 0.15F + (r * 0.7F);
-		Line.points3[0] = Vector3.Lerp(startpos, endpos, 0.15F);
-		Line.points3[1] = Vector3.Lerp(startpos, endpos, ratio);
-		Line.Draw();
-
-		Vector3 point  = Vector3.Lerp(startpos, endpos, ratio);
-		Arrow.points3[0] = (point -(vel*0.2F) + (Vector3.Cross(vel, Vector3.up).normalized * 0.2F));
-		Arrow.points3[1] = point;
-		Arrow.points3[2] = (point -(vel*0.2F) - (Vector3.Cross(vel, Vector3.up).normalized * 0.2F));
-		Arrow.SetColor(c);
-		Arrow.Draw();
-
-		SetLineTime(1.2F);
-	}*/
 
 	public void Destroy()
 	{

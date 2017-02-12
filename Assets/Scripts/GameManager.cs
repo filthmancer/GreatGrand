@@ -128,7 +128,6 @@ public class GameManager : MonoBehaviour {
 
 		TimeChecks();
 		Resource g = Data.Grands[0].Hunger;
-		//print(g.Ratio + " -- " + System.DateTime.Now + " -- " + g.TimeLast.Add(g.Span) + " :: " + System.DateTime.Compare(System.DateTime.Now, g.TimeLast.Add(g.Span)));
 		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
 		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
 	}
@@ -137,8 +136,6 @@ public class GameManager : MonoBehaviour {
 	{
 		if(StartingModule == string.Empty) StartingModule = "menu";
 		yield return StartCoroutine(LoadModule(StartingModule));
-	//	yield return StartCoroutine(TimeChecks());
-
 		yield return null;
 	}
 
@@ -149,29 +146,26 @@ public class GameManager : MonoBehaviour {
 			Alerts.AddRange(Data.Grands[i].CheckTime(System.DateTime.Now));
 	}
 
+	float check = 0.0F;
 	public void TimeChecks()
 	{
-		System.TimeSpan span = System.DateTime.Now.Subtract(Data.TimeLast);
-		if(span.TotalSeconds > 10)
+		for(int i = 0; i < Data.Grands.Count; i++) 
+			Data.Grands[i].CheckTime(System.DateTime.Now);
+
+		if(Data.FundsHourly.Claim(() =>
 		{
-			for(int i = 0; i < Data.Grands.Count; i++) 
-				Data.Grands[i].CheckTime(System.DateTime.Now);
+			if(FundsAlert == null) FundsAlert = new RewardCon("INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
+			else FundsAlert.Funds += Data.Grands.Count * funds_per_hour;
+		}));
 
-			if(Data.FundsHourly.Claim(() =>
-			{
-				if(FundsAlert == null) FundsAlert = new RewardCon("INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
-				else FundsAlert.Funds += Data.Grands.Count * funds_per_hour;
-			}));
+		if(Data.RepLast != WorldRes.Rep.Level)
+		{
+			RepAlert = new RewardCon(WorldRes.VillageName + " Rep Up!", "Lvl. " + WorldRes.Rep.Level, 
+									new int [] {0, WorldRes.Rep.Level * 50, 1 + WorldRes.Rep.Level /5});
+			Data.RepLast = WorldRes.Rep.Level;
+		}
 
-			if(Data.RepLast != WorldRes.Rep.Level)
-			{
-				RepAlert = new RewardCon(WorldRes.VillageName + " Rep Up!", "Lvl. " + WorldRes.Rep.Level, 
-										new int [] {0, WorldRes.Rep.Level * 50, 1 + WorldRes.Rep.Level /5});
-				Data.RepLast = WorldRes.Rep.Level;
-			}
-
-			Data.TimeLast = System.DateTime.Now;
-		}	
+		Data.TimeLast = System.DateTime.Now;	
 	}
 
 	public List<GrandAlert> Alerts = new List<GrandAlert>();
@@ -208,24 +202,24 @@ public class GameManager : MonoBehaviour {
 	
 		if(hunger.Count > 0) 
 		{
-			for(int i = 0; i < hunger.Count ; i++)
-			{
-				yield return StartCoroutine(UI.ShowGrandAlert(hunger[i]));
-			}
+			//for(int i = 0; i < hunger.Count ; i++)
+			//{
+				yield return StartCoroutine(UI.ShowGrandAlert(hunger));
+			//}
 		}
 		if(fitness.Count > 0) 
 		{
-			for(int i = 0; i < fitness.Count ; i++)
-			{
-				yield return StartCoroutine(UI.ShowGrandAlert(fitness[i]));
-			}
+			//for(int i = 0; i < fitness.Count ; i++)
+			//{
+				yield return StartCoroutine(UI.ShowGrandAlert(fitness));
+			//}
 		}
 		if(ageup.Count > 0) 
 		{
-			for(int i = 0; i < ageup.Count ; i++)
-			{
-				yield return StartCoroutine(UI.ShowGrandAlert(ageup[i]));
-			}
+			//for(int i = 0; i < ageup.Count ; i++)
+			//{
+				yield return StartCoroutine(UI.ShowGrandAlert(ageup));
+			//}
 		}
 
 		Alerts.Clear();
@@ -274,6 +268,17 @@ public class GameManager : MonoBehaviour {
 
 		yield return null;
 
+	}
+
+	public void CheckPopulation()
+	{
+		if(Data.Grands.Count < WorldRes.Population)
+		{
+			for(int i = Data.Grands.Count; i < WorldRes.Population; i++)
+			{
+				Data.Grands.Add(Generator.GenerateGrand());
+			}
+		}
 	}
 
 	public static void OnTouch()
@@ -334,8 +339,8 @@ public class GameManager : MonoBehaviour {
 				AllModules[i].SetIntro(false);
 			}
 
-			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 25));
-			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 100));
+			StartCoroutine(UI.ResourceAlert(WorldRes.Meds, 10));
+			StartCoroutine(UI.ResourceAlert(WorldRes.Funds, 400));
 			StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 0));	
 
 			Data.SetupData();

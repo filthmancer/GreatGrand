@@ -174,9 +174,9 @@ public class Bowls : Module {
 			}
 			Sway_CurrentVelocity.Normalize();
 			Sway_Speed = Vector2.Distance(BalancePoint, 
-				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor);
+				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor+0.4F);
 
-			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.6F + 0.02F * MoveSpeed_factor));
+			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.4F + 0.04F * MoveSpeed_factor));
 			Sway_CurrentVelocity.y = 0.0F;
 			Control_Velocity.y = 0.0F;
 
@@ -234,9 +234,13 @@ public class Bowls : Module {
 		EndInfo.Txt[0].text = "FITNESS UP: " + (TargetGrand.Data.Fitness.RatioToString()) + "%";
 		Tweens.Bounce(EndInfo.Txt[0].transform);
 
+		yield return new WaitForSeconds(Time.deltaTime * 40);
+		int rep = fit;
+		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
+		EndInfo.Txt[0].text = "REP UP: " + rep;
+		Tweens.Bounce(EndInfo.Txt[0].transform);
+
 		EndButton.TweenActive(true);
-		
-		//StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Meds, med));
 	}
 
 	public void Lose()
@@ -393,7 +397,7 @@ public class Bowls : Module {
 	 
 		int mvmt_segments = 10 + MiddlePoints.Length * 10;
 
-	 	Safeway = new VectorLine("Safeway Path", new List<Vector2>(mvmt_segments+1), Safeway_Threshold_actual, LineType.Continuous);
+	 	Safeway = new VectorLine("Safeway Path", new List<Vector2>(mvmt_segments+1), Safeway_Threshold_actual*1.2F, LineType.Continuous);
 		Safeway.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, false);
 		Safeway.drawTransform = MUI["pathway"].transform;
 		Safeway.SetCanvas(UIObj._UICanvas);

@@ -34,13 +34,17 @@ public class Menu : Module {
 			StartCoroutine(GameManager.instance.LoadModule("Bowls"));
 		});
 		menuobj = MUI["back"];
+		TrayObj = menuobj[0];
+		//TrayObj.SetActive(GameManager.Data.Alert_Pigeonhole);
 	}
 
 	public RectTransform ScrollTrack;
 	public UIObj menuobj;
+	private UIObj TrayObj;
+	private int lastgrumps = 0, lastsmiles = 0;
 	public override void ControlledUpdate()
 	{
-		if(!GameManager.IgnoreInput && Input.GetMouseButton(0))
+		if(!GameManager.Paused && !GameManager.IgnoreInput && Input.GetMouseButton(0))
 		{
 			Vector2 v = GameManager._Input.GetScroll();
 			v.x = 0.0F;
@@ -49,19 +53,33 @@ public class Menu : Module {
 			newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
 			menuobj.SetUIPosition(newpos);	
 		}
-		
 
+		if(ginfo != null && ginfo_target != null)
+		{
+			GameManager.UI.SetGrandInfoObj(ginfo, ginfo_target);
+
+			//DOTween.To(()=> lastgrumps, x => lastgrumps = x, ginfo_target.Data.Grumps.Value, 0.3F);
+			//DOTween.To(()=> lastsmiles, x => lastsmiles = x, ginfo_target.Data.Smiles.Value, 0.3F);
+			if(lastsmiles < ginfo_target.Data.Smiles.Value) lastsmiles++;
+			if(lastgrumps < ginfo_target.Data.Grumps.Value) lastgrumps++;
+			ginfo[1][3].Txt[0].text = lastsmiles + "";
+			ginfo[1][3].Txt[1].text = lastgrumps + "";
+		}
+		
+		
 		if(GameManager.instance.AlertsTotal > 0)
 		{
-			GameManager.UI.PermUI["exit"].TweenActive(true);
-			GameManager.UI.PermUI["exit"][0].TweenActive(true);
-			GameManager.UI.PermUI["exit"][0].Txt[0].text = "" + GameManager.instance.AlertsTotal;
+			GameManager.Data.Alert_Pigeonhole = true;
+			Tweens.Bounce(TrayObj.Txt[0].transform);
+			TrayObj.Txt[0].text = "" + GameManager.instance.AlertsTotal;
 		}
-		else GameManager.UI.PermUI["exit"].TweenActive(false);
+		else TrayObj.Txt[0].text = "";
 	}
 
 	public override IEnumerator Load()
 	{
+		GameManager.instance.CheckPopulation();
+
 		Faces = new FaceObj[GameManager.WorldRes.Population];
 		Frames = new UIObj[GameManager.WorldRes.Population];
 
@@ -82,7 +100,7 @@ public class Menu : Module {
 
 			Faces[i] = GameManager.Generator.GenerateFace(f);
 			Frames[i][0].AddChild(Faces[i]);
-
+			Frames[i].Txt[0].text = f.Info.Name.ToUpper();
 			Faces[i].transform.position = Frames[i][0].transform.position;
 			SetupFace(Faces[i], Frames[i], f);
 
@@ -92,14 +110,11 @@ public class Menu : Module {
 		}
 
 		GameManager.instance.InitTimeChecks();
-			UIObj alert = GameManager.UI.PermUI["exit"];
 
-			alert.ClearActions();
-			alert.AddAction(UIAction.MouseUp, () =>
+			TrayObj.ClearActions();
+			TrayObj.AddAction(UIAction.MouseUp, () =>
 			{
 				StartCoroutine(GameManager.instance.ShowAlerts());
-				GameManager.UI.PermUI["exit"].TweenActive(false);
-				GameManager.UI.PermUI["exit"][0].SetActive(false);
 			});
 	
 	}
@@ -120,6 +135,9 @@ public class Menu : Module {
 				ginfo.FitUIPosition(f.transform.position + Vector3.down*50, null, 1.0F);
 				ginfo.SetActive(false);
 				ginfo.TweenActive(true);
+
+				lastsmiles = g.Data.Smiles.Value;
+				lastgrumps = g.Data.Grumps.Value;
 				Tweens.Bounce(frame.transform);
 			}
 			else if(ginfo != null) 
@@ -157,6 +175,7 @@ public class Menu : Module {
 		for(int i = 0; i < Frames.Length; i++)
 		{
 			Frames[i].Destroy();
+			Faces[i].Destroy();
 		}
 	}
 

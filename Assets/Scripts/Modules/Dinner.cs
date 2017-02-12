@@ -32,7 +32,7 @@ public class Dinner : Module {
 	public VectorObject2D GrumpLine;
 	private int [] GG_Indexes;
 
-	private float Timer_current = 0.0F;
+	private float GameTime = 0.0F;
 
 	public override UIQuote [] Intro_String
 	{
@@ -58,28 +58,28 @@ public class Dinner : Module {
 		if(Running)
 		{
 		//TIMER
-			Timer_current += Time.deltaTime;
-			if(Timer_current >= Timer)
+			GameTime += Time.deltaTime;
+			if(GameTime >= Timer)
 			{
 				Complete();
 			}
 
 			if(timerobj == null) timerobj = MUI["kitchen"];
 
-			float timer_ui = (Timer - Timer_current);
+			float timer_ui = (Timer - GameTime);
 			int secs = (int) timer_ui % 60;
 
 			timerobj.Txt[1].text = "SERVING IN";
 			timerobj.Txt[1].color = Color.white;
 			timerobj.Txt[0].text = (int) timer_ui + "";
-			timerobj.Txt[0].color = (Timer_current > Timer*0.75F) ? Color.red : Color.white;
+			timerobj.Txt[0].color = (GameTime > Timer*0.75F) ? Color.red : Color.white;
 
 			if(secs != last_sec) 
 			{
 				last_sec = secs;
-				if (Timer_current > Timer*0.75F) 
+				if (GameTime > Timer*0.75F) 
 					Tweens.Bounce(timerobj.Txt[0].transform, 
-									Vector3.one + (Vector3.one * Timer_current / Timer/2));
+									Vector3.one + (Vector3.one * GameTime / Timer/2));
 			}
 
 		//TARGET GRAND
@@ -164,8 +164,8 @@ public class Dinner : Module {
 			yield return f.WaitForCompletion();
 		}
 		CreateDinner();
-		yield return StartCoroutine(StartGame(GG_Indexes));
 		yield return StartCoroutine(CheckForIntro());
+		yield return StartCoroutine(StartGame(GG_Indexes));
 	}
 
 
@@ -267,7 +267,7 @@ public class Dinner : Module {
 
 		Ability_ThirdEye(1.3F);
 		Running = true;
-		Timer_current = 0.0F;
+		GameTime = 0.0F;
 
 		timerobj.Txt[0].text = "";
 		timerobj.transform.localScale = Vector3.one;
@@ -393,11 +393,11 @@ public class Dinner : Module {
 		int rep = (int) ((FinalScore*5) * (1.0F+(Difficulty * Bonus_DifficultyMultiplier)));
 		info.Txt[0].text = rep + "";
 		
-		if(Timer_current < Timer)
+		if(GameTime < Timer)
 		{
-			yield return new WaitForSeconds(0.3F);
+			yield return new WaitForSeconds(0.4F);
 
-			float mult = 1.0F - (Timer_current/Timer*Bonus_TimerDecay);
+			float mult = 1.0F - (GameTime/Timer*Bonus_TimerDecay);
 			mult = Mathf.Clamp(1.0F + mult, 1.0F, Bonus_TimerMax);
 			rep = (int) ((float) rep * mult);
 			info.Txt[0].text = rep + "";
@@ -406,12 +406,11 @@ public class Dinner : Module {
 
 			Tweens.Bounce(info.transform);
 			yield return null;
-			//Tweens.Bounce(points.transform);
 		}
 		
 		if(FinalScore == GGNum)
 		{
-			yield return new WaitForSeconds(0.3F);
+			yield return new WaitForSeconds(0.4F);
 			rep = (int) ((float)rep * Bonus_Perfect);
 			info.Txt[0].text = rep + "";
 			info.Txt[1].text = "PERFECT!";
@@ -419,13 +418,40 @@ public class Dinner : Module {
 
 			Tweens.Bounce(info.transform);
 			yield return null;
-			//Tweens.Bounce(points.transform);
 		}
 
-
+		yield return new WaitForSeconds(0.4F);
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
-		yield return new WaitForSeconds(0.2F);
+
+		int hungertotal = 10 + FinalScore * 5;
+
+		//FUTURE ANIMATION OF GRANDS EATING
+		/*
+		float feedtimer = 0.2F;
+		float hungerrate = (float)hungertotal * (feedtimer/Time.deltaTime);
+
+		while((feedtimer -= Time.deltaTime) > 0.0F)
+		{
+			
+			yield return null;
+		}*/
+
+
+		for(int i = 0; i < _TableManager.Seat.Length; i++)
+		{
+			_TableManager.Seat[i].Target.Data.Hunger.Add(hungertotal);
+			UIAlert a = GameManager.UI.StringAlert(
+							"-" + hungertotal + "%\nHunger", 
+							_TableManager.Seat[i].transform.position, 1.4F);
+			a.Txt[0].color = Color.white;
+			a.Txt[0].fontSize = 65;
+			Tweens.Bounce(a.transform);
+			yield return new WaitForSeconds(0.1F);
+		}
+		yield return new WaitForSeconds(0.7F);
 		yield return StartCoroutine(FinishDinner());
+		
+		
 	}
 
 	IEnumerator FinishDinner()
@@ -433,11 +459,6 @@ public class Dinner : Module {
 		for(int i = 0; i < _TableManager.Seat.Length; i++)
 		{
 			StartCoroutine(_TableManager.Exit(_TableManager.Seat[i].Target, 0.3F));
-			Grands[i].Data.Hunger.Add(25);
-			UIAlert a = GameManager.UI.StringAlert("25%\nHunger", Faces[i].transform.position, 0.7F);
-			a.Txt[0].color = Color.white;
-			a.Txt[0].fontSize = 45;
-			Tweens.Bounce(a.transform);
 		}
 
 		yield return new WaitForSeconds(final_timer);

@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 01871037c4bdd80478afbb5f6b462ef8
+timeCreated: 1486867658
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 17 16\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-818,-813)\">\n        <g id=\"Bell\" transform=\"matrix(1,0,0,1,7.66015,30.4538)\">\n
+    \           <g transform=\"matrix(0.708108,0,0,0.708108,249.044,245.207)\">\n
+    \               <path d=\"M814.627,780.761C815.476,779.186 815.921,777.424 815.921,775.635C815.921,771.842
+    813.931,768.327 810.68,766.375L799.559,766.375C796.307,768.327 794.318,771.842
+    794.318,775.635C794.318,777.424 794.763,779.186 795.612,780.761L814.627,780.761Z\"
+    style=\"fill:rgb(231,185,109);stroke:black;stroke-width:0.52px;\"/>\n            </g>\n
+    \           <g transform=\"matrix(0.763692,0,0,0.763692,181.347,193.234)\">\n
+    \               <circle cx=\"835.164\" cy=\"774.969\" r=\"2.429\" style=\"fill:rgb(231,185,109);stroke:black;stroke-width:0.48px;\"/>\n
+    \           </g>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

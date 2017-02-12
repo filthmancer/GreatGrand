@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: fac352d28beeca544ab9ee5011d98d41
+timeCreated: 1486867658
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 194 98\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-782,-811)\">\n        <g id=\"Desk\">\n            <g
+    transform=\"matrix(0.450815,0,0,0.324672,429.682,588.356)\">\n                <path
+    d=\"M1210.66,763.483L782.747,763.483L782.399,985.336L1210.59,985.336L1210.66,763.483Z\"
+    style=\"fill:rgb(132,83,3);stroke:black;stroke-width:1.78px;\"/>\n            </g>\n
+    \           <g transform=\"matrix(0.456541,0,0,0.58979,424.031,343.034)\">\n                <path
+    d=\"M1181.61,794.35L816.635,794.35L784.965,836.238L1207.79,836.238L1181.61,794.35Z\"
+    style=\"fill:rgb(132,83,3);stroke:black;stroke-width:1.3px;\"/>\n            </g>\n
+    \       </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 
