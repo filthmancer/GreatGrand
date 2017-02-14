@@ -44,7 +44,7 @@ public class Menu : Module {
 	private int lastgrumps = 0, lastsmiles = 0;
 	public override void ControlledUpdate()
 	{
-		if(!GameManager.Paused && !GameManager.IgnoreInput && Input.GetMouseButton(0))
+		/*if(!GameManager.Paused && !GameManager.IgnoreInput)
 		{
 			Vector2 v = GameManager._Input.GetScroll();
 			v.x = 0.0F;
@@ -52,7 +52,7 @@ public class Menu : Module {
 			Vector2 newpos = menuobj.GetUIPosition() + v;
 			newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
 			menuobj.SetUIPosition(newpos);	
-		}
+		}*/
 
 		if(ginfo != null && ginfo_target != null)
 		{
@@ -79,9 +79,10 @@ public class Menu : Module {
 	public override IEnumerator Load()
 	{
 		GameManager.instance.CheckPopulation();
-
-		Faces = new FaceObj[GameManager.WorldRes.Population];
-		Frames = new UIObj[GameManager.WorldRes.Population];
+        int framenum = GameManager.WorldRes.Population;
+        print(framenum);
+		Faces = new FaceObj[framenum];
+		Frames = new UIObj[framenum];
 
 		List<GrandData> allgrands = new List<GrandData>();
 		allgrands.AddRange(GameManager.instance.Grands);
@@ -164,6 +165,7 @@ public class Menu : Module {
 
 		for(int i = 0; i < Frames.Length; i++)
 		{
+			if(Frames[i] == null) continue;
 			s.Insert(0.4F, Tweens.PictureSway(Frames[i].transform, new Vector3(0,0,12 * v.x)));
 		}
 

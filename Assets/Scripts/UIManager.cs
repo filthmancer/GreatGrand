@@ -397,31 +397,24 @@ public class UIManager : MonoBehaviour {
 		alert.TweenActive(true);	
 
 
-		bool isAlive = true;		
+		bool isAlive = true;
 		Vector2 finscroll = Vector2.zero;
 		while(isAlive)
 		{
 			Vector2 scroll = Input.GetMouseButton(0) ? GameManager._Input.GetScroll() : Vector2.zero;
+			scroll.y = 0;
 
-			float d = alert.GetUIPosition().x - QuoteObjects[1].GetUIPosition().x;
-			if(!Input.GetMouseButton(0)) 
+			if(scroll == Vector2.zero) alert.SetUIPosition(Vector2.Lerp(alert.GetUIPosition(), QuoteObjects[1].GetUIPosition(), Time.deltaTime *15));
+			else if(Vector2.Distance(alert.GetUIPosition(), QuoteObjects[1].GetUIPosition()) > 100)
 			{
-				alert.SetUIPosition(Vector2.Lerp(alert.GetUIPosition(), QuoteObjects[1].GetUIPosition(), Time.deltaTime *15));
-				alert.transform.rotation = Quaternion.Slerp(alert.transform.rotation, Quaternion.identity, Time.deltaTime * 15);
-			}
-			else if(Mathf.Abs(d) > Screen.width*0.4F)
-			{
-				isAlive = false;
 				finscroll = scroll;
+				isAlive = false;
 			}
-			else 
-			{
-				alert.SetUIPosition(alert.GetUIPosition() + scroll);
-				alert.transform.rotation = Quaternion.Euler(0,0,(-d)/20);
-			}
+			else alert.SetUIPosition(alert.GetUIPosition() + scroll);
 
 			yield return null;
 		}
+
 
 		finscroll.Normalize();
 		float throwtime = 0.3F;

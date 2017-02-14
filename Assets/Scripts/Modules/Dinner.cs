@@ -632,7 +632,7 @@ public class Dinner : Module {
 
 	public IEnumerator GrumpAlert(_Grump g)
 	{
-		float time_pause = 1.2F;
+		float time_pause = 0.7F;
 
 		UIObj alert = Instantiate(GameManager.UI.Prefabs.GetObject("grump") as GameObject).GetComponent<UIObj>();
 		GameManager.UI.WorldObjects.AddChild(alert);

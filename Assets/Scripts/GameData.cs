@@ -86,6 +86,8 @@ public class GameData : MonoBehaviour {
 		//World[2].Col = Color.blue;
 		World[2].Set(0);
 
+		FundsHourly = new GoodBoy(TimeLast, new System.TimeSpan(1, 0, 0));
+
 		Grands.Clear();
 		for(int i = 0; i < World.Population; i++)
 		{
@@ -215,17 +217,18 @@ public class GameData : MonoBehaviour {
 			for(int i = 0; i < s.Length; i++)
 			{
 				World[i].Name = s[i];
-				World[i].Set(Save_Data.GetValue<int>("World-"+s[i]+"-Current"));
 				World[i].Multiplier = Save_Data.GetValue<float>("World-"+s[i]+"-Multiplier");
 				//World[i].Index = Save_Data.GetValue<int>("World-"+s[i]+"-Index");
-				
 				//World[i].Col = Save_Data.GetValue<Color>("World-"+s[i]+"-Col");
 				if(World[i] is Stat)
 				{
 					(World[i] as Stat).SetLevel(Save_Data.GetValue<int>("World-"+s[i]+"-Level"));
 				}
 				else World[i].Max = Save_Data.GetValue<int>("World-"+s[i]+"-Max");
+
+				World[i].Set(Save_Data.GetValue<int>("World-"+s[i]+"-Current"));
 			}
+
 		}
 		RepLast = Save_Data.TryGetValue<int>("Rep Last");
 		
@@ -269,11 +272,12 @@ public class GameData : MonoBehaviour {
 						Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Max")
 						);
 					g.Resources[r].Set(Save_Data.TryGetValue<int>(pref + "-Res " + r + ":Current"));
+
 					System.TimeSpan span = System.TimeSpan.FromSeconds(Save_Data.GetValue<double>(pref + "-Res " + r + ":SpanSecs"));
 					g.Resources[r].SetRate(Save_Data.TryGetValue<float>(pref+"-Res " + r + ":Rate"), span);
+
 					g.Resources[r].TimeLast = Save_Data.TryGetValue<System.DateTime>(pref+"-Res " + r + ":TimeLast");
 				}
-			
 				Grands.Add(g);
 			}
 		}
@@ -377,8 +381,8 @@ public class GrandData
 		if(Fitness.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Fitness,this));
 
 		float agerate = 1.0F + (float)Age.Value/200.0F;
-		float baserate = 0.2F * agerate;
-		float multrate = 0.2F * agerate;
+		float baserate = 0.05F * agerate;
+		float multrate = 0.05F * agerate;
 
 		float from_hunger = multrate * Hunger.Ratio;
 		float from_fitness = multrate * Fitness.Ratio;

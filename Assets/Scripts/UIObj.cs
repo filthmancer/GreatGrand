@@ -324,10 +324,10 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 
 	public virtual void LateUpdate()
 	{
-		if(isPressed)
+		/*if(isPressed)
 		{
 			time_over += Time.deltaTime;
-		}
+		}*/
 	}
 
 	public void OnPointerClick(PointerEventData eventData)

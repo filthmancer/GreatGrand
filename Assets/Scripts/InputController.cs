@@ -71,7 +71,7 @@ public class InputController : MonoBehaviour {
 	private bool Scrolling;
 	private float 	ScrollSpeed = 0.0F,
 					ScrollSpeed_init = 1.0F,
-					ScrollDecay = 0.98F;
+					ScrollDecay = 0.94F;
 
 	private float   ScrollTimeThreshold = 0.3F,
 					ScrollTimeCurrent = 0.0F;

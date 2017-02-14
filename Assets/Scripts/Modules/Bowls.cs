@@ -36,7 +36,7 @@ public class Bowls : Module {
 	public float Safeway_Threshold
 	{
 		get{
-			int [] d = new int[]{150, 100, 60};
+			int [] d = new int[]{120, 90, 60};
 			return d[Difficulty];
 		}
 	}
@@ -47,10 +47,10 @@ public class Bowls : Module {
 
 	public int Difficulty = 0;
 
-	private float TotalDistance =  20000;
+	private float TotalDistance =  12000;
 	private int [] Difficulty_PathPoints = new int []
 	{
-		5,6,8
+		6,7,8
 	};
 
 	public int PathPoints {get {return Difficulty_PathPoints[Difficulty];} }
@@ -122,7 +122,7 @@ public class Bowls : Module {
 		if(Application.isMobilePlatform)
 		{
 			Vector2 inacc = Input.acceleration;
-			Control_Velocity = new Vector3(inacc.x*1.4F, 0.0F, 0.0F);
+			Control_Velocity = new Vector3(inacc.x*2.2F, 0.0F, 0.0F);
 		}    
 		else
 		{
@@ -132,7 +132,7 @@ public class Bowls : Module {
 		}
 		Movement();
 
-		float tickrate = Mathf.Clamp(MoveSpeed_actual / MoveSpeed, 0.5F, 2.0F);
+		float tickrate = Mathf.Clamp(1.0F + MoveSpeed_actual / MoveSpeed, 1.1F, 3.0F);
 		if(TargetGrand.Data.Fitness.Ratio < 1.0F)
 			TargetGrand.Data.Fitness.Add(FitnessPerTick * tickrate);
 		else TargetGrand.Data.Fitness.AddMax(FitnessPerTick * tickrate/5);
@@ -174,9 +174,9 @@ public class Bowls : Module {
 			}
 			Sway_CurrentVelocity.Normalize();
 			Sway_Speed = Vector2.Distance(BalancePoint, 
-				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor+0.4F);
+				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor+0.8F);
 
-			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.4F + 0.04F * MoveSpeed_factor));
+			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.2F + 0.06F * MoveSpeed_factor));
 			Sway_CurrentVelocity.y = 0.0F;
 			Control_Velocity.y = 0.0F;
 
@@ -347,7 +347,7 @@ public class Bowls : Module {
 		MoveSpeed_actual = MoveSpeed;
 
 		Safeway_Threshold_actual = Safeway_Threshold;
-		if(Application.isMobilePlatform) Safeway_Threshold_actual *= 2;
+		//if(Application.isMobilePlatform) Safeway_Threshold_actual *= 2;
 
 		int checks = 0;
 		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio > 0.6F)

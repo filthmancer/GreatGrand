@@ -121,13 +121,12 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(StartGame());
 	}
 
-	private int funds_per_hour = 40;
+	private int funds_per_hour = 15;
 	// Update is called once per frame
 	void Update () {
 		if(CurrentModule != null) CurrentModule.ControlledUpdate();
 
 		TimeChecks();
-		Resource g = Data.Grands[0].Hunger;
 		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
 		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
 	}
@@ -154,7 +153,7 @@ public class GameManager : MonoBehaviour {
 
 		if(Data.FundsHourly.Claim(() =>
 		{
-			if(FundsAlert == null) FundsAlert = new RewardCon("INCOMING", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
+			if(FundsAlert == null) FundsAlert = new RewardCon("INCOMING FUNDS", "", new int [] {0,Data.Grands.Count * funds_per_hour, 0});
 			else FundsAlert.Funds += Data.Grands.Count * funds_per_hour;
 		}));
 
