@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Filthworks;
 
 public class InputController : MonoBehaviour {
 
 	public Transform Target;
+	public FOBJ TObj;
 
 	private Ray InputRay;
 	private RaycastHit InputRay_hit;
@@ -32,39 +34,62 @@ public class InputController : MonoBehaviour {
 		UpdateScroll();
 		if(GameManager.Paused || GameManager.IgnoreInput) return;
 		CheckInput();
-		
 	}
 
 	public void CheckInput()
 	{
+		if(Input.GetMouseButtonDown(0))
+		{
+			HasInput = true;
+			InputRay = Camera.main.ScreenPointToRay(Position);
+			TObj = CheckCollision(InputRay);
+			if(TObj != null) TObj.gameObject.SendMessage("OnDown");
+			GameManager.OnTouch();
+		}
+
 		if(Input.GetMouseButton(0))
 		{
 			HasInput = true;
 			InputRay = Camera.main.ScreenPointToRay(Position);
-			baseplane = new Plane(-Vector3.forward, Vector3.zero);
-
-			float d;
-			baseplane.Raycast(InputRay, out d);
-			GameManager.InputPos = InputRay.GetPoint(d);
-		}
-
-		if(Input.GetMouseButtonDown(0))
-		{
-			HasInput = true;
-			if(Physics.Raycast(InputRay, out InputRay_hit, Mathf.Infinity))
-			{
-				Target = InputRay_hit.transform;
-				WorldPosition = Target.position;
-			}
-			GameManager.OnTouch();
+			TObj = CheckCollision(InputRay);
+			if(TObj != null) TObj.gameObject.SendMessage("OnStay");
 		}
 
 		if(Input.GetMouseButtonUp(0))
 		{
 			HasInput = false;
 			GameManager.OnRelease();
+			if(TObj != null) TObj.gameObject.SendMessage("OnUp");
+			TObj = null;
 			Target = null;
 		}
+	}
+
+	public FOBJ CheckCollision(Ray inp)
+	{
+		baseplane = new Plane(-Vector3.forward, Vector3.zero);
+		float d;
+		baseplane.Raycast(InputRay, out d);
+		GameManager.InputPos = InputRay.GetPoint(d);
+		if(Physics.Raycast(InputRay, out InputRay_hit, Mathf.Infinity))
+		{
+			WorldPosition = InputRay_hit.point;
+			if(Target != InputRay_hit.transform)
+			{
+				Target = InputRay_hit.transform;
+				FOBJ fin = InputRay_hit.transform.GetComponent<FOBJ>();
+
+				Transform p = Target;
+				while(fin == null && p.parent != null)
+				{
+					p = p.parent;
+ 					fin = p.GetComponent<FOBJ>();
+				}
+				return fin;
+			}
+			else return TObj;
+		}
+		return null;
 	}
 
 	private Vector2 ScrollPosition, ScrollVector, ScrollActual;

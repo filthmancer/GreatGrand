@@ -47,13 +47,12 @@ public class Menu : Module {
 	{
 		if(!GameManager.Paused && !GameManager.IgnoreInput)
 		{
-			Vector2 v = GameManager._Input.GetScroll();
+			Vector2 v = GameManager._Input.GetScroll()/9;
 			v.x = 0.0F;
+			Vector3 newpos = MOB.pos + new Vector3(0.0F, v.y, 0.0F);
+			newpos.y = Mathf.Clamp(newpos.y, MOB["min"].pos.y, MOB["max"].pos.y);
 
-			Vector2 newpos = menuobj.GetUIPosition() + v;
-			newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
-			menuobj.SetUIPosition(newpos);	
-			MOB.transform.position += new Vector3(v.x, v.y/4, 0.0F);
+			MOB.T.position = newpos;
 		}
 
 		if(ginfo != null && ginfo_target != null)
@@ -62,8 +61,8 @@ public class Menu : Module {
 
 			//DOTween.To(()=> lastgrumps, x => lastgrumps = x, ginfo_target.Data.Grumps.Value, 0.3F);
 			//DOTween.To(()=> lastsmiles, x => lastsmiles = x, ginfo_target.Data.Smiles.Value, 0.3F);
-			if(lastsmiles < ginfo_target.Data.Smiles.Value) lastsmiles++;
-			if(lastgrumps < ginfo_target.Data.Grumps.Value) lastgrumps++;
+			if(lastsmiles < ginfo_target.Smiles.Value) lastsmiles++;
+			if(lastgrumps < ginfo_target.Grumps.Value) lastgrumps++;
 			ginfo[1][3].Txt[0].text = lastsmiles + "";
 			ginfo[1][3].Txt[1].text = lastgrumps + "";
 		}
@@ -81,7 +80,7 @@ public class Menu : Module {
 	public override IEnumerator Load()
 	{
 		GameManager.instance.CheckPopulation();
-        int framenum = GameManager.WorldRes.Population;
+        int framenum = 10;//GameManager.WorldRes.Population;
 		Faces = new Face[framenum];
 		Frames = new FIRL[framenum];
 
@@ -99,6 +98,7 @@ public class Menu : Module {
 			Frames[i] = Instantiate(GameManager.Data.RandomFrame());
 			Frames[i].transform.SetParent(MOB[0].transform);
 			Frames[i].transform.position = MOB[0][i].transform.position;
+			Frames[i].transform.localScale = Vector3.one*0.15F;
 			//Frames[i].Svg[1].color = f.Info.C_Eye;
 			//Frames[i].Svg[0].color = GameManager.Generator.RandomSkin();
 
@@ -107,9 +107,9 @@ public class Menu : Module {
 			Frames[i].Child[0].AddChild(Faces[i]);
 			//Frames[i].Txt[0].text = f.Info.Name.ToUpper();
 			Faces[i].transform.localPosition = Vector3.zero;
-			//SetupFace(Faces[i], Frames[i], f);
+			SetupFace(Faces[i], Frames[i], f);
 
-			allgrands.RemoveAt(num);
+		//	allgrands.RemoveAt(num);
 
 			yield return null;
 		}
@@ -121,15 +121,27 @@ public class Menu : Module {
 			{
 				StartCoroutine(GameManager.instance.ShowAlerts());
 			});
+
+		MOB["dinner"].AddAction(TouchAction.Up, ()=> 
+			{
+				StartCoroutine(GameManager.instance.LoadModule("Dinner"));
+				Tweens.Bounce(MOB["dinner"].transform);
+				});
+
+		MOB["garden"].AddAction(TouchAction.Up, ()=> 
+			{
+				StartCoroutine(GameManager.instance.LoadModule("bowls"));
+				Tweens.Bounce(MOB["garden"].transform);
+				});
 	
 	}
 
 	private UIObj ginfo;
-	private GreatGrand ginfo_target;
+	private GrandData ginfo_target;
 
-	public void SetupFace(FaceObj f, UIObj frame, GreatGrand g)
+	public void SetupFace(Face f, FIRL frame, GrandData g)
 	{
-		f.AddAction(UIAction.MouseDown, ()=>
+		frame.AddAction(TouchAction.Down, ()=>
 		{
 			if(ginfo_target != g)
 			{
@@ -141,8 +153,8 @@ public class Menu : Module {
 				ginfo.SetActive(false);
 				ginfo.TweenActive(true);
 
-				lastsmiles = g.Data.Smiles.Value;
-				lastgrumps = g.Data.Grumps.Value;
+				lastsmiles = g.Smiles.Value;
+				lastgrumps = g.Grumps.Value;
 				Tweens.Bounce(frame.transform);
 			}
 			else if(ginfo != null) 
@@ -155,7 +167,6 @@ public class Menu : Module {
 
 	public override Sequence OpeningSequence(IntVector v)
 	{
-		UIObj mui = MUI;
 		Transform start = GameManager.UI.ModuleRight;
 		Transform end = GameManager.UI.ModuleTarget;
 
@@ -163,9 +174,9 @@ public class Menu : Module {
 		else if(v.x == -1) start = GameManager.UI.ModuleLeft;
 		else start = GameManager.UI.ModuleRight;
 
-		mui.transform.position = start.position;
+		MOB.transform.position = start.position;
 
-		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
+		Sequence s = Tweens.SwoopTo(MOB.transform, end.position);
 
 		for(int i = 0; i < Frames.Length; i++)
 		{

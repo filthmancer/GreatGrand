@@ -500,7 +500,7 @@ public class UIManager : MonoBehaviour {
 		yield return null;
 	}
 
-	public UIObj GrandInfo(GreatGrand g)
+	public UIObj GrandInfo(GrandData g)
 	{
 		UIObj final = Instantiate(Prefabs.GetObject("grandinfo") as GameObject).GetComponent<UIObj>();
 		final.Init(-1, WorldObjects);
@@ -513,29 +513,29 @@ public class UIManager : MonoBehaviour {
 		return final;
 	}
 
-	public void SetGrandInfoObj(UIObj final, GreatGrand g)
+	public void SetGrandInfoObj(UIObj final, GrandData g)
 	{
 		final[0].Txt[0].text = g.Info.Name;
-		final[0].Txt[1].text = "Age " + g.Data.Age.Value;
-		final[0].Txt[2].text = g.Data.RoleType + "";
+		final[0].Txt[1].text = "Age " + g.Age.Value;
+		final[0].Txt[2].text = g.RoleType + "";
 
 		final[1][0].Txt[0].text = "Hungry ";
 		final[1][0].Svg[0].transform.localScale = Vector3.Lerp(
 			final[1][0].Svg[0].transform.localScale,
-			new Vector3(g.Data.Hunger.Ratio, 1, 1), Time.deltaTime * 10);
-		final[1][0].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Hunger.Ratio);
+			new Vector3(g.Hunger.Ratio, 1, 1), Time.deltaTime * 10);
+		final[1][0].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Hunger.Ratio);
 
 		final[1][1].Txt[0].text = "Fitness ";
 		final[1][1].Svg[0].transform.localScale = Vector3.Lerp(
 			final[1][1].Svg[0].transform.localScale,
-			new Vector3(g.Data.Fitness.Ratio, 1, 1), Time.deltaTime * 10);
-		final[1][1].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Fitness.Ratio);
+			new Vector3(g.Fitness.Ratio, 1, 1), Time.deltaTime * 10);
+		final[1][1].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Fitness.Ratio);
 
 		final[1][2].Txt[0].text = "Social ";
 		final[1][2].Svg[0].transform.localScale = Vector3.Lerp(
 			final[1][2].Svg[0].transform.localScale,
-			new Vector3(g.Data.Social.Ratio, 1, 1), Time.deltaTime * 10);
-		final[1][2].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Data.Social.Ratio);
+			new Vector3(g.Social.Ratio, 1, 1), Time.deltaTime * 10);
+		final[1][2].Svg[0].color = Color.Lerp(Color.red, Color.green, g.Social.Ratio);
 
 	}
 
@@ -594,9 +594,9 @@ public class Tweens
 		vel.Normalize();
 
 		Sequence s = DOTween.Sequence();
-		s.Append(t.DOMove(t.position - vel * 100.0F, 0.2F));
-		s.Append(t.DOMove(target + vel * 25.0F, 0.2F));
-		s.Append(t.DOMove(target + vel * 50.0F, 0.2F));
+		s.Append(t.DOMove(t.position - vel * 7.0F, 0.2F));
+		s.Append(t.DOMove(target + vel * 3.0F, 0.2F));
+		s.Append(t.DOMove(target + vel * 5.0F, 0.2F));
 		s.Append(t.DOMove(target, 0.1F));
 		return s;
 	}

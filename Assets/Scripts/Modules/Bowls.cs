@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Vectrosity;
 using DG.Tweening;
+using Filthworks;
 
 public class Bowls : Module {
 
@@ -20,9 +21,9 @@ public class Bowls : Module {
 	}
 
 	public GreatGrand TargetGrand;
-	private FaceObj TargetGrand_Face;
+	private Face TargetGrand_Face;
 	public UIObj FaceParent;
-	private UIObj Pathway;
+	private FOBJ Pathway;
 	//Grands used as hazards
 	public GreatGrand [] Hazard_Grands;
 
@@ -36,7 +37,7 @@ public class Bowls : Module {
 	public float Safeway_Threshold
 	{
 		get{
-			int [] d = new int[]{120, 90, 60};
+			int [] d = new int[]{150, 80, 60};
 			return d[Difficulty];
 		}
 	}
@@ -47,10 +48,10 @@ public class Bowls : Module {
 
 	public int Difficulty = 0;
 
-	private float TotalDistance =  12000;
+	private float TotalDistance =  500;
 	private int [] Difficulty_PathPoints = new int []
 	{
-		6,7,8
+		5,7,8
 	};
 
 	public int PathPoints {get {return Difficulty_PathPoints[Difficulty];} }
@@ -72,8 +73,8 @@ public class Bowls : Module {
 	private Vector2 Sway_TimeBracket = new Vector2(0.2F, 0.5F);
 
 	private Vector3 Control_Velocity;
-	private float Control_Speed = 190F;
-	private Vector2 BalancePoint;
+	private float Control_Speed = 25;
+	private Vector3 BalancePoint;
 
 	private float GameTime;
 	private UIObj FitnessObj;
@@ -81,13 +82,13 @@ public class Bowls : Module {
 
 	public float DistanceAlongPath()
 	{
-		Vector3 pos = TargetGrand_Face.transform.position;
+		Vector3 pos = MOB.transform.position;
 		Vector3 start = StartPoint.position;
 		Vector3 end = EndPoint.position;
 
 		//Get distance from start and end
-		float d_s = Vector2.Distance(pos, start);
-		float d_e = Vector2.Distance(pos, end);
+		float d_s = Vector3.Distance(pos, start);
+		float d_e = Vector3.Distance(pos, end);
 
 		//Add distances together then divide the distance from the start by the total
 		float d_total = d_s + d_e;
@@ -97,8 +98,12 @@ public class Bowls : Module {
 	public float DistanceFromSafeway()
 	{
 		Safeway.SetDistances();
-		BalancePoint = Safeway.GetPoint01(DistanceAlongPath());
-		return Vector2.Distance(BalancePoint, TargetGrand_Face.transform.position);
+		BalancePoint = Safeway.GetPoint3D01(DistanceAlongPath());
+		Vector3 vpos = MOB[1].pos;
+		vpos.y = BalancePoint.y;
+		vpos.z = BalancePoint.z;
+		print(DistanceAlongPath() + " -- " + BalancePoint + ":" + vpos);
+		return Vector3.Distance(BalancePoint, vpos);
 	}
 
 	public override void ControlledUpdate()
@@ -106,15 +111,15 @@ public class Bowls : Module {
 		if(!Running) return;
 		GameTime += Time.deltaTime;
 
-		Safeway.Draw();
-		if(Safeway.GetPoint01(1.0F).y > TargetGrand_Face.transform.position.y)
+		Safeway.Draw3D();
+		if(DistanceAlongPath() == 1.0F)
 		{
 			//WIN
 			StartCoroutine(Win());
 			return;
 		}
 
-		if(DistanceFromSafeway() > Safeway_Threshold)
+		if(DistanceFromSafeway() > Safeway_Threshold/20)
 		{
 			Lose();
 		}
@@ -146,7 +151,7 @@ public class Bowls : Module {
 		Stopped = Input.GetMouseButton(0);
 
 		float moveinc = MoveSpeed_inc;
-		moveinc *= Mathf.Clamp(1.0F + Vector2.Distance(BalancePoint, TargetGrand_Face.GetUIPosition())/4,
+		moveinc *= Mathf.Clamp(1.0F + Vector3.Distance(BalancePoint, TargetGrand_Face.pos)/4,
 								0.7F, 1.6F);
 
 		MoveSpeed_actual += Stopped ? -MoveSpeed_actual/2 : moveinc;
@@ -157,58 +162,60 @@ public class Bowls : Module {
 		float MoveSpeed_factor = MoveSpeed_actual / MoveSpeed;
 		if(!Stopped)
 		{
-			BalancePoint = Safeway.GetPoint01(DistanceAlongPath());
-			Sway_CurrentVelocity = (BalancePoint -  TargetGrand_Face.GetUIPosition());
+			BalancePoint = Safeway.GetPoint3D01(DistanceAlongPath());
+			Sway_CurrentVelocity = (BalancePoint -  MOB[1].pos);
 
 			Rotation();
-
-			if((Sway_Timer-=Time.deltaTime) < 0.0F)
-			{
-				Sway_Extra = (Random.value - Random.value) * 7;
-				Sway_Timer = Random.Range(Sway_TimeBracket.x, Sway_TimeBracket.y);
-			}
 
 			if(Sway_CurrentVelocity == Vector3.zero) 
 			{
 				Sway_CurrentVelocity = CrossVelocity * (Random.value - Random.value);
 			}
 			Sway_CurrentVelocity.Normalize();
-			Sway_Speed = Vector2.Distance(BalancePoint, 
-				TargetGrand_Face.GetUIPosition())*(MoveSpeed_factor+0.8F);
+			Sway_Speed = Vector3.Distance(BalancePoint, 
+				MOB[1].pos)*(MoveSpeed_factor+0.2F);
 
-			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.8f, Control_Speed * (0.2F + 0.06F * MoveSpeed_factor));
+			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.0f, Control_Speed * (0.05F + 0.02F * MoveSpeed_factor));
 			Sway_CurrentVelocity.y = 0.0F;
+			Sway_CurrentVelocity.z = 0.0F;
 			Control_Velocity.y = 0.0F;
+			Control_Velocity.z = 0.0F;
 
-			Vector3 finalpos = TargetGrand_Face.transform.position;
+			Vector3 finalpos = MOB[1].transform.position;
 			finalpos -= Sway_CurrentVelocity * Sway_Speed * Time.deltaTime;
 			finalpos += Control_Velocity * Control_Speed * Time.deltaTime;	
-			TargetGrand_Face.transform.position = finalpos;
+			MOB[1].transform.position = finalpos;
 		}
 
-		Vector3 fpos =  TargetGrand_Face.transform.localPosition;
-		fpos.y = 0.0F + (MoveSpeed_factor * 100);
+		//Vector3 fpos =  MOB[1].transform.localPosition;
+		//fpos.y = 0.0F + (MoveSpeed_factor * 100);
 
-		TargetGrand_Face.transform.localPosition = Vector3.Lerp(
-			TargetGrand_Face.transform.localPosition,
-			fpos,
-			Time.deltaTime * 5);
+		//MOB[1].transform.localPosition = Vector3.Lerp(
+		//	MOB[1].transform.localPosition,
+		//	fpos,
+		//	Time.deltaTime * 5);
 	}
 
 	public void Rotation()
 	{
-		Vector2 v = (Safeway.GetPoint01(DistanceAlongPath()+0.1F) - Safeway.GetPoint01(DistanceAlongPath())).normalized;
+		if((Sway_Timer-=Time.deltaTime) < 0.0F)
+		{
+			Sway_Extra = (Random.value - Random.value) * 10;
+			Sway_Timer = Random.Range(Sway_TimeBracket.x, Sway_TimeBracket.y);
+		}
+
+		Vector3 v = (Safeway.GetPoint3D01(DistanceAlongPath()+0.1F) - Safeway.GetPoint3D01(DistanceAlongPath())).normalized;
 		
 		float rot = v.x*5;
 
-		rot += Sway_CurrentVelocity.x*0.7F;
+		rot += Sway_CurrentVelocity.x * Sway_Speed * 0.7F;
 		rot += Sway_Extra;
-		rot += Control_Velocity.x /2;
-		rot = Mathf.Clamp(rot, -65, 65);
+		rot += Control_Velocity.x * 15;
+		rot = Mathf.Clamp(rot, -60, 60);
 		
-		TargetGrand_Face.transform.rotation = Quaternion.Slerp(
-			TargetGrand_Face.transform.rotation,
-			Quaternion.Euler(0.0F,0.0F, rot),
+		MOB[1].transform.rotation = Quaternion.Slerp(
+			MOB[1].transform.rotation,
+			Quaternion.Euler(-18.0F,0.0F, rot),
 			Time.deltaTime * 10
 		);
 	}
@@ -217,7 +224,7 @@ public class Bowls : Module {
 	{
 		Running = false;
 
-		TargetGrand_Face.transform.position = EndPoint.position;
+		MOB[1].transform.position = EndPoint.position;
 		EndInfo.TweenActive(true);
 		EndInfo.Txt[0].text = "SAFE!";
 
@@ -247,8 +254,8 @@ public class Bowls : Module {
 	{
 		Running = false;
 
-		TargetGrand_Face.transform.rotation = Quaternion.Slerp(
-			TargetGrand_Face.transform.rotation,
+		MOB[1].transform.rotation = Quaternion.Slerp(
+			MOB[1].transform.rotation,
 			Quaternion.Euler(0.0F,0.0F, Sway_CurrentVelocity.x*90),
 				Time.deltaTime * 60);
 		EndInfo.TweenActive(true);
@@ -260,7 +267,7 @@ public class Bowls : Module {
 	private Vector3 Pathway_init;
 	public override void InitUI()
 	{
-		Pathway = MUI["pathway"];
+		Pathway = MOB["pathway"];
 		Pathway_init = Pathway.transform.position;
 
 		EndButton = MUI["reset"];
@@ -280,7 +287,8 @@ public class Bowls : Module {
 		this.gameObject.SetActive(true);
 		yield return StartCoroutine(Load());
 		
-		MUI.SetActive(true);
+		//MUI.SetActive(true);
+		MOB.SetActive(true);
 		GameManager.UI.PermUI["exit"].TweenActive(true);
 		GameManager.UI.PermUI["exit"].ClearActions();
 		GameManager.UI.PermUI["exit"].AddAction(UIAction.MouseUp, () =>
@@ -300,7 +308,7 @@ public class Bowls : Module {
 
 	public override void Clear()
 	{
-		FaceParent.DestroyChildren();
+		MOB[1].DestroyChildren();
 		VectorLine.Destroy(ref Safeway);
 		for(int i = 0; i < MiddlePoints.Length; i++)
 		{
@@ -360,14 +368,16 @@ public class Bowls : Module {
 
 		if(TargetGrand == null) TargetGrand = GameManager.Generator.Generate(0);
 		
-		TargetGrand_Face = GameManager.Generator.GenerateFace(TargetGrand);
-		FaceParent.AddChild(TargetGrand_Face);
+		TargetGrand_Face = GameManager.Generator.GenerateNewFace(TargetGrand.Data);
+		MOB[1].T.rotation = Quaternion.Euler(-18,0,0);
+		MOB[1].T.localPosition = Vector3.zero;
+		MOB[1].AddChild(TargetGrand_Face);
 
-		TargetGrand_Face.transform.localPosition = Vector3.zero;
-		BalancePoint = TargetGrand_Face.GetUIPosition();
+		TargetGrand_Face.transform.localPosition = Vector3.up * 4;
+		BalancePoint = Vector3.zero;
 
 
-		EndPoint.position = StartPoint.position + Vector3.down * TotalDistance;
+		EndPoint.position = StartPoint.position - StartPoint.up * TotalDistance;
 
 		MiddlePoints = new Transform[PathPoints];
 
@@ -382,44 +392,48 @@ public class Bowls : Module {
 			MiddlePoints[i] = g.transform;
 			MiddlePoints[i].position = Vector3.Lerp(StartPoint.position, EndPoint.position,
 													Mathf.Clamp(pathrate + (pathrate * i), 0.0F, 1.0F));
-			MiddlePoints[i].position += CrossVelocity * ((Random.value - Random.value) * Screen.width/2);
-			MiddlePoints[i].SetParent(MUI["pathway"].transform);
+			MiddlePoints[i].position += CrossVelocity * ((Random.value - Random.value)*10);
+			MiddlePoints[i].SetParent(MOB[0].transform);
 		}
-
-		List<Vector2> splinepoints = new List<Vector2>();
+		List<float> splinewidths = new List<float>();
+		List<Vector3> splinepoints = new List<Vector3>();
 		splinepoints.Add(StartPoint.localPosition);
+		splinewidths.Add(Safeway_Threshold);
 	 	for(int i = 0; i < MiddlePoints.Length; i++)
 	 	{
 	 		splinepoints.Add(MiddlePoints[i].localPosition);
+	 		splinewidths.Add(Safeway_Threshold/i+1);
 	 	}
 	 	splinepoints.Add(EndPoint.localPosition);
+	 	splinewidths.Add(0.0F);
 	 	VectorLine.Destroy(ref Safeway);
 	 
 		int mvmt_segments = 10 + MiddlePoints.Length * 10;
 
-	 	Safeway = new VectorLine("Safeway Path", new List<Vector2>(mvmt_segments+1), Safeway_Threshold_actual*1.2F, LineType.Continuous);
+	 	Safeway = new VectorLine("Safeway Path", new List<Vector3>(mvmt_segments+1), Safeway_Threshold_actual*1.2F, LineType.Continuous);
 		Safeway.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, false);
-		Safeway.drawTransform = MUI["pathway"].transform;
-		Safeway.SetCanvas(UIObj._UICanvas);
-		Safeway.rectTransform.SetParent(MUI[2].transform);
+		Safeway.drawTransform = MOB[0].transform;
+		//Safeway.SetCanvas(UIObj._UICanvas);
+		//Safeway.rectTransform.SetParent(MUI[2].transform);
 		Safeway.SetColor(PathColor);
+		//Safeway.SetWidths(splinewidths);
 		Safeway.joins = Joins.Fill;
 
 		int objnum = 20 + MiddlePoints.Length * 5;
-		PathInstances = new UIObj[objnum];
+		//PathInstances = new UIObj[objnum];
 
 		float point = 0.0F;
 		float objratio = 0.9F/objnum;
-		for(int i = 0; i < objnum; i++)
+		/*for(int i = 0; i < objnum; i++)
 		{
 			PathInstances[i] = (UIObj) Instantiate(PathPrefabs[Random.Range(0, PathPrefabs.Length)]);
 			PathInstances[i].SetParent(MUI["pathway"]);
 
 			point += Random.Range(objratio/1.5F, objratio*1.5F);
 
-			Vector2 pos = Safeway.GetPoint01(point);
-			Vector2 nextpos = Safeway.GetPoint01(point+0.1F);
-			Vector2 vel = (nextpos - pos).normalized;
+			Vector3 pos = Safeway.GetPoint3D01(point);
+			Vector3 nextpos = Safeway.GetPoint3D01(point+0.1F);
+			Vector3 vel = (nextpos - pos).normalized;
 
 			Vector3 cross = Vector3.Cross(vel, -Vector3.forward).normalized;
 			float xd = cross.x * Safeway_Threshold_actual * 1.1F;
@@ -429,8 +443,8 @@ public class Bowls : Module {
 			
 			PathInstances[i].transform.LookAt(pos + vel);
 			PathInstances[i].transform.rotation *= Quaternion.Euler(0,90,90);
-		}
-		Safeway.Draw();
+		}*/
+		Safeway.Draw3DAuto();
 		yield return null;
 	}
 

@@ -14,12 +14,8 @@ namespace Filthworks
 		public SVGRenderer [] SVG;
 		public TextMeshPro [] Text;
 
-		private Transform _trans;
-		public Transform T {get{if(_trans == null) _trans = this.transform;	return _trans;}}
 		
 
-
-		
 		public override void Init(int ind, FOBJ p, params float [] args)
 		{
 			base.Init(ind, p, args);

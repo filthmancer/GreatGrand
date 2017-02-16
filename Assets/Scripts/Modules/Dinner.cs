@@ -150,6 +150,7 @@ public class Dinner : Module {
 		yield return StartCoroutine(Load());
 		
 		MUI.SetActive(true);
+		MOB.SetActive(true);
 		GameManager.UI.PermUI["exit"].TweenActive(true);
 		GameManager.UI.PermUI["exit"].ClearActions();
 		GameManager.UI.PermUI["exit"].AddAction(UIAction.MouseUp, () =>
@@ -171,7 +172,7 @@ public class Dinner : Module {
 
 	public virtual Sequence OpeningSequence(IntVector v)
 	{
-		UIObj mui = MUI;
+		
 		Transform start = GameManager.UI.ModuleRight;
 		Transform end = GameManager.UI.ModuleTarget;
 
@@ -179,9 +180,9 @@ public class Dinner : Module {
 		else if(v.x == -1) start = GameManager.UI.ModuleLeft;
 		else start = GameManager.UI.ModuleRight;
 
-		mui.transform.position = start.position;
+		MOB.transform.position = start.position;
 
-		Sequence s = Tweens.SwoopTo(mui.transform, end.position);
+		Sequence s = Tweens.SwoopTo(MOB.transform, end.position);
 
 		Sequence f = DOTween.Sequence();
 		f.Append(MUI[7].transform.DOLocalRotate(new Vector3(0, 25,0), 0.1F));

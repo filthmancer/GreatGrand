@@ -73,6 +73,7 @@ public class Module : MonoBehaviour {
 		yield return StartCoroutine(Load());
 		
 		MUI.SetActive(true);
+		MOB.SetActive(true);
 		if(entry)
 		{
 			Sequence f = OpeningSequence(v);
@@ -84,7 +85,7 @@ public class Module : MonoBehaviour {
 
 	public virtual Sequence OpeningSequence(IntVector v)
 	{
-		UIObj mui = MUI;
+		//UIObj mui = MUI;
 		Transform start = GameManager.UI.ModuleRight;
 		Transform end = GameManager.UI.ModuleTarget;
 
@@ -92,21 +93,21 @@ public class Module : MonoBehaviour {
 		else if(v.x == -1) start = GameManager.UI.ModuleLeft;
 		else start = GameManager.UI.ModuleRight;
 
-		mui.transform.position = start.position;
+		MOB.transform.position = start.position;
 
-		return Tweens.SwoopTo(mui.transform, end.position);
+		return Tweens.SwoopTo(MOB.transform, end.position);
 	}
 
 	public virtual Sequence ClosingSequence(IntVector v)
 	{
-		UIObj mui = MUI;
+		//UIObj mui = MUI;
 		Transform end = GameManager.UI.ModuleRight;
 
 		if(v.x == 1) end = GameManager.UI.ModuleRight;
 		else if(v.x == -1) end = GameManager.UI.ModuleLeft;
 		else end = GameManager.UI.ModuleRight;
 
-		return Tweens.SwoopTo(mui.transform, end.position);
+		return Tweens.SwoopTo(MOB.transform, end.position);
 	}
 
 
