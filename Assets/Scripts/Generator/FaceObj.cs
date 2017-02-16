@@ -373,6 +373,15 @@ public class FaceObjInfoContainer
 		_index = 0;
 	}
 
+	public FaceInfo GetCurrent()
+	{
+		FaceInfo f = new FaceInfo(Index, Colour);
+		f._Position = _Position;
+		f._Rotation = _Rotation;
+		f._Scale = _Scale;
+		return f;
+	}
+
 	public Vector3 _Position;
 	public Vector3 _Rotation;
 	public Vector3 _Scale = Vector3.one;

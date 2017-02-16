@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 1ee4bf40fc10fbc43acb09677ba917de
+timeCreated: 1485569362
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 128 161\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-1016,-431)\">\n        <g>\n            <path
+    d=\"M1080.07,431.644C1038.03,444.051 1032.81,495.732 1048.19,540.399C1021.15,541.831
+    1014.54,555.61 1017.2,561.533C1021.02,570.062 1028.96,571.613 1043.2,571.613C1049.32,583.935
+    1061.08,591.931 1080.07,591.931\" style=\"fill:url(#_Radial1);fill-rule:nonzero;\"/>\n
+    \           <path d=\"M1080.07,431.644C1122.1,444.051 1127.32,495.732 1111.94,540.399C1138.98,541.831
+    1145.59,555.61 1142.93,561.533C1139.11,570.062 1131.17,571.613 1116.93,571.613C1110.81,583.935
+    1099.06,591.931 1080.07,591.931\" style=\"fill:url(#_Radial2);fill-rule:nonzero;\"/>\n
+    \       </g>\n    </g>\n    <defs>\n        <radialGradient id=\"_Radial1\" cx=\"0\"
+    cy=\"0\" r=\"1\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(98.2339,0,0,75.0653,1080.38,579.122)\"><stop
+    offset=\"0%\" style=\"stop-color:rgb(231,231,231);stop-opacity:1\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(190,190,190);stop-opacity:1\"/></radialGradient>\n        <radialGradient
+    id=\"_Radial2\" cx=\"0\" cy=\"0\" r=\"1\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(98.2339,0,0,75.0653,1080.38,579.122)\"><stop
+    offset=\"0%\" style=\"stop-color:rgb(231,231,231);stop-opacity:1\"/><stop offset=\"100%\"
+    style=\"stop-color:rgb(190,190,190);stop-opacity:1\"/></radialGradient>\n    </defs>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

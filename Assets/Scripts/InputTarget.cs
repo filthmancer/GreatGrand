@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InputTarget : MonoBehaviour {
-
+public abstract class InputTarget : MonoBehaviour {
 	public virtual void Release(Vector3 pos)
 	{
 

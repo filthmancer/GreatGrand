@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using Vectrosity;
 using DG.Tweening;
 using Scumworks;
+using Filthworks;
 
 public class GameData : MonoBehaviour {
 
 	public WorldResources World;
 	public List<GrandData> Grands;
 
-	public UIObj [] Frames;
-	public UIObj RandomFrame()
+	public FIRL [] Frames;
+	public FIRL RandomFrame()
 	{
 		return Frames[Random.Range(0, Frames.Length)];
 	}
@@ -351,6 +352,7 @@ public class GrandData
 	public Role RoleType;
 	public GreatGrand GrandObj;
 	public FaceObj Face;
+	public List<Face> Faces = new List<Face>();
 	public GrandInfo Info;
 
 	public Resource Smiles, Grumps;

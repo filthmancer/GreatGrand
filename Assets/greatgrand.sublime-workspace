@@ -188,50 +188,34 @@
 	"buffers":
 	[
 		{
+			"file": "Scripts/Face_Obj.cs",
+			"settings":
+			{
+				"buffer_size": 1452,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/Face.cs",
+			"settings":
+			{
+				"buffer_size": 2124,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/Generator/GreatGrand.cs",
+			"settings":
+			{
+				"buffer_size": 9938,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "Scripts/GameManager.cs",
 			"settings":
 			{
-				"buffer_size": 7486,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/UIManager.cs",
-			"settings":
-			{
-				"buffer_size": 17490,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/GameData.cs",
-			"settings":
-			{
-				"buffer_size": 18006,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/Modules/Bowls.cs",
-			"settings":
-			{
-				"buffer_size": 12457,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/Modules/Dinner.cs",
-			"settings":
-			{
-				"buffer_size": 17385,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/Modules/Module.cs",
-			"settings":
-			{
-				"buffer_size": 3040,
+				"buffer_size": 7651,
 				"line_ending": "Windows"
 			}
 		},
@@ -239,16 +223,40 @@
 			"file": "Scripts/Modules/Menu.cs",
 			"settings":
 			{
-				"buffer_size": 4928,
+				"buffer_size": 5105,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Scripts/Generator/Generator.cs",
+			"file": "Scripts/GameData.cs",
 			"settings":
 			{
-				"buffer_size": 11278,
+				"buffer_size": 18134,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/Modules/Module.cs",
+			"settings":
+			{
+				"buffer_size": 3077,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/Filthworks/FIRL.cs",
+			"settings":
+			{
+				"buffer_size": 702,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scripts/Filthworks/FOBJ.cs",
+			"settings":
+			{
+				"buffer_size": 1587,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -258,12 +266,36 @@
 				"buffer_size": 4201,
 				"line_ending": "Windows"
 			}
+		},
+		{
+			"file": "Scripts/UI/UIManager.cs",
+			"settings":
+			{
+				"buffer_size": 17267,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/UI/UIObj.cs",
+			"settings":
+			{
+				"buffer_size": 13686,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Scripts/Generator/Generator.cs",
+			"settings":
+			{
+				"buffer_size": 13045,
+				"line_ending": "Windows"
+			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 104.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
@@ -296,18 +328,27 @@
 	},
 	"file_history":
 	[
-		"/C/Projects/greatgrand/Assets/Scripts/UIObj.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Modules/Bowls.cs",
-		"/C/Projects/greatgrand/Assets/SaveData/SaveData.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Wobj.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/GameData.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Modules/Module.cs",
+		"/C/Projects/greatgrand/Assets/Editor/GrandGen.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UI/UIObj.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/InputTarget.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Face.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Face_Parent.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Face_Object.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UIManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Bowls.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Modules/Dinner.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Module.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Utility.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/UIObj.cs",
+		"/C/Projects/greatgrand/Assets/SaveData/SaveData.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Generator/GreatGrand.cs",
 		"/C/Users/Matt/AppData/LocalLow/DefaultCompany/GreatGrand/SaveData.uml",
-		"/C/Projects/greatgrand/Assets/Scripts/Generator/FaceObj.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/GameData.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/UIManager.cs",
 		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/C#/Comments.tmPreferences",
 		"/C/Users/Matt/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
@@ -315,14 +356,11 @@
 		"/C/Projects/greatgrand/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll",
 		"/C/Projects/greatgrand/Assets/Scripts/TableManager.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/UIAlert.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Generator/GrumpObj.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Modules/DefaultMod.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Scumworks.cs",
-		"/C/Projects/greatgrand/Assets/Editor/GrandGen.cs",
 		"/C/Projects/matchima/Matchima!/Assets/Scripts/Utilities/_GameSaveLoad.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Utilities/Utility.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/Example/SaveDataExample.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/ColorHSB.cs",
 		"/C/Projects/greatgrand/Assets/SaveData/readme.txt",
@@ -368,9 +406,7 @@
 		"/C/Projects/greatgrand/Assets/Generator/FaceObj.cs",
 		"/C/Projects/greatgrand/Assets/What to import!.txt",
 		"/C/Projects/greatgrand/Assets/Generator/GrumpObj.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/InputTarget.cs",
 		"/C/Projects/unitystation/Assets/scripts/UI/ControlChat.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Face.cs",
 		"/C/Users/Matt/Downloads/mxrj001@hotmail.com.Photon-vX.free.100-ccu.license"
 	],
 	"find":
@@ -379,7 +415,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"C:\\Projects\\greatgrand\\Assets",
@@ -391,6 +427,78 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Pup",
+			"Child",
+			"Parent",
+			"GameObject",
+			"FIRL",
+			"Svg",
+			"SVG",
+			"Svg",
+			"_Name",
+			"Name",
+			"SVGImage",
+			"TextMeshProUGUI",
+			"Txt",
+			"Init",
+			"UIObj",
+			"MUI",
+			"Wobj",
+			"ObjectContainer",
+			"Frames[i]",
+			"UIObj",
+			"Repaint",
+			");\n",
+			"GrandInfo",
+			"Randomise",
+			"RandomiseOffsetColours",
+			"Ear",
+			"Base",
+			"final",
+			"GRandomise",
+			"TargetGrand",
+			"TargetData",
+			"GrandData",
+			"TargetGrand",
+			"FaceObjInfo",
+			"final",
+			"Current",
+			"Randomise",
+			"FOA",
+			"Generate",
+			"Face",
+			"private",
+			"Ear",
+			"Eye_Left",
+			"_",
+			"Eye_",
+			"Parent",
+			"Nose",
+			"final.Child.Nose = Instantiate(Nose[targ.Info.Nose.Index].Prefab).GetComponent<Face_Obj>();",
+			"Hair",
+			"Ear",
+			"Eye",
+			"SVG",
+			"targ",
+			"final",
+			"Data",
+			"targ",
+			"Info",
+			"Brow_",
+			"Ear_",
+			"Eye_",
+			"Image",
+			"FaceParent",
+			"Element",
+			"FaceInfo",
+			"Setup",
+			"Hair",
+			"Eye",
+			"FaceObj",
+			"GrandInfo",
+			"Parent",
+			"arent",
+			",",
 			"CheckPopulation",
 			"OpeningSequence",
 			"baserate",
@@ -446,79 +554,7 @@
 			"g",
 			"Grand",
 			"amt",
-			"title",
-			"State_init",
-			"IgnoreInput",
-			"g.Grand.Info.Name",
-			"is",
-			"for",
-			"[i]",
-			"Alert",
-			"GrandAlert",
-			"res",
-			"HungerAlert",
-			"g.Grand.Hunger",
-			"Fitness",
-			"alert.Child[0].DestroyChildren();",
-			"isAlive = false;",
-			"yield return new WaitForSeconds(0.3F);",
-			"alert.TweenActive(false);",
-			"govletter",
-			"g[i]",
-			"List<GrandAlert>",
-			"Alert",
-			"Safeway_Threshold_actual",
-			"Safeway_Threshold",
-			"Resource",
-			"starttext",
-			"rate",
-			"0.2F",
-			"Init",
-			"WorldRes",
-			"LastTime",
-			"RepLast",
-			"ageup",
-			"Funds",
-			" + \"\"",
-			"StateWhenPressed",
-			"Color",
-			"MUI[0].Child",
-			"MUI[0].Child.Length",
-			"Enter",
-			"Intro_String",
-			"GetValue",
-			"Generate",
-			"TargetGrand",
-			"50",
-			"Hunger",
-			"/2F",
-			"GrumpAlert",
-			"SetTarget",
-			"SetupFace",
-			"2.0F",
-			"x",
-			"alert",
-			"Role",
-			"GrandData",
-			"g.",
-			"Hunger",
-			"Quote",
-			"100",
-			"Hunger",
-			"ts[i]",
-			"FrameObj",
-			"grand",
-			"hunger",
-			"alerts",
-			"GrandAlert",
-			"i",
-			"grand",
-			"Grand",
-			"grand",
-			"FundsDaily",
-			"ResourceAlert",
-			"Resource",
-			"Init"
+			"title"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -540,23 +576,23 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scripts/GameManager.cs",
+					"file": "Scripts/Face_Obj.cs",
 					"settings":
 					{
-						"buffer_size": 7486,
+						"buffer_size": 1452,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6147,
-								6147
+								1412,
+								1412
 							]
 						],
 						"settings":
@@ -565,25 +601,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4259.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scripts/UIManager.cs",
+					"file": "Scripts/Face.cs",
 					"settings":
 					{
-						"buffer_size": 17490,
+						"buffer_size": 2124,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14586,
-								14586
+								492,
+								492
 							]
 						],
 						"settings":
@@ -592,25 +628,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9332.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Scripts/GameData.cs",
+					"file": "Scripts/Generator/GreatGrand.cs",
 					"settings":
 					{
-						"buffer_size": 18006,
+						"buffer_size": 9938,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9962,
-								9962
+								4099,
+								4099
 							]
 						],
 						"settings":
@@ -618,26 +654,26 @@
 							"syntax": "Packages/C#/C#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 21.0,
-						"translation.y": 6406.0,
+						"translation.x": 0.0,
+						"translation.y": 3138.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Scripts/Modules/Bowls.cs",
+					"file": "Scripts/GameManager.cs",
 					"settings":
 					{
-						"buffer_size": 12457,
+						"buffer_size": 7651,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11260,
-								11260
+								2692,
+								2692
 							]
 						],
 						"settings":
@@ -646,25 +682,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1357.0,
+						"translation.y": 1368.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "Scripts/Modules/Dinner.cs",
+					"file": "Scripts/Modules/Menu.cs",
 					"settings":
 					{
-						"buffer_size": 17385,
+						"buffer_size": 5105,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11339,
-								11339
+								1904,
+								1904
 							]
 						],
 						"settings":
@@ -673,25 +709,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7869.0,
+						"translation.y": 513.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "Scripts/Modules/Module.cs",
+					"file": "Scripts/GameData.cs",
 					"settings":
 					{
-						"buffer_size": 3040,
+						"buffer_size": 18134,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								790,
-								790
+								152,
+								152
 							]
 						],
 						"settings":
@@ -700,25 +736,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 570.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "Scripts/Modules/Menu.cs",
+					"file": "Scripts/Modules/Module.cs",
 					"settings":
 					{
-						"buffer_size": 4928,
+						"buffer_size": 3077,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4285,
-								4285
+								115,
+								115
 							]
 						],
 						"settings":
@@ -727,57 +763,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2166.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "Scripts/Generator/Generator.cs",
+					"file": "Scripts/Filthworks/FIRL.cs",
 					"settings":
 					{
-						"buffer_size": 11278,
+						"buffer_size": 702,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2067,
-								2067
-							],
-							[
-								2088,
-								2088
-							],
-							[
-								2094,
-								2094
-							],
-							[
-								2204,
-								2204
-							],
-							[
-								2225,
-								2225
-							],
-							[
-								2232,
-								2232
-							],
-							[
-								2318,
-								2318
-							],
-							[
-								2339,
-								2339
-							],
-							[
-								2346,
-								2346
+								153,
+								153
 							]
 						],
 						"settings":
@@ -786,13 +790,40 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 456.0,
+						"translation.y": 120.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 8,
+					"file": "Scripts/Filthworks/FOBJ.cs",
+					"settings":
+					{
+						"buffer_size": 1587,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								267,
+								267
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "Scripts/Utilities/Utility.cs",
 					"settings":
 					{
@@ -803,8 +834,8 @@
 						"selection":
 						[
 							[
-								1361,
-								1361
+								1403,
+								1409
 							]
 						],
 						"settings":
@@ -814,6 +845,87 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "Scripts/UI/UIManager.cs",
+					"settings":
+					{
+						"buffer_size": 17267,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15034,
+								15034
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 9926.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "Scripts/UI/UIObj.cs",
+					"settings":
+					{
+						"buffer_size": 13686,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2833,
+								2663
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1425.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "Scripts/Generator/Generator.cs",
+					"settings":
+					{
+						"buffer_size": 13045,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5767,
+								5767
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2668.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -863,16 +975,52 @@
 		"selected_items":
 		[
 			[
+				"gener",
+				"Main/Generator/Generator.cs"
+			],
+			[
+				"uiobj",
+				"Main/UI/UIObj.cs"
+			],
+			[
+				"uimana",
+				"Main/UI/UIManager.cs"
+			],
+			[
 				"utility",
 				"Utilities/Utility.cs"
 			],
 			[
-				"generat",
-				"Main/Generator/Generator.cs"
+				"modul",
+				"Main/Modules/Module.cs"
 			],
 			[
 				"menu",
 				"Main/Modules/Menu.cs"
+			],
+			[
+				"faceobj",
+				"Main/Generator/FaceObj.cs"
+			],
+			[
+				"gameman",
+				"Main/GameManager.cs"
+			],
+			[
+				"gamedata",
+				"Main/GameData.cs"
+			],
+			[
+				"greatgran",
+				"Main/Generator/GreatGrand.cs"
+			],
+			[
+				"inputtar",
+				"Main/InputTarget.cs"
+			],
+			[
+				"generat",
+				"Main/Generator/Generator.cs"
 			],
 			[
 				"module",
@@ -883,10 +1031,6 @@
 				"Main/Modules/Dinner.cs"
 			],
 			[
-				"uiobj",
-				"Main/UIObj.cs"
-			],
-			[
 				"bowls",
 				"Main/Modules/Bowls.cs"
 			],
@@ -895,16 +1039,8 @@
 				"Main/Generator/GreatGrand.cs"
 			],
 			[
-				"gamedata",
-				"Main/GameData.cs"
-			],
-			[
 				"gameda",
 				"Main/GameData.cs"
-			],
-			[
-				"modul",
-				"Main/Modules/Module.cs"
 			],
 			[
 				"dinn",
@@ -913,10 +1049,6 @@
 			[
 				"ui",
 				"Main/UIManager.cs"
-			],
-			[
-				"gameman",
-				"Main/GameManager.cs"
 			],
 			[
 				"gamemana",
@@ -947,10 +1079,6 @@
 				"Main/GameData.cs"
 			],
 			[
-				"gener",
-				"Main/Generator/Generator.cs"
-			],
-			[
 				"uiob",
 				"Main/UIObj.cs"
 			],
@@ -967,20 +1095,12 @@
 				"Main/TableManager.cs"
 			],
 			[
-				"uimana",
-				"Main/UIManager.cs"
-			],
-			[
 				"gamemanager",
 				"Main/GameManager.cs"
 			],
 			[
 				"gamedat",
 				"Main/GameData.cs"
-			],
-			[
-				"faceobj",
-				"Main/Generator/FaceObj.cs"
 			],
 			[
 				"tablemanag",

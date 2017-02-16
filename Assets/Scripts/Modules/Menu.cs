@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Filthworks;
 
 public class Menu : Module {
 
@@ -18,8 +19,8 @@ public class Menu : Module {
 		}
 	}
 
-	FaceObj [] Faces;
-	UIObj [] Frames;
+	Face [] Faces;
+	FIRL [] Frames;
 
 	public override void InitUI()
 	{
@@ -44,7 +45,7 @@ public class Menu : Module {
 	private int lastgrumps = 0, lastsmiles = 0;
 	public override void ControlledUpdate()
 	{
-		/*if(!GameManager.Paused && !GameManager.IgnoreInput)
+		if(!GameManager.Paused && !GameManager.IgnoreInput)
 		{
 			Vector2 v = GameManager._Input.GetScroll();
 			v.x = 0.0F;
@@ -52,7 +53,8 @@ public class Menu : Module {
 			Vector2 newpos = menuobj.GetUIPosition() + v;
 			newpos.y = Mathf.Clamp(newpos.y, ScrollTrack.transform.position.y, Screen.height/2);
 			menuobj.SetUIPosition(newpos);	
-		}*/
+			MOB.transform.position += new Vector3(v.x, v.y/4, 0.0F);
+		}
 
 		if(ginfo != null && ginfo_target != null)
 		{
@@ -80,9 +82,8 @@ public class Menu : Module {
 	{
 		GameManager.instance.CheckPopulation();
         int framenum = GameManager.WorldRes.Population;
-        print(framenum);
-		Faces = new FaceObj[framenum];
-		Frames = new UIObj[framenum];
+		Faces = new Face[framenum];
+		Frames = new FIRL[framenum];
 
 		List<GrandData> allgrands = new List<GrandData>();
 		allgrands.AddRange(GameManager.instance.Grands);
@@ -91,19 +92,22 @@ public class Menu : Module {
 		{
 			if(allgrands.Count <= 0) continue;
 			int num = Random.Range(0, allgrands.Count);
-			GreatGrand f = allgrands[num].GrandObj;
-			if(f == null) continue;
-			Frames[i] = (UIObj) Instantiate(GameManager.Data.RandomFrame());
-			Frames[i].SetParent(MUI[0]);
-			Frames[i].transform.position = MUI[0].Img[i].transform.position;
-			Frames[i].Svg[1].color = f.Info.C_Eye;
-			Frames[i].Svg[0].color = GameManager.Generator.RandomSkin();
 
-			Faces[i] = GameManager.Generator.GenerateFace(f);
-			Frames[i][0].AddChild(Faces[i]);
-			Frames[i].Txt[0].text = f.Info.Name.ToUpper();
-			Faces[i].transform.position = Frames[i][0].transform.position;
-			SetupFace(Faces[i], Frames[i], f);
+			GrandData f = allgrands[num];
+			if(f == null) continue;
+
+			Frames[i] = Instantiate(GameManager.Data.RandomFrame());
+			Frames[i].transform.SetParent(MOB[0].transform);
+			Frames[i].transform.position = MOB[0][i].transform.position;
+			//Frames[i].Svg[1].color = f.Info.C_Eye;
+			//Frames[i].Svg[0].color = GameManager.Generator.RandomSkin();
+
+			Faces[i] = GameManager.Generator.GenerateNewFace(f);
+			//Faces[i].transform.SetParent(Frames[i].transform);
+			Frames[i].Child[0].AddChild(Faces[i]);
+			//Frames[i].Txt[0].text = f.Info.Name.ToUpper();
+			Faces[i].transform.localPosition = Vector3.zero;
+			//SetupFace(Faces[i], Frames[i], f);
 
 			allgrands.RemoveAt(num);
 
@@ -176,8 +180,8 @@ public class Menu : Module {
 	{
 		for(int i = 0; i < Frames.Length; i++)
 		{
-			Frames[i].Destroy();
-			Faces[i].Destroy();
+			GameObject.Destroy(Frames[i].gameObject);
+			Destroy(Faces[i].gameObject);
 		}
 	}
 

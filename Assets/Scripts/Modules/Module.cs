@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Filthworks;
 
 public class Module : MonoBehaviour {
 	public int Index = 0;
 	public bool Running = false;
 
 	public UIObj MUI;
+	public FIRL MOB;
+
 	public ObjectContainer MObj;
 
 	public GreatGrand [] Grands;

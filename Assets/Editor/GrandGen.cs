@@ -61,6 +61,7 @@ public class GrandGenerator : EditorWindow {
 	void OnInspectorUpdate()
 	{
 		Repaint();
+		changes = true;
 	}
 
 	void OnGUI()
@@ -89,12 +90,9 @@ public class GrandGenerator : EditorWindow {
 			time_total = facenum * time_per_face;
 			time_init = (float) EditorApplication.timeSinceStartup;	*/	
 			Gen.Destroy();
-			Gen.TargetGrand = Gen.Generate(0);
-			FaceObj f = Gen.GenerateFace(Gen.TargetGrand);
-			f.transform.localRotation = Quaternion.identity;
-			f.transform.SetParent(GameManager.GetCanvas());
-			f.transform.localScale = Vector3.one;
-			f.transform.localRotation = Quaternion.identity;
+			Gen.TargetData = Gen.EditorGenerate();
+
+			Gen.GenerateNewFace(Gen.TargetData);
 		}
 
 		if(progress < time_total)
@@ -116,7 +114,8 @@ public class GrandGenerator : EditorWindow {
 		if(GUILayout.Button("Randomise"))
 		{
 			Gen.Destroy();
-			Gen.TargetGrand = Gen.Randomise();
+			Gen.TargetData = Gen.GenerateGrand();
+			Gen.GenerateNewFace(Gen.TargetData);
 		}
 		GUI.color = Color.white;
 
@@ -132,7 +131,6 @@ public class GrandGenerator : EditorWindow {
 		tab = GUILayout.Toolbar(tab, new string[] {"Base", "Hair","Jaw","Eyes", 
 													"Nose", "Brows", "Ears"});
 		FaceObjInfoContainer targ = FOA(tab);
-
 
 		if(targ == null) return; 
 
@@ -185,7 +183,6 @@ public class GrandGenerator : EditorWindow {
 				targ._Position.y = EditorGUILayout.Slider(targ._Position.y, -30.0F, 30.0F, GUILayout.Width(150));
 				EditorGUILayout.EndHorizontal();
 
-			//	targ._Position = EditorGUILayout.Vector3Field("Position", targ._Position);
 				EditorGUILayout.Space();
 
 				EditorGUILayout.BeginHorizontal();
@@ -194,14 +191,6 @@ public class GrandGenerator : EditorWindow {
 				EditorGUILayout.EndHorizontal();
 
 				EditorGUILayout.Space();
-				/*if(targ == Eye)
-				{
-					EditorGUILayout.BeginHorizontal();
-					GUILayout.Label("Pupil", GUILayout.Width(50));
-					targ._Rotation.z = EditorGUILayout.Slider("", targ._Rotation.z, -25.0F, 25.0F, GUILayout.Width(150));
-					EditorGUILayout.EndHorizontal();
-					EditorGUILayout.Space();
-				}*/
 
 				if(targ.Symm)
 				{
@@ -227,10 +216,18 @@ public class GrandGenerator : EditorWindow {
 					}
 				}
 		}
-		//Gen.CheckDifferences(Gen.TargetGrand.Face);
+		/*if(Gen.TargetData != null)
+		{
+			changes = false;
+			Gen.CheckEditorInfo(Gen.TargetData);
+			if(Gen.TargetData.Faces.Count > 0 && Gen.TargetData.Faces[0] != null)
+				 Gen.TargetData.Faces[0].Create(Gen.TargetData.Info);
+		
+		}*/
 		
 		
 	}
+	private bool changes;
 
 
 

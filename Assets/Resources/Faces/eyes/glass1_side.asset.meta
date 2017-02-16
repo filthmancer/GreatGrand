@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 034a7d55264bfee448a44eabcd672b58
+timeCreated: 1485655981
+licenseType: Free
+NativeFormatImporter:
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE
+    svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg
+    width=\"100%\" height=\"100%\" viewBox=\"0 0 196 81\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"
+    xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;\">\n
+    \   <g transform=\"matrix(1,0,0,1,-727,-365)\">\n        <g>\n            <path
+    d=\"M891.357,401.02C891.359,401.603 891.297,402.173 891.27,402.749L891.08,404.459C890.95,405.598
+    890.745,406.723 890.538,407.847C890.307,408.966 890.077,410.085 889.769,411.19C889.472,412.296
+    889.159,413.4 888.738,414.482L887.756,414.291C884.522,412.498 882.948,411.027
+    881.873,409.654C880.83,408.287 880.525,407.063 880.724,405.937C880.943,404.816
+    881.683,403.795 883.16,402.918C884.666,402.047 886.682,401.275 890.375,400.829L891.357,401.02Z\"
+    style=\"fill:rgb(86,86,86);fill-rule:nonzero;\"/>\n            <path d=\"M766.565,405.602C771.992,404.56
+    777.419,403.823 782.847,403.077C788.274,403.127 793.701,403.091 799.128,403.102L880.537,403.102C885.964,403.862
+    891.391,404.599 896.818,405.602C891.391,406.605 885.964,407.342 880.537,408.102L864.255,408.102L831.691,408.102L799.128,408.102C793.701,408.113
+    788.274,408.077 782.847,408.127C777.419,407.381 771.992,406.644 766.565,405.602\"
+    style=\"fill:rgb(86,86,86);fill-rule:nonzero;\"/>\n        </g>\n    </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

@@ -45,6 +45,13 @@ public class GameManager : MonoBehaviour {
 		else return GameObject.Find("FaceParent").GetComponent<UIObj>();
 	}
 
+	private static GameObject _worldobjects;
+	public static GameObject GetWorldObjects()
+	{
+		if(_worldobjects == null) _worldobjects = GameObject.Find("WorldObjects");
+		return _worldobjects;
+	}
+
 	public static Generator GetGenerator()
 	{
 		if(_generator == null)
@@ -128,7 +135,10 @@ public class GameManager : MonoBehaviour {
 
 		TimeChecks();
 		if(Input.GetKeyDown(KeyCode.F1)) PlayerPrefs.SetInt("FirstTime", 0);
-		if(Input.GetKeyDown(KeyCode.F2)) StartCoroutine(UI.ResourceAlert(WorldRes.Rep, 50));
+		if(Input.GetKeyDown(KeyCode.F2)) 
+		{
+			Generator.GenerateNewFace(Data.Grands[0]);
+		}
 	}
 
 	public IEnumerator StartGame()
