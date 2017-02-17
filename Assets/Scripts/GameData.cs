@@ -352,6 +352,7 @@ public class GrandData
 	public Role RoleType;
 	public GreatGrand GrandObj;
 	public FaceObj Face;
+	public Face TargetFace;
 	public List<Face> Faces = new List<Face>();
 	public GrandInfo Info;
 

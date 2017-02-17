@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vectrosity;
 using DG.Tweening;
+using Filthworks;
 
 public class Dinner : Module {
 
@@ -89,7 +90,7 @@ public class Dinner : Module {
 				if(isDragging)
 				{
 					if(drag_targ == null) drag_targ = Target.Seat;
-					_Seat n = _TableManager.NearestSeat(Input.mousePosition);
+					_Seat n = _TableManager.NearestSeat(GameManager.InputPos);
 					if(n != drag_targ)
 					{
 						drag_targ.Reset();
@@ -97,21 +98,24 @@ public class Dinner : Module {
 						drag_targ.Highlight(true);	
 					}
 
-					Vector2 npos = Vector2.Lerp(Target.Face.GetUIPosition(), Input.mousePosition, Time.deltaTime * 30);
-					Target.Face.SetUIPosition(npos);
-					Target.Face.transform.LookAt(_TableManager.TableObj.transform, Vector3.forward);
-					Target.Face.transform.rotation *= Quaternion.Euler(80, 0,180);
+					Vector3 dpos = GameManager.InputPos;
+					dpos.z = Target.TargetFace.T.position.z;
+
+					Vector3 npos = Vector3.Lerp(Target.TargetFace.pos, dpos, Time.deltaTime * 30);
+					Target.TargetFace.T.position = npos;
+					Target.TargetFace.transform.LookAt(_TableManager.TableObj.transform, Vector3.up);
+					Target.TargetFace.transform.rotation *= Quaternion.Euler(0, 180,0);
 					Target.GrumpLines(0.8F, true); 
 				}
 				else 
 				{
 					Vector3 dpos = GameManager.InputPos;
-					dpos.y = Target.Face.transform.position.y;
+					dpos.z = Target.TargetFace.transform.position.z;
 
-					Target.Face.transform.position = Target.Seat.Position;
-					Target.Face.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(5, 0,0);
+					Target.TargetFace.transform.position = Target.Seat.Position;
+					Target.TargetFace.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(5, 0,0);
 					Target.GrumpLines(0.8F, true); 
-					if(Vector3.Distance(dpos, Target.Face.transform.position) > drag_distance)
+					if(Vector3.Distance(dpos, Target.TargetFace.transform.position) > drag_distance)
 					{
 						isDragging = true;
 					}
@@ -195,17 +199,17 @@ public class Dinner : Module {
 		return s;
 	}
 
-	public FaceObj [] Faces;
+	public Face [] Faces;
 	public void CreateDinner(int d = 0)
 	{
 		Running = false;
 
-		UIObj fparent = MUI["faceparent"];
+		FOBJ fparent = MOB["faceparent"];
 		Difficulty = d;
 		Grands = new GreatGrand[GGNum];
 
 		_TableManager.SetupTable(Difficulty);
-		Faces = new FaceObj[GGNum];
+		Faces = new Face[GGNum];
 		for(int i = 0; i < GGNum; i++)
 		{
 			if(i < GameManager.instance.Grands.Length && GameManager.instance.Grands[i].Hunger.Current < 60)
@@ -214,14 +218,15 @@ public class Dinner : Module {
 
 			Grands[i].gameObject.SetActive(true);
 
-			Faces[i] = GameManager.Generator.GenerateFace(Grands[i]);
+			Faces[i] = GameManager.Generator.GenerateNewFace(Grands[i].Data);
 			fparent.AddChild(Faces[i]);
+			Grands[i].Data.TargetFace = (Faces[i]);
 			SetupFace(Faces[i], Grands[i]);
 		}
 
 		for(int i = 0; i < GGNum; i++)
 		{
-			Grands[i].SitImmediate(_TableManager.Seat[i]);
+			SitImmediate(Grands[i], _TableManager.Seat[i]);
 		}
 
 		for(int i = 0; i < GGNum; i++)
@@ -340,7 +345,7 @@ public class Dinner : Module {
 			Sprite s = targ_grumps >= 0 ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
 								         GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
 
-			UIAlert a = GameManager.UI.ImgAlert(s, grand.Face.transform.position, -1.0F);
+			UIAlert a = GameManager.UI.ImgAlert(s, grand.TargetFace.transform.position, -1.0F);
 			a.SetActive(false);
 			a.transform.localScale = Vector3.one * 0.5F;
 			a.TweenActive(true);
@@ -496,15 +501,15 @@ public class Dinner : Module {
 		}
 	}
 
-	public void SetupFace(FaceObj f, GreatGrand g)
+	public void SetupFace(Face f, GreatGrand g)
 	{
-		f.AddAction(UIAction.MouseDown, () =>
+		f.AddAction(TouchAction.Down, () =>
 		{
-			GameManager.instance.SetTargetGrand(g);
+			//GameManager.instance.SetTargetGrand(g);
 			SetTarget(g);
 		});
 
-		f.AddAction(UIAction.MouseUp, () =>
+		f.AddAction(TouchAction.Up, () =>
 		{
 			GameManager.instance.SetTargetGrand(null);
 			ReleaseTarget();
@@ -523,13 +528,13 @@ public class Dinner : Module {
 	public void SetTarget(GreatGrand g)
 	{
 		Target = g;
-		StartCoroutine(GrumpAlert(Target.Grumps[0]));
+		//StartCoroutine(GrumpAlert(Target.Grumps[0]));
 		//Target.ShowGrumpLines();
 	}
 
 	public void ReleaseTarget()
 	{
-		drag_targ = _TableManager.NearestSeat(Input.mousePosition);
+		drag_targ = _TableManager.NearestSeat(GameManager.InputPos);
 		DragSit(Target, drag_targ);	
 
 		//if(drag_targ.CanSeat(Target) && drag_targ != Target.Seat) Target.DragSit(drag_targ);
@@ -552,9 +557,8 @@ public class Dinner : Module {
 		t.Seat = s;
 		t.Seat.SetTarget(t);
 
-		t.Face.transform.position = t.Seat.Position;
-		t.Face.transform.rotation = t.Seat.Rotation;
-		t.Face.transform.rotation *= Quaternion.Euler(0, 0,180);
+		t.TargetFace.transform.position = t.Seat.Position;
+		t.TargetFace.transform.rotation = t.Seat.Rotation;
 		t.isSeated = true;
 	}
 
@@ -574,9 +578,27 @@ public class Dinner : Module {
 		t.Seat = s;
 		t.Seat.SetTarget(t);
 
-		t.Face.transform.position = t.Seat.Position;
-		t.Face.transform.rotation = t.Seat.Rotation;
-		t.Face.transform.rotation *= Quaternion.Euler(0, 0,180);		
+		t.TargetFace.transform.position = t.Seat.Position;
+		t.TargetFace.transform.rotation = t.Seat.Rotation;
+		t.isSeated = true;
+	}
+
+	public void SitImmediate(GreatGrand t, _Seat s)
+	{
+		if(s == null) return;
+
+		if(s.Target)
+		{
+			_Seat temp = t.Seat;
+			t.Seat = null;
+			SitImmediate(s.Target, temp);
+		}
+
+		t.Seat = s;
+		t.Seat.SetTarget(t);
+
+		t.TargetFace.transform.position = s.Position;
+		t.TargetFace.transform.rotation = s.Rotation;
 		t.isSeated = true;
 	}
 
@@ -682,7 +704,7 @@ public class Dinner : Module {
 			}
 
 			fin[i] = finalpos[num].Index;
-			Grands[i].SitImmediate(point);
+			SitImmediate(Grands[i], point);
 			finalpos.RemoveAt(num);
 
 		}

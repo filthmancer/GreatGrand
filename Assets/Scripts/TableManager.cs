@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
+using Filthworks;
 
 public class TableManager : MonoBehaviour {
-	public UIObj [] TableObjects;
-
-	public UIObj TableUI;
+	public FOBJ [] TableObjects;
+	public FOBJ TableUI;
 	public GameObject TableObj;
 	public _Seat [] Seat;
 	public _Food [] Food;
@@ -18,18 +18,7 @@ public class TableManager : MonoBehaviour {
 
 	public void Init()
 	{
-		List<Vector2> splinepoints = new List<Vector2>();
-		for(int i = 0; i < Seat.Length; i++)
-		{
-			Seat[i].Index = i;
-			Vector3 t = Seat[i].transform.position + Seat[i].transform.forward;
-			splinepoints.Add(new Vector2(t.x, t.z));
-		}
 
-		//Movement = new VectorLine("Movement Path", new List<Vector2>(mvmt_segments+1), 4.0F, LineType.Continuous);
-
-		//Movement.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, true);
-		//Movement.Draw();
 	}
 
 	public void SetupTable(int n)
@@ -38,14 +27,12 @@ public class TableManager : MonoBehaviour {
 
 		for(int i = 0; i < TableObjects.Length; i++) 
 		{
-			if(i != n)	TableObjects[i].TweenActive(false);
+			if(i != n)	TableObjects[i].SetActive(false);
 		}
-		TableUI = TableObjects[n];//(UIObj) Instantiate(t);
-		//TableUI.SetParent(GameManager.Module.MUI[7]);
-		//TableUI.ResetRect();
+		TableUI = TableObjects[n];
 
 		TableObj = TableUI.Child[0].transform.gameObject;
-		TableObj.transform.SetParent(GameManager.Module.transform);
+		//TableObj.transform.SetParent(GameManager.Module.transform);
 	 	Seat = new _Seat[TableUI.Child.Length-1];
 	 	List<Vector2> splinepoints = new List<Vector2>();
 	 	for(int i = 0; i < Seat.Length; i++)
@@ -88,7 +75,7 @@ public class TableManager : MonoBehaviour {
 	float x_rot = 80;
 	public IEnumerator MoveSeat(GreatGrand g, int from, int to, float time)
 	{
-		Transform t = g.Face.transform;
+		Transform t = g.TargetFace.transform;
 		g.isSeated = false;
 		Vector3 start = GetMovementPointAtSeat(from);
 		Vector3 end = GetMovementPointAtSeat(to);
@@ -125,16 +112,16 @@ public class TableManager : MonoBehaviour {
 		while((getup_time += Time.deltaTime) < getup_init)
 		{
 			t.position = Vector3.Lerp(Seat[from].transform.position, start, getup_time/getup_init);
-			t.LookAt(TableObj.transform.position, Vector3.forward);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			t.LookAt(TableObj.transform.position, Vector3.up);
+			t.rotation *= Quaternion.Euler(x_rot, 180,0);
 			yield return null;
 		}
 
 		while((timer += Time.deltaTime) < timer_total)
 		{
 			t.position = GetMovementPoint(norm);
-			t.LookAt(TableObj.transform.position, Vector3.forward);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			t.LookAt(TableObj.transform.position, Vector3.up);
+			t.rotation *= Quaternion.Euler(x_rot, 180,0);
 
 			norm += norm_rate * Time.deltaTime;
 			if(norm < 0.0F) norm = 1.0F;
@@ -148,11 +135,8 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[to].Position, sitdown_time/sitdown_init);
 			t.transform.rotation = Quaternion.Slerp(t.transform.rotation,
-													Seat[to].Rotation * Quaternion.Euler(5, 180,180),
+													Seat[to].Rotation * Quaternion.Euler(-50, 0,0),
 													sitdown_time/sitdown_init);
-			//t.LookAt(TableObj.transform.position);
-			//t.rotation *= Quaternion.Euler(x_rot, 0,180);
-
 			yield return null;
 		}
 		g.isSeated = true;
@@ -161,7 +145,7 @@ public class TableManager : MonoBehaviour {
 
 	public IEnumerator DoorToSeat(GreatGrand g, int seat, float time)
 	{
-		Transform t = g.Face.transform;
+		Transform t = g.TargetFace.transform;
 		g.isSeated = false;
 		Vector3 d = EntryDoor.position;
 		Vector3 start = GetMovementPoint(0.0F);
@@ -177,7 +161,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(d, start, getup_time/getup_init);
 			t.LookAt(TableObj.transform.position, Vector3.forward);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			//t.rotation *= Quaternion.Euler(x_rot, 0,0);
 			yield return null;
 		}
 
@@ -189,7 +173,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = GetMovementPoint(norm);
 			t.LookAt(TableObj.transform.position, Vector3.forward);
-			t.rotation *= Quaternion.Euler(x_rot, 0,180);
+			//t.rotation *= Quaternion.Euler(x_rot, 0,0);
 
 			norm += norm_rate * Time.deltaTime;
 			if(norm < 0.0F) norm = 1.0F;
@@ -203,7 +187,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[seat].Position, sitdown_time/sitdown_init);
 			t.rotation = Quaternion.Slerp(t.rotation,
-										Seat[seat].Rotation * Quaternion.Euler(5, 180,180),
+										Seat[seat].Rotation * Quaternion.Euler(-50, 0,0),
 										sitdown_time/sitdown_init);
 
 			yield return null;
@@ -215,7 +199,7 @@ public class TableManager : MonoBehaviour {
 
 	public IEnumerator Exit(GreatGrand g, float time)
 	{
-		Transform t = g.Face.transform;
+		Transform t = g.TargetFace.transform;
 		g.isSeated = false;
 		Vector3 d = ExitDoor.position;
 		Vector3 start = GetMovementPointAtSeat(g.Seat.Index); 

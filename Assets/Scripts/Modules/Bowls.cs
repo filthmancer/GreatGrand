@@ -48,7 +48,7 @@ public class Bowls : Module {
 
 	public int Difficulty = 0;
 
-	private float TotalDistance =  500;
+	private float TotalDistance =  800;
 	private int [] Difficulty_PathPoints = new int []
 	{
 		5,7,8
@@ -73,12 +73,14 @@ public class Bowls : Module {
 	private Vector2 Sway_TimeBracket = new Vector2(0.2F, 0.5F);
 
 	private Vector3 Control_Velocity;
-	private float Control_Speed = 25;
+	private float Control_Speed = 20;
 	private Vector3 BalancePoint;
 
 	private float GameTime;
 	private UIObj FitnessObj;
 	private float FitnessPerTick = 0.01F;
+
+	private float face_rotation_x = -33.0F;
 
 	public float DistanceAlongPath()
 	{
@@ -102,7 +104,6 @@ public class Bowls : Module {
 		Vector3 vpos = MOB[1].pos;
 		vpos.y = BalancePoint.y;
 		vpos.z = BalancePoint.z;
-		print(DistanceAlongPath() + " -- " + BalancePoint + ":" + vpos);
 		return Vector3.Distance(BalancePoint, vpos);
 	}
 
@@ -112,7 +113,7 @@ public class Bowls : Module {
 		GameTime += Time.deltaTime;
 
 		Safeway.Draw3D();
-		if(DistanceAlongPath() == 1.0F)
+		if(EndPoint.position.y > 2)
 		{
 			//WIN
 			StartCoroutine(Win());
@@ -128,6 +129,7 @@ public class Bowls : Module {
 		{
 			Vector2 inacc = Input.acceleration;
 			Control_Velocity = new Vector3(inacc.x*2.2F, 0.0F, 0.0F);
+			Control_Velocity.x = Mathf.Clamp(Control_Velocity.x, -1.3F, 1.3F);
 		}    
 		else
 		{
@@ -173,9 +175,10 @@ public class Bowls : Module {
 			}
 			Sway_CurrentVelocity.Normalize();
 			Sway_Speed = Vector3.Distance(BalancePoint, 
-				MOB[1].pos)*(MoveSpeed_factor+0.2F);
+				MOB[1].pos)*(MoveSpeed_factor);
 
 			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.0f, Control_Speed * (0.05F + 0.02F * MoveSpeed_factor));
+			
 			Sway_CurrentVelocity.y = 0.0F;
 			Sway_CurrentVelocity.z = 0.0F;
 			Control_Velocity.y = 0.0F;
@@ -204,18 +207,20 @@ public class Bowls : Module {
 			Sway_Timer = Random.Range(Sway_TimeBracket.x, Sway_TimeBracket.y);
 		}
 
-		Vector3 v = (Safeway.GetPoint3D01(DistanceAlongPath()+0.1F) - Safeway.GetPoint3D01(DistanceAlongPath())).normalized;
+		Vector3 v = (Safeway.GetPoint3D01(DistanceAlongPath()+0.05F) - Safeway.GetPoint3D01(DistanceAlongPath())).normalized;
 		
-		float rot = v.x*5;
+		float rotz = v.x*5;
+		float roty = v.y * 13;
 
-		rot += Sway_CurrentVelocity.x * Sway_Speed * 0.7F;
-		rot += Sway_Extra;
-		rot += Control_Velocity.x * 15;
-		rot = Mathf.Clamp(rot, -60, 60);
+		rotz += Sway_CurrentVelocity.x * Sway_Speed * 0.7F;
+		rotz += Sway_Extra;
+		rotz += Control_Velocity.x * 15;
+		rotz = Mathf.Clamp(rotz, -60, 60);
+
 		
 		MOB[1].transform.rotation = Quaternion.Slerp(
 			MOB[1].transform.rotation,
-			Quaternion.Euler(-18.0F,0.0F, rot),
+			Quaternion.Euler(face_rotation_x,roty, rotz),
 			Time.deltaTime * 10
 		);
 	}
@@ -275,11 +280,29 @@ public class Bowls : Module {
 		EndButton.AddAction(UIAction.MouseUp, ()=>
 		{
 			Clear();
-			StartCoroutine(StartGame());
+			StartCoroutine(Reload());
 			});		
 
 		EndInfo = MUI["endcond"];
 		FitnessObj = MUI["fitobj"];
+	}
+
+	public IEnumerator Reload()
+	{
+		float speed = 0.3F;
+		while(Vector3.Distance(Pathway.transform.position, Pathway_init)> 0.3F)
+		{
+			Vector3 vel = (Pathway_init) - Pathway.transform.position;
+			Pathway.transform.position += vel * speed;
+			yield return null;
+		}
+		
+		yield return StartCoroutine(Load());
+		yield return StartCoroutine(StartGame());
+	}
+	public override IEnumerator Load()
+	{
+		yield return StartCoroutine(CreatePath());
 	}
 
 	public override IEnumerator Enter(bool entry, IntVector v)
@@ -325,7 +348,7 @@ public class Bowls : Module {
 		EndButton.TweenActive(false);
 		EndInfo.TweenActive(false);
 		FitnessObj.SetActive(false);
-		yield return StartCoroutine(CreatePath());
+
 		yield return new WaitForSeconds(0.4F);
 	
 		for(int i = 3; i > 0; i--)
@@ -346,8 +369,8 @@ public class Bowls : Module {
 		Running = true;
 	}
 
-	public UIObj [] PathPrefabs;
-	public UIObj [] PathInstances;
+	public FOBJ [] PathPrefabs;
+	public FOBJ [] PathInstances;
 
 	IEnumerator CreatePath()
 	{
@@ -355,7 +378,6 @@ public class Bowls : Module {
 		MoveSpeed_actual = MoveSpeed;
 
 		Safeway_Threshold_actual = Safeway_Threshold;
-		//if(Application.isMobilePlatform) Safeway_Threshold_actual *= 2;
 
 		int checks = 0;
 		while(TargetGrand == null || TargetGrand.Data.Fitness.Ratio > 0.6F)
@@ -369,7 +391,7 @@ public class Bowls : Module {
 		if(TargetGrand == null) TargetGrand = GameManager.Generator.Generate(0);
 		
 		TargetGrand_Face = GameManager.Generator.GenerateNewFace(TargetGrand.Data);
-		MOB[1].T.rotation = Quaternion.Euler(-18,0,0);
+		MOB[1].T.rotation = Quaternion.Euler(face_rotation_x,0,0);
 		MOB[1].T.localPosition = Vector3.zero;
 		MOB[1].AddChild(TargetGrand_Face);
 
@@ -378,6 +400,7 @@ public class Bowls : Module {
 
 
 		EndPoint.position = StartPoint.position - StartPoint.up * TotalDistance;
+		MOB[0][0].transform.localScale = new Vector3(19.5F, TotalDistance /3, 1.0F);
 
 		MiddlePoints = new Transform[PathPoints];
 
@@ -412,22 +435,20 @@ public class Bowls : Module {
 
 	 	Safeway = new VectorLine("Safeway Path", new List<Vector3>(mvmt_segments+1), Safeway_Threshold_actual*1.2F, LineType.Continuous);
 		Safeway.MakeSpline(splinepoints.ToArray(), mvmt_segments, 0, false);
+
 		Safeway.drawTransform = MOB[0].transform;
-		//Safeway.SetCanvas(UIObj._UICanvas);
-		//Safeway.rectTransform.SetParent(MUI[2].transform);
 		Safeway.SetColor(PathColor);
-		//Safeway.SetWidths(splinewidths);
 		Safeway.joins = Joins.Fill;
 
 		int objnum = 20 + MiddlePoints.Length * 5;
-		//PathInstances = new UIObj[objnum];
+		PathInstances = new FOBJ[objnum];
 
 		float point = 0.0F;
 		float objratio = 0.9F/objnum;
-		/*for(int i = 0; i < objnum; i++)
+		for(int i = 0; i < objnum; i++)
 		{
-			PathInstances[i] = (UIObj) Instantiate(PathPrefabs[Random.Range(0, PathPrefabs.Length)]);
-			PathInstances[i].SetParent(MUI["pathway"]);
+			PathInstances[i] = (FOBJ) Instantiate(PathPrefabs[Random.Range(0, PathPrefabs.Length)]);
+			MOB[0].AddChild(PathInstances[i]);
 
 			point += Random.Range(objratio/1.5F, objratio*1.5F);
 
@@ -436,15 +457,17 @@ public class Bowls : Module {
 			Vector3 vel = (nextpos - pos).normalized;
 
 			Vector3 cross = Vector3.Cross(vel, -Vector3.forward).normalized;
-			float xd = cross.x * Safeway_Threshold_actual * 1.1F;
+			float xd = cross.x * Safeway_Threshold_actual/10;
 			pos.x += Random.value > 0.5F ? xd : -xd;
 
-			PathInstances[i].SetUIPosition(pos);
-			
-			PathInstances[i].transform.LookAt(pos + vel);
-			PathInstances[i].transform.rotation *= Quaternion.Euler(0,90,90);
-		}*/
-		Safeway.Draw3DAuto();
+			PathInstances[i].T.position = pos;
+			PathInstances[i].T.LookAt(pos + vel);
+			PathInstances[i].T.rotation *= Quaternion.Euler(0,90,90);
+		}
+		Safeway.Draw3D();
+		VectorLine.SetCamera3D(Camera.main);
+		VectorManager.useDraw3D = true;
+
 		yield return null;
 	}
 

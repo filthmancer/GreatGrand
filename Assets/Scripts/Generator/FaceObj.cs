@@ -363,6 +363,7 @@ public class FaceObjInfoContainer
 	}
 	public FaceObjInfo [] Objs;
 	public FaceObjInfo this[int num]{get{
+		num = Mathf.Clamp(num, 0, Objs.Length-1);
 		return Objs[num];
 		}}
 	public int Length{get{return Objs.Length;}}

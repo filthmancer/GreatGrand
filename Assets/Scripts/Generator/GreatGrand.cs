@@ -35,6 +35,8 @@ public class GreatGrand : GrumpObj {
 		get{return Face;}
 	}
 
+	public Face TargetFace{get{return Data.TargetFace;}}
+
 	public bool IsHappy
 	{
 		get{
