@@ -315,8 +315,12 @@ public class GameManager : MonoBehaviour {
 	public static GreatGrand TargetGrand;
 	public void SetTargetGrand(GreatGrand g)
 	{
-		if(g == null && TargetGrand != null) TargetGrand.Release(InputPos);
-		else g.Tap(InputPos);
+		if(g!= null)
+		{	
+			if(TargetGrand != null) TargetGrand.Release(InputPos);
+			else g.Tap(InputPos);
+		}
+		
 		UI.SetGrandUI(g);
 		TargetGrand = g;
 	}

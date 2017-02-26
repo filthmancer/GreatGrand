@@ -38,13 +38,14 @@ public class InputController : MonoBehaviour {
 
 	public void CheckInput()
 	{
-		if(Input.GetMouseButtonDown(0))
+		if(Input.GetMouseButtonUp(0))
 		{
-			HasInput = true;
-			InputRay = Camera.main.ScreenPointToRay(Position);
-			TObj = CheckCollision(InputRay);
-			if(TObj != null) TObj.gameObject.SendMessage("OnDown");
-			GameManager.OnTouch();
+
+			HasInput = false;
+			GameManager.OnRelease();
+			if(TObj != null) TObj.OnUp();
+			TObj = null;
+			Target = null;
 		}
 
 		if(Input.GetMouseButton(0))
@@ -52,17 +53,18 @@ public class InputController : MonoBehaviour {
 			HasInput = true;
 			InputRay = Camera.main.ScreenPointToRay(Position);
 			TObj = CheckCollision(InputRay);
-			if(TObj != null) TObj.gameObject.SendMessage("OnStay");
+			if(TObj != null) TObj.OnStay();
 		}
 
-		if(Input.GetMouseButtonUp(0))
+		if(Input.GetMouseButtonDown(0))
 		{
-			HasInput = false;
-			GameManager.OnRelease();
-			if(TObj != null) TObj.gameObject.SendMessage("OnUp");
-			TObj = null;
-			Target = null;
-		}
+
+			HasInput = true;
+			InputRay = Camera.main.ScreenPointToRay(Position);
+			TObj = CheckCollision(InputRay);
+			if(TObj != null) TObj.OnDown();
+			GameManager.OnTouch();
+		}	
 	}
 
 	public FOBJ CheckCollision(Ray inp)
@@ -71,6 +73,7 @@ public class InputController : MonoBehaviour {
 		float d;
 		baseplane.Raycast(InputRay, out d);
 		GameManager.InputPos = InputRay.GetPoint(d);
+		Debug.DrawRay(InputRay.origin, InputRay.direction * 500);
 		if(Physics.Raycast(InputRay, out InputRay_hit, Mathf.Infinity))
 		{
 			WorldPosition = InputRay_hit.point;

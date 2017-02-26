@@ -12,7 +12,7 @@ public class Dinner : Module {
 	public int Difficulty = 0;
 	private int [] Difficulty_GG = new int[]
 	{
-		5, 6, 8
+		6, 6, 8
 	};
 	public int GGNum {get {return Difficulty_GG[Difficulty];} }
 
@@ -53,7 +53,7 @@ public class Dinner : Module {
 	private GreatGrand Target;
 	private bool isDragging;
 	private _Seat drag_targ;	
-	private float drag_distance = 0.8F;
+	private float drag_distance = 3.5F;
 	public override void ControlledUpdate()
 	{
 		if(Running)
@@ -85,6 +85,12 @@ public class Dinner : Module {
 
 		//TARGET GRAND
 
+			if(Input.GetMouseButtonUp(0))
+			{
+				GameManager.instance.SetTargetGrand(null);
+				ReleaseTarget();
+			}
+
 			if(Target != null)
 			{
 				if(isDragging)
@@ -101,19 +107,25 @@ public class Dinner : Module {
 					Vector3 dpos = GameManager.InputPos;
 					dpos.z = Target.TargetFace.T.position.z;
 
-					Vector3 npos = Vector3.Lerp(Target.TargetFace.pos, dpos, Time.deltaTime * 30);
+					Vector3 npos = Vector3.Lerp(Target.TargetFace.pos, dpos, Time.deltaTime * 15);
 					Target.TargetFace.T.position = npos;
-					Target.TargetFace.transform.LookAt(_TableManager.TableObj.transform, Vector3.up);
-					Target.TargetFace.transform.rotation *= Quaternion.Euler(0, 180,0);
+
+					Target.TargetFace.T.rotation = Quaternion.Slerp(
+						Target.TargetFace.T.rotation,
+						Quaternion.LookRotation(GameManager.InputPos-Target.TargetFace.T.position, Vector3.up),
+						Time.deltaTime * 10);
 					Target.GrumpLines(0.8F, true); 
 				}
 				else 
 				{
 					Vector3 dpos = GameManager.InputPos;
 					dpos.z = Target.TargetFace.transform.position.z;
-
-					Target.TargetFace.transform.position = Target.Seat.Position;
-					Target.TargetFace.transform.rotation = Target.Seat.Rotation * Quaternion.Euler(5, 0,0);
+					Vector3 vel = dpos - Target.Seat.Position;
+					Target.TargetFace.transform.position = Target.Seat.Position + vel/5;
+					Target.TargetFace.T.rotation = Quaternion.Slerp(
+						Target.TargetFace.T.rotation,
+						Quaternion.LookRotation(GameManager.InputPos-Target.TargetFace.T.position, Vector3.up),
+						Time.deltaTime * 10);
 					Target.GrumpLines(0.8F, true); 
 					if(Vector3.Distance(dpos, Target.TargetFace.transform.position) > drag_distance)
 					{
@@ -220,6 +232,7 @@ public class Dinner : Module {
 
 			Faces[i] = GameManager.Generator.GenerateNewFace(Grands[i].Data);
 			fparent.AddChild(Faces[i]);
+
 			Grands[i].Data.TargetFace = (Faces[i]);
 			SetupFace(Faces[i], Grands[i]);
 		}
@@ -330,8 +343,8 @@ public class Dinner : Module {
 
 		endgame[0].TweenActive(false);
 
-		List<UIAlert> correct = new List<UIAlert>();
-		List<UIAlert> wrong = new List<UIAlert>();
+		List<FOBJ> correct = new List<FOBJ>();
+		List<FOBJ> wrong = new List<FOBJ>();
 
 		for(int i = 0; i < _TableManager.Seat.Length; i++)
 		{
@@ -342,12 +355,13 @@ public class Dinner : Module {
 			int targ_grumps = grand.GetGrumps(false);
 			yield return new WaitForSeconds(Time.deltaTime  * 5);
 
-			Sprite s = targ_grumps >= 0 ? GameManager.UI.Sprites.GetObject("Correct") as Sprite :  
-								         GameManager.UI.Sprites.GetObject("Incorrect") as Sprite;
+			Sprite s = targ_grumps >= 0 ? Alert_Right :  Alert_Wrong;
 
-			UIAlert a = GameManager.UI.ImgAlert(s, grand.TargetFace.transform.position, -1.0F);
+			FOBJ a = Instantiate(GameManager.UI.Prefabs.GetObject("FOBJ_Default") as GameObject).GetComponent<FOBJ>();
 			a.SetActive(false);
-			a.transform.localScale = Vector3.one * 0.5F;
+			a.transform.position = grand.TargetFace.pos - Vector3.forward * 1;
+			a.transform.localScale = Vector3.one * 1.6F;
+			a.T.rotation = grand.TargetFace.rot;
 			a.TweenActive(true);
 
 			if(targ_grumps >= 0) correct.Add(a);
@@ -486,13 +500,18 @@ public class Dinner : Module {
 
 		for(int x = 0; x < Grands.Length; x++)
 		{
-			for(int i = 0; i < Grands[x].Grumps.Length; i++)
+			/*for(int i = 0; i < Grands[x].Grumps.Length; i++)
 			{
 				Grands[x].Grumps[i].Destroy();
-			}
+			}*/
 		}
 
-		MUI["faceparent"].DestroyChildren();
+		for(int i = 0; i < Faces.Length; i++)
+		{
+			Faces[i].PoolDestroy();
+		}
+
+		MOB["faceparent"].DestroyChildren();
 
 		UIObj end = MUI["endgame"];
 		for(int i = 0; i < end.Length; i++)
@@ -505,15 +524,13 @@ public class Dinner : Module {
 	{
 		f.AddAction(TouchAction.Down, () =>
 		{
-			//GameManager.instance.SetTargetGrand(g);
 			SetTarget(g);
 		});
 
-		f.AddAction(TouchAction.Up, () =>
+	/*	f.AddAction(TouchAction.Up, () =>
 		{
-			GameManager.instance.SetTargetGrand(null);
-			ReleaseTarget();
-		});
+			
+		});*/
 	}
 
 	private void Ability_ThirdEye(float time = 2.5F)
@@ -528,7 +545,7 @@ public class Dinner : Module {
 	public void SetTarget(GreatGrand g)
 	{
 		Target = g;
-		//StartCoroutine(GrumpAlert(Target.Grumps[0]));
+		StartCoroutine(GrumpAlert(Target.Grumps[0]));
 		//Target.ShowGrumpLines();
 	}
 
@@ -603,7 +620,7 @@ public class Dinner : Module {
 	}
 
 
-	public void SendCorrectAlert(UIAlert u, Transform t)
+	public void SendCorrectAlert(FOBJ u, Transform t)
 	{
 		u.transform.DOScale(Vector3.one * 0.4F, 0.18F);
 		u.transform.DOMove(t.position, 0.25F).OnComplete(()=>{
@@ -652,8 +669,41 @@ public class Dinner : Module {
 		g.Grumps = final;	
 	}
 
-
+	public FIRL GrumpAlertObj;
+	public Sprite Alert_Right, Alert_Wrong;
 	public IEnumerator GrumpAlert(_Grump g)
+	{
+		float time_pause = 0.7F;
+
+		FIRL alert = (FIRL)Instantiate(GrumpAlertObj);
+		//GameManager.UI.WorldObjects.AddChild(alert);
+		alert.Init(-1,	GameManager.UI.FOBJ_World);
+
+		alert.Child[1].AddChild(Instantiate(g.Target.FObject));
+		alert.IMG[0].sprite = g.LikesIt ? Alert_Right : Alert_Wrong;
+
+		alert.SetActive(false);
+		alert.T.position = MOB[0][0].T.position;
+		alert.T.localScale = Vector3.one * 4.0F;
+		alert[0].T.rotation = g.Parent.Seat.Rotation * Quaternion.Euler(50,0,180);
+		alert.TweenActive(true);
+
+		float t = 0.0F;
+		while((t+=Time.deltaTime) < time_pause || Target == g.Parent)
+		{
+			//Vector3 targpos = g.Parent.Position;
+			//alert.transform.position = targpos;
+			//alert.Child[0].transform.rotation = Quaternion.identity;
+			//alert.IMG[0].transform.rotation = Quaternion.identity;
+			yield return null;
+		}
+
+		alert.TweenActive(false);
+		yield return new WaitForSeconds(0.4F);
+		if(alert != null) alert.PoolDestroy();
+		yield return null;
+	}
+	/*public IEnumerator GrumpAlert(_Grump g)
 	{
 		float time_pause = 0.7F;
 
@@ -684,7 +734,7 @@ public class Dinner : Module {
 		yield return new WaitForSeconds(0.4F);
 		if(alert != null) alert.PoolDestroy();
 		yield return null;
-	}
+	}*/
 
 
 	public int [] ShuffleGG()
@@ -763,5 +813,7 @@ public class Dinner : Module {
 			return true;
 		}
 	}
+
+
 
 }

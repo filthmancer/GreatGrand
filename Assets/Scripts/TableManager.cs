@@ -72,7 +72,7 @@ public class TableManager : MonoBehaviour {
 		return norm;
 	}
 
-	float x_rot = 80;
+	float x_rot = 50;
 	public IEnumerator MoveSeat(GreatGrand g, int from, int to, float time)
 	{
 		Transform t = g.TargetFace.transform;
@@ -135,7 +135,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[to].Position, sitdown_time/sitdown_init);
 			t.transform.rotation = Quaternion.Slerp(t.transform.rotation,
-													Seat[to].Rotation * Quaternion.Euler(-50, 0,0),
+													Seat[to].Rotation,
 													sitdown_time/sitdown_init);
 			yield return null;
 		}
@@ -160,8 +160,8 @@ public class TableManager : MonoBehaviour {
 		while((getup_time += Time.deltaTime) < getup_init)
 		{
 			t.position = Vector3.Lerp(d, start, getup_time/getup_init);
-			t.LookAt(TableObj.transform.position, Vector3.forward);
-			//t.rotation *= Quaternion.Euler(x_rot, 0,0);
+			//t.LookAt(TableObj.transform.position, Vector3.up);
+			//t.rotation *= Quaternion.Euler(x_rot, 180,0);
 			yield return null;
 		}
 
@@ -172,8 +172,9 @@ public class TableManager : MonoBehaviour {
 		while((timer += Time.deltaTime) < time)
 		{
 			t.position = GetMovementPoint(norm);
-			t.LookAt(TableObj.transform.position, Vector3.forward);
-			//t.rotation *= Quaternion.Euler(x_rot, 0,0);
+			//t.LookAt(TableObj.transform.position, Vector3.up);
+			//t.rotation *= Quaternion.Euler(0,180,0);
+			//t.rotation *= Quaternion.Euler(x_rot, 180,0);
 
 			norm += norm_rate * Time.deltaTime;
 			if(norm < 0.0F) norm = 1.0F;
@@ -187,7 +188,7 @@ public class TableManager : MonoBehaviour {
 		{
 			t.position = Vector3.Lerp(end, Seat[seat].Position, sitdown_time/sitdown_init);
 			t.rotation = Quaternion.Slerp(t.rotation,
-										Seat[seat].Rotation * Quaternion.Euler(-50, 0,0),
+										Seat[seat].Rotation,
 										sitdown_time/sitdown_init);
 
 			yield return null;
@@ -347,7 +348,7 @@ public class _Seat
 	}
 	public Quaternion Rotation
 	{
-		get{return Object.transform.rotation;}
+		get{return Object.transform.rotation * Quaternion.Euler(-30,0,0);}
 	}
 
 	public Transform transform {get{

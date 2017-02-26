@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Filthworks;
 
 public class GrumpObj : InputTarget {
 
@@ -13,7 +14,7 @@ public class GrumpObj : InputTarget {
 		get{return trans.position;}
 	}
 
-	public virtual UIObj UIObject
+	public virtual FOBJ FObject
 	{
 		get{return null;}
 	}

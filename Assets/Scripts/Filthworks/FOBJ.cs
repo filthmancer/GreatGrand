@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 namespace Filthworks
 {
@@ -47,6 +48,29 @@ namespace Filthworks
 			bool actual = active ?? !this.gameObject.activeSelf;
 			isActive = actual;
 			this.gameObject.SetActive(actual);
+		}
+
+		private Vector3 activescale = Vector3.one;
+		public virtual void TweenActive(bool ? active = null)
+		{
+			bool actual = active ?? !this.gameObject.activeSelf;
+			if(actual == this.gameObject.activeSelf) return;
+
+			isActive = actual;
+			if(actual)
+			{
+				this.gameObject.SetActive(true);
+				if(this.transform.localScale != Vector3.zero) activescale = this.transform.localScale;
+				else activescale = Vector3.one;
+
+				this.transform.localScale = Vector3.zero;
+
+				Sequence s = Tweens.Bounce(this.transform, activescale).OnComplete(() => {activescale = this.transform.localScale;});
+			}
+			else
+			{
+				this.transform.DOScale(Vector3.zero, 0.25F).OnComplete(() =>{this.gameObject.SetActive(false);});
+			}
 		}
 
 

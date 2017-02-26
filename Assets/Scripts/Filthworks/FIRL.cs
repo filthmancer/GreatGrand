@@ -13,8 +13,7 @@ namespace Filthworks
 		
 		public SVGRenderer [] SVG;
 		public TextMeshPro [] Text;
-
-		
+		public SpriteRenderer [] IMG;
 
 		public override void Init(int ind, FOBJ p, params float [] args)
 		{

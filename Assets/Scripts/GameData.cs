@@ -515,6 +515,53 @@ public class GrandInfo
 	}
 }
 
+public class FaceContainer
+{
+	public GameObject [] Male, Female;
+	public ColorType Colour;
+	public int Index;
+
+	public FaceInfo GetCurrent()
+	{
+		FaceInfo f = new FaceInfo(Index, Colour);
+		//f._Position = _Position;
+		//f._Rotation = _Rotation;
+		//f._Scale = _Scale;
+		return f;
+	}
+
+	public GameObject GetObject(bool gender, int index)
+	{
+		index = Mathf.Clamp(index, 0, (gender ? Male.Length-1 : Female.Length-1));
+		return (gender ? Male[index] : Female[index]);
+	}
+
+
+	public FaceContainer(GameObject [] m, GameObject [] f)
+	{
+		Male = m;
+		Female = f;
+	}
+
+	public FaceInfo Randomise(bool gender, Simple2x2 pos, Simple2x2 rot, Simple2x2 sc)
+	{
+		int Index = gender ? Random.Range(0, Male.Length-1) : Random.Range(0, Female.Length-1);
+		FaceInfo final = new FaceInfo(Index, Colour);
+		Debug.Log(Male.Length + ":" + Female.Length);
+		final.Obj = gender ? Male[Index]: Female[Index];
+
+		Vector3 p = new Vector3(pos.RandX(), 0.0F, pos.RandY());
+		final._Position = p;
+
+		Vector3 r = new Vector3(0.0F, 0.0F, rot.RandX());
+		final._Rotation = r;
+
+		Vector2 s = Utility.RandomMatrixPoint(sc);
+		final._Scale = Vector3.one + new Vector3(s.x, s.y, 0.0F);
+		return final;
+	}
+}
+
 public class FaceInfo
 {
 	public int Index;

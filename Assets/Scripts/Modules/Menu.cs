@@ -47,7 +47,7 @@ public class Menu : Module {
 	{
 		if(!GameManager.Paused && !GameManager.IgnoreInput)
 		{
-			Vector2 v = GameManager._Input.GetScroll()/9;
+			Vector2 v = GameManager._Input.GetScroll()/17;
 			v.x = 0.0F;
 			Vector3 newpos = MOB.pos + new Vector3(0.0F, v.y, 0.0F);
 			newpos.y = Mathf.Clamp(newpos.y, MOB["min"].pos.y, MOB["max"].pos.y);

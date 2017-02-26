@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
+using Filthworks;
 
 public class GreatGrand : GrumpObj {
 	public GrandData Data;
@@ -26,13 +27,13 @@ public class GreatGrand : GrumpObj {
 	public override Vector3 Position
 	{
 		get{
-			return Face.GetUIPosition();
+			return TargetFace.pos;
 		}
 	}
 
-	public override UIObj UIObject
+	public override FOBJ FObject
 	{
-		get{return Face;}
+		get{return TargetFace;}
 	}
 
 	public Face TargetFace{get{return Data.TargetFace;}}
@@ -232,15 +233,15 @@ public class GreatGrand : GrumpObj {
 
 		Face.Init(0, null);
 		Face.Reset(Info.Base);
-		(Face.Child[0] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
-		(Face.Child[1] as FaceObj).SetInfo( Info.Eye, GameManager.GetGenerator().Eye[Info.Eye.Index].Prefab);
-		(Face.Child[2] as FaceObj).SetInfo( Info.Ear, GameManager.GetGenerator().Ear[Info.Ear.Index].Prefab);
-		(Face.Child[3] as FaceObj).SetInfo( Info.Ear, GameManager.GetGenerator().Ear[Info.Ear.Index].Prefab);
-		(Face.Child[4] as FaceObj).SetInfo( Info.Brow, GameManager.GetGenerator().Brow[Info.Brow.Index].Prefab);
-		(Face.Child[5] as FaceObj).SetInfo( Info.Brow, GameManager.GetGenerator().Brow[Info.Brow.Index].Prefab);
-		(Face.Child[6] as FaceObj).SetInfo( Info.Hair, GameManager.GetGenerator().Hair[Info.Hair.Index].Prefab);
-		(Face.Child[8] as FaceObj).SetInfo( Info.Nose, GameManager.GetGenerator().Nose[Info.Nose.Index].Prefab);
-		(Face.Child[7] as FaceObj).SetInfo( Info.Jaw, GameManager.GetGenerator().Jaw[Info.Jaw.Index].Prefab);
+		(Face.Child[0] as FaceObj).SetInfo( Info.Eye, Info.Eye.Obj);
+		(Face.Child[1] as FaceObj).SetInfo( Info.Eye, Info.Eye.Obj);
+		(Face.Child[2] as FaceObj).SetInfo( Info.Ear, Info.Ear.Obj);
+		(Face.Child[3] as FaceObj).SetInfo( Info.Ear, Info.Ear.Obj);
+		(Face.Child[4] as FaceObj).SetInfo( Info.Brow, Info.Brow.Obj);
+		(Face.Child[5] as FaceObj).SetInfo( Info.Brow, Info.Brow.Obj);
+		(Face.Child[6] as FaceObj).SetInfo( Info.Hair, Info.Hair.Obj);
+		(Face.Child[8] as FaceObj).SetInfo( Info.Nose, Info.Nose.Obj);
+		(Face.Child[7] as FaceObj).SetInfo( Info.Jaw, Info.Jaw.Obj);
 		
 		Face.Child[0][0].Svg[1].transform.localScale = Info.PupilScale;
 		Face.Child[1][0].Svg[1].transform.localScale = Info.PupilScale;

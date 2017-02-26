@@ -7,6 +7,7 @@ using Filthworks;
 public class Face : FOBJ {
 	public FaceGroup FaceParents, FaceChildren;
 	public SVGRenderer Skin,Shadow;
+	public BoxCollider Collider;
 	public void Create(GrandInfo Info)
 	{
 		SetSkinColor(Info.C_Skin);
@@ -37,7 +38,7 @@ public class Face : FOBJ {
 		FaceChildren.Left_Eye.Images[1].color = Info.C_Eye;
 		FaceChildren.Right_Eye.Images[1].color = Info.C_Eye;
 
-		FaceChildren.Nose.Images[1].color = Info.C_Nose;
+		//FaceChildren.Nose.Images[1].color = Info.C_Nose;
 
 	}
 

@@ -310,7 +310,7 @@ public class Bowls : Module {
 		this.gameObject.SetActive(true);
 		yield return StartCoroutine(Load());
 		
-		//MUI.SetActive(true);
+		MUI.SetActive(true);
 		MOB.SetActive(true);
 		GameManager.UI.PermUI["exit"].TweenActive(true);
 		GameManager.UI.PermUI["exit"].ClearActions();

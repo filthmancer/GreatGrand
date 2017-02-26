@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using DG.Tweening;
 using Vectrosity;
+using Filthworks;
 
 public class UIManager : MonoBehaviour {
 	public Canvas Canvas;
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour {
 	public UIObj ResUI;
 	public UIObj FaceParent;
 	public UIObj WorldObjects, QuoteObjects;
+	public FOBJ FOBJ_World, FOBJ_UI;
 	private Material QuoteMat;
 	
 	//public FaceObj ActiveFace;

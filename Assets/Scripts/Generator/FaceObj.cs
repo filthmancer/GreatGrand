@@ -361,6 +361,8 @@ public class FaceObjInfoContainer
 			else if(_index > Objs.Length-1) _index = 0;
 			}
 	}
+
+	public GameObject [] Male, Female;
 	public FaceObjInfo [] Objs;
 	public FaceObjInfo this[int num]{get{
 		num = Mathf.Clamp(num, 0, Objs.Length-1);

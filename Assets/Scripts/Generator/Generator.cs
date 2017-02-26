@@ -139,34 +139,34 @@ public class Generator : MonoBehaviour {
 
 		RandomiseOffsetColours(final);
 
-		final.Info.Base = Base.Randomise(Simple2x2.zero, Simple2x2.zero, Simple2x2.zero);
+		final.Info.Base = Base.Randomise(final.Info.Gender, Simple2x2.zero, Simple2x2.zero, Simple2x2.zero);
 
-		final.Info.Eye = Eye.Randomise(new Simple2x2(0.0F, -0.05F, 0.0F, 0.15F),
+		final.Info.Eye = Eye.Randomise(final.Info.Gender, new Simple2x2(0.0F, -0.05F, 0.0F, 0.15F),
 									 Simple2x2.zero,
 									 new Simple2x2(-0.2F, -0.2F, 0.1F, 0.1F));
 		//	new Vector3(0,0.05F), 0.0F, new Vector3(0.1F, 0.1F));
 
-		final.Info.Ear = Ear.Randomise(new Simple2x2(0.0F, -0.3F, 0.0F, 0.3F),
+		final.Info.Ear = Ear.Randomise(final.Info.Gender, new Simple2x2(0.0F, -0.3F, 0.0F, 0.3F),
 									 new Simple2x2(-4.0F, 0.0F, 4.0F, 0.0F),
 									 new Simple2x2(-0.3F, -0.3F, 0.25F, 0.25F));
 			//new Vector3(0,0.3F), 4.0F,  new Vector3(0.3F, 0.3F));
 
-		final.Info.Brow = Brow.Randomise(new Simple2x2(0.0F, -0.1F, 0.0F, 0.15F),
+		final.Info.Brow = Brow.Randomise(final.Info.Gender, new Simple2x2(0.0F, -0.1F, 0.0F, 0.15F),
 									  new Simple2x2(-5.0F, 0.0F, 7.0F, 0.0F),
 									 new Simple2x2(-0.2F, -0.15F, 0.35F, 0.35F));
 			//new Vector3(0,0.1F), 6.0F,  new Vector3(0.3F, 0.2F));
 
-		final.Info.Hair = Hair.Randomise(Simple2x2.zero,
+		final.Info.Hair = Hair.Randomise(final.Info.Gender, Simple2x2.zero,
 									 Simple2x2.zero,
 									 new Simple2x2(0.0F, -0.1F, 0.0F, 0.1F));
 			//Vector3.zero, 0.0F,  new Vector3(0.0F, 0.1F));
 
-		final.Info.Jaw = Jaw.Randomise(Simple2x2.zero,
+		final.Info.Jaw = Jaw.Randomise(final.Info.Gender, Simple2x2.zero,
 									 Simple2x2.zero,
 									 new Simple2x2(-0.15F, -0.2F, 0.15F, 0.24F));
 			//Vector3.zero, 0.0F, new Vector3(0.35F, 0.25F));
 
-		final.Info.Nose = Nose.Randomise(new Simple2x2(0.0F, -0.1F, 0.0F, 0.2F),
+		final.Info.Nose = Nose.Randomise(final.Info.Gender, new Simple2x2(0.0F, -0.1F, 0.0F, 0.2F),
 									 Simple2x2.zero,
 									 new Simple2x2(-0.2F, -0.15F, 0.1F, 0.2F));
 			//new Vector3(0,0.1F), 0.0F,  new Vector3(0.1F, 0.3F));	
@@ -217,9 +217,9 @@ public class Generator : MonoBehaviour {
 		return final;
 	}
 
-	public FaceObjInfoContainer Base;
+	public FaceContainer Base;
 
-	public FaceObjInfoContainer Eye,
+	public FaceContainer Eye,
 								Nose,
 								Brow,
 								Hair,
@@ -230,7 +230,7 @@ public class Generator : MonoBehaviour {
 	public GrandData TargetData;
 	public FaceObj GenerateFace(GreatGrand targ)
 	{
-		GameObject _base = (GameObject) Instantiate(Base[targ.Data.Info.Base.Index].Prefab);
+		GameObject _base = (GameObject) Instantiate(targ.Data.Info.Base.Obj);
 
 		FaceObj final = _base.GetComponent<FaceObj>();
 		final.SetSkinColor(targ.Data.Info.C_Skin);
@@ -246,20 +246,20 @@ public class Generator : MonoBehaviour {
 
 	public Face GenerateNewFace(GrandData targ)
 	{
-		GameObject _base = (GameObject) Instantiate(Base[targ.Info.Base.Index].Prefab);
+		GameObject _base = (GameObject) Instantiate(Base.GetObject(targ.Info.Gender, targ.Info.Base.Index));
 
 		Face final = _base.GetComponent<Face>();
 
-		final.FaceChildren.Left_Eye = Instantiate(Eye[targ.Info.Eye.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Right_Eye = Instantiate(Eye[targ.Info.Eye.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Left_Ear = Instantiate(Ear[targ.Info.Ear.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Right_Ear = Instantiate(Ear[targ.Info.Ear.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Left_Brow = Instantiate(Brow[targ.Info.Brow.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Right_Brow = Instantiate(Brow[targ.Info.Brow.Index].Prefab).GetComponent<Face_Obj>();
+		final.FaceChildren.Left_Eye = Instantiate(Eye.GetObject(targ.Info.Gender, targ.Info.Eye.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Right_Eye = Instantiate(Eye.GetObject(targ.Info.Gender, targ.Info.Eye.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Left_Ear = Instantiate(Ear.GetObject(targ.Info.Gender, targ.Info.Ear.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Right_Ear = Instantiate(Ear.GetObject(targ.Info.Gender, targ.Info.Ear.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Left_Brow = Instantiate(Brow.GetObject(targ.Info.Gender, targ.Info.Brow.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Right_Brow = Instantiate(Brow.GetObject(targ.Info.Gender, targ.Info.Brow.Index)).GetComponent<Face_Obj>();
 
-		final.FaceChildren.Hair = Instantiate(Hair[targ.Info.Hair.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Nose = Instantiate(Nose[targ.Info.Nose.Index].Prefab).GetComponent<Face_Obj>();
-		final.FaceChildren.Jaw = Instantiate(Jaw[targ.Info.Jaw.Index].Prefab).GetComponent<Face_Obj>();
+		final.FaceChildren.Hair = Instantiate(Hair.GetObject(targ.Info.Gender, targ.Info.Hair.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Nose = Instantiate(Nose.GetObject(targ.Info.Gender, targ.Info.Nose.Index)).GetComponent<Face_Obj>();
+		final.FaceChildren.Jaw = Instantiate(Jaw.GetObject(targ.Info.Gender, targ.Info.Jaw.Index)).GetComponent<Face_Obj>();
 
 		final.Create(targ.Info);
 
@@ -316,138 +316,225 @@ public class Generator : MonoBehaviour {
 	{
 		int x = 0;
 		List<Object> _base = new List<Object>();
-		List<FaceObjInfo> final = new List<FaceObjInfo>();
-		_base.AddRange(Resources.LoadAll(root + "/base", typeof(Object)));
+		List<GameObject> male = new List<GameObject>();
+		List<GameObject> female = new List<GameObject>();
+
+		_base.AddRange(Resources.LoadAll(root + "/base/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _base.Count; i++)
 		{
 			GameObject g = _base[i] as GameObject;
 			if((g != null) && g.transform.root == g.transform)
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				final.Add(f);
+				male.Add(g);
 				x++;
 			}
 		}
-		Base = new FaceObjInfoContainer(final.ToArray());
+		_base.Clear();
+		_base.AddRange(Resources.LoadAll(root + "/base/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _base.Count; i++)
+		{
+			GameObject g = _base[i] as GameObject;
+			if((g != null) && g.transform.root == g.transform)
+			{
+				female.Add(g);
+				x++;
+			}
+		}
+
+		Base = new FaceContainer(male.ToArray(), female.ToArray());
 
 		List<Object> _eye = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_eye.AddRange(Resources.LoadAll(root + "/eyes", typeof(Object)));
+		male.Clear();
+		female.Clear();
+		_eye.AddRange(Resources.LoadAll(root + "/eyes/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _eye.Count; i++)
 		{
 			GameObject g = _eye[i] as GameObject;
 			if((g != null) && g.transform.root == g.transform)
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				f.Colour = ColorType.Skin;
-				final.Add(f);
+				male.Add(g);
 				x++;
 			}
-
 		}
-		Eye =new FaceObjInfoContainer(final.ToArray());
-		Eye.Symm = true;
+		_eye.Clear();
+		_eye.AddRange(Resources.LoadAll(root + "/eyes/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _eye.Count; i++)
+		{
+			GameObject g = _eye[i] as GameObject;
+			if((g != null) && g.transform.root == g.transform)
+			{
+				
+				female.Add(g);
+				x++;
+			}
+		}
+		Eye =new FaceContainer(male.ToArray(), female.ToArray());
 		Eye.Colour = ColorType.Offset;
 
 
 		List<Object> _nose = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_nose.AddRange(Resources.LoadAll(root + "/nose", typeof(Object)));
+		male = new List<GameObject>();
+		female = new List<GameObject>();
+		_nose.AddRange(Resources.LoadAll(root + "/nose/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _nose.Count; i++)
 		{
 			GameObject g = _nose[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				final.Add(f);
+				
+				male.Add(g);
+					x++;
+			}
+		}
+		_nose.Clear();
+		_nose.AddRange(Resources.LoadAll(root + "/nose/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _nose.Count; i++)
+		{
+			GameObject g = _nose[i] as GameObject;
+			if((g != null))
+			{
+				
+				female.Add(g);
 					x++;
 			}
 		}
 		
-		Nose = new FaceObjInfoContainer(final.ToArray());
+		Nose = new FaceContainer(male.ToArray(), female.ToArray());
 		Nose.Colour = ColorType.Nose;
 
 		List<Object> _brow = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_brow.AddRange(Resources.LoadAll(root + "/brow", typeof(Object)));
+		male = new List<GameObject>();
+		female = new List<GameObject>();
+		_brow.AddRange(Resources.LoadAll(root + "/brow/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _brow.Count; i++)
 		{
 			GameObject g = _brow[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				f.Colour = ColorType.Hair;
-				final.Add(f);
+				
+				male.Add(g);
+					x++;
+			}
+		}
+		_brow.Clear();
+		_brow.AddRange(Resources.LoadAll(root + "/brow/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _brow.Count; i++)
+		{
+			GameObject g = _brow[i] as GameObject;
+			if((g != null))
+			{
+				
+				female.Add(g);
 					x++;
 			}
 		
 		}
-		Brow = new FaceObjInfoContainer(final.ToArray());
-		Brow.Symm = true;
+		Brow = new FaceContainer(male.ToArray(), female.ToArray());
 		Brow.Colour = ColorType.Hair;
 		
 
 		List<Object> _hair = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_hair.AddRange(Resources.LoadAll(root + "/hair", typeof(Object)));
+		male = new List<GameObject>();
+		female = new List<GameObject>();
+		_hair.AddRange(Resources.LoadAll(root + "/hair/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _hair.Count; i++)
 		{
 			GameObject g = _hair[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				f.Colour = ColorType.Hair;
-				final.Add(f);
+				
+				male.Add(g);
 					x++;
 			}
 		
 		}
-		Hair = new FaceObjInfoContainer(final.ToArray());
-		Hair.Symm = true;
+		_hair.Clear();
+		_hair.AddRange(Resources.LoadAll(root + "/hair/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _hair.Count; i++)
+		{
+			GameObject g = _hair[i] as GameObject;
+			if((g != null))
+			{
+				
+				female.Add(g);
+					x++;
+			}
+		
+		}
+		Hair = new FaceContainer(male.ToArray(), female.ToArray());
 		Hair.Colour = ColorType.Hair;
 
 		List<Object> _ear = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_ear.AddRange(Resources.LoadAll(root + "/ears", typeof(Object)));
+		male = new List<GameObject>();
+		female = new List<GameObject>();
+		_ear.AddRange(Resources.LoadAll(root + "/ears/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _ear.Count; i++)
 		{
 			GameObject g = _ear[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				f.Colour = ColorType.Offset;
-				final.Add(f);
+				
+				male.Add(g);
 					x++;
 			}
-		
 		}
-		Ear = new FaceObjInfoContainer(final.ToArray());
-		Ear.Symm = true;
+		_ear.Clear();
+		_ear.AddRange(Resources.LoadAll(root + "/ears/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _ear.Count; i++)
+		{
+			GameObject g = _ear[i] as GameObject;
+			if((g != null))
+			{
+				
+				female.Add(g);
+					x++;
+			}
+		}
+		Ear = new FaceContainer(male.ToArray(), female.ToArray());
 		Ear.Colour = ColorType.Skin;
 
 
 		List<Object> _jaw = new List<Object>();
-		final = new List<FaceObjInfo>();
-		_jaw.AddRange(Resources.LoadAll(root + "/jaw", typeof(Object)));
+		male = new List<GameObject>();
+		female = new List<GameObject>();
+		_jaw.AddRange(Resources.LoadAll(root + "/jaw/Males", typeof(Object)));
 		x = 0;
 		for(int i =0 ; i < _jaw.Count; i++)
 		{
 			GameObject g = _jaw[i] as GameObject;
 			if((g != null))
 			{
-				FaceObjInfo f = new FaceObjInfo(x, g);
-				final.Add(f);
+				
+				male.Add(g);
 					x++;
 			}
-		
 		}
-		Jaw = new FaceObjInfoContainer(final.ToArray());
+		_jaw.Clear();
+		_jaw.AddRange(Resources.LoadAll(root + "/jaw/Females", typeof(Object)));
+		x = 0;
+		for(int i =0 ; i < _jaw.Count; i++)
+		{
+			GameObject g = _jaw[i] as GameObject;
+			if((g != null))
+			{
+				
+				female.Add(g);
+					x++;
+			}
+		}
+		Jaw = new FaceContainer(male.ToArray(), female.ToArray());
 		Jaw.Colour = ColorType.Offset;
 
 		SkinCurrent = SkinTones[0];

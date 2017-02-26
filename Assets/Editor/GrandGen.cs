@@ -17,7 +17,7 @@ public class GrandGenerator : EditorWindow {
 	public GameData Data;
 	public Generator Gen;
 
-	public FaceObjInfoContainer FOA(int num)
+	public FaceContainer FOA(int num)
 	{
 		switch(num)
 		{
@@ -130,11 +130,11 @@ public class GrandGenerator : EditorWindow {
 
 		tab = GUILayout.Toolbar(tab, new string[] {"Base", "Hair","Jaw","Eyes", 
 													"Nose", "Brows", "Ears"});
-		FaceObjInfoContainer targ = FOA(tab);
+		FaceContainer targ = FOA(tab);
 
 		if(targ == null) return; 
 
-		EditorGUILayout.BeginHorizontal();
+		/*EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Elements: " + targ.Length, EditorStyles.boldLabel);
 		targ.Colour = (ColorType) EditorGUILayout.EnumPopup(targ.Colour);
 		EditorGUILayout.EndHorizontal();
@@ -215,7 +215,7 @@ public class GrandGenerator : EditorWindow {
 						Gen.TargetGrand.Face[1][0].Img[1].enabled = !Gen.TargetGrand.Face[1][0].Img[1].enabled;
 					}
 				}
-		}
+		}*/
 		/*if(Gen.TargetData != null)
 		{
 			changes = false;
