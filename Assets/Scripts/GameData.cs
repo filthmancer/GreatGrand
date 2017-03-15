@@ -1,6 +1,6 @@
 ﻿
 using UnityEngine;
-
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
@@ -12,6 +12,9 @@ public class GameData : MonoBehaviour {
 
 	public WorldResources World;
 	public List<GrandData> Grands;
+
+	public GameObject ResidentParent, GuestParent;
+	public FOBJ WorldObjects;
 
 	public FIRL [] Frames;
 	public FIRL RandomFrame()
@@ -38,6 +41,7 @@ public class GameData : MonoBehaviour {
     public bool Alert_Letter = false,
     			Alert_Pigeonhole = false,
     			Alert_ScrollUp = false;
+
 
  
 	// Use this for initialization
@@ -284,6 +288,28 @@ public class GameData : MonoBehaviour {
 		}
 		print("Loaded info: " + Grands.Count + " grands");
 	}
+
+
+    public List<GrandData> SortResidentsBy(AlertType t)
+    {
+    	List<GrandData> fin = new List<GrandData>();
+    	switch(t)
+    	{
+    		case AlertType.Hunger:
+    			fin = Grands.OrderBy(o=>o.Hunger.Current).ToList();
+    		break;
+    		case AlertType.Fitness:
+    			fin = Grands.OrderBy(o=>o.Fitness.Current).ToList();
+    		break;
+    		case AlertType.Social:
+    			fin = Grands.OrderBy(o=>o.Social.Current).ToList();
+    		break;
+    		case AlertType.Ageup:
+    			fin = Grands.OrderBy(o=>o.Age.Current).ToList();
+    		break;
+    	}
+    	return fin;
+    }
 }
 
 
@@ -380,7 +406,7 @@ public class GrandData
 		int soc = Social.Check(t);
 		int H = Hunger.Check(t);
 
-		if(Hunger.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Hungry,this));
+		if(Hunger.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Hunger,this));
 		if(Fitness.Ratio < 0.2F) fin.Add(new GrandAlert(AlertType.Fitness,this));
 
 		float agerate = 1.0F + (float)Age.Value/200.0F;
@@ -490,7 +516,7 @@ public struct GrandAlert
 	}
 }
 public enum AlertType{	Ageup, Smiles, Grumps, 
-						Hungry, Fitness, Social, 
+						Hunger, Fitness, Social, 
 						Senile, Fight, Gift, 
 						Repup, None}
 
@@ -504,6 +530,7 @@ public class GrandInfo
 	public bool Military;
 
 	public FaceInfo Eye, Ear, Brow, Base, Hair, Jaw, Nose;
+	public FaceInfo Glasses, Wrinkles;
 	public Vector3 PupilScale;
 	public Color C_Skin, C_Hair, C_Offset, C_Nose, C_Eye;
 	public GrandInfo()
@@ -545,9 +572,8 @@ public class FaceContainer
 
 	public FaceInfo Randomise(bool gender, Simple2x2 pos, Simple2x2 rot, Simple2x2 sc)
 	{
-		int Index = gender ? Random.Range(0, Male.Length-1) : Random.Range(0, Female.Length-1);
+		int Index = gender ? Random.Range(0, Male.Length) : Random.Range(0, Female.Length);
 		FaceInfo final = new FaceInfo(Index, Colour);
-		Debug.Log(Male.Length + ":" + Female.Length);
 		final.Obj = gender ? Male[Index]: Female[Index];
 
 		Vector3 p = new Vector3(pos.RandX(), 0.0F, pos.RandY());

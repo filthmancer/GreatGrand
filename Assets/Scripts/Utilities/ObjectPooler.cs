@@ -5,12 +5,16 @@ using System;
 
 public class ObjectPooler
 {
-	GameObject _Obj;
-	Transform Parent;
+	public string Name;
+	public GameObject _Obj;
+	[HideInInspector]
+	public Transform Parent;
+	[HideInInspector]
 	public int Count;
 
 	public Stack<GameObject> Available;
 	public ArrayList All;
+	[HideInInspector]
 	public Vector3 PoolPos = new Vector3(0, -50, 0);
 
 	public bool IsAvailable
@@ -22,6 +26,11 @@ public class ObjectPooler
 	{
 		_Obj = u;
 		Parent = _parent;
+		Init(num);
+	}
+
+	public void Init(int num)
+	{
 		Available = new Stack<GameObject>();
 		All = new ArrayList(num);
 		for(int i = 0; i < num; i++)

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public enum ColorType
 {
-	Skin, Hair, Offset, Feature, Nose, Ears, Jaw
+	Skin, Hair, Offset, Feature, Nose, Ears, Jaw, None
 }
 
 public class FaceObj : UIObj {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
 using DG.Tweening;
+using Filthworks;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager instance;
@@ -193,51 +194,21 @@ public class GameManager : MonoBehaviour {
 
 	public IEnumerator ShowAlerts()
 	{
-		List<GrandAlert> hunger = new List<GrandAlert>();
-		List<GrandAlert> fitness = new List<GrandAlert>();
-		List<GrandAlert> ageup = new List<GrandAlert>();
-		//List<GrandAlert> repup = new List<GrandAlert>();
-
-		for(int a = 0; a < Alerts.Count; a++)
-		{
-			switch(Alerts[a].Type)
-			{
-				case AlertType.Hungry: hunger.Add(Alerts[a]); break;
-				case AlertType.Fitness: fitness.Add(Alerts[a]); break;
-				case AlertType.Ageup: ageup.Add(Alerts[a]); break;
-				//case AlertType.Repup: repup.Add(Alerts[a]); break;
-			}
-		}
-	
-		if(hunger.Count > 0) 
-		{
-			//for(int i = 0; i < hunger.Count ; i++)
-			//{
-				yield return StartCoroutine(UI.ShowGrandAlert(hunger));
-			//}
-		}
-		if(fitness.Count > 0) 
-		{
-			//for(int i = 0; i < fitness.Count ; i++)
-			//{
-				yield return StartCoroutine(UI.ShowGrandAlert(fitness));
-			//}
-		}
-		if(ageup.Count > 0) 
-		{
-			//for(int i = 0; i < ageup.Count ; i++)
-			//{
-				yield return StartCoroutine(UI.ShowGrandAlert(ageup));
-			//}
-		}
-
-		Alerts.Clear();
-
+		List<FIRL> notices = new List<FIRL>();
 		for(int i = 0; i < Rewards.Count; i++)
 		{
-			yield return StartCoroutine(UI.RepAlert(Rewards[i]));
+			notices.Add(UI.RewardAlert(Rewards[i]));
 		}
 
+		for(int i = 0; i < Alerts.Count; i++)
+		{
+			notices.Add(UI.ShowGrandAlert(Alerts[i], i));
+		}
+		
+		yield return StartCoroutine(UI.GoThroughAlerts(notices));
+
+		Alerts.Clear();
+		
 		RepAlert = null;
 		FundsAlert = null;
 

@@ -170,7 +170,24 @@ public class UIObj : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, I
 		transform.position = spos;
 	}
 
+	public void FitOnScreen()
+	{
+		Rect r = RectT.rect;
+		Vector3 spos = GetUIPosition3D();
+		//restrict position to the minimum point on the canvas and the maximum point
+		Vector2 min = _UICanvasRect.rect.min;//new Vector2(_UICanvasRect.rect.x - _UICanvasRect.rect.width/2,	_UICanvasRect.rect.y - _UICanvasRect.rect.height/2);
+		Vector2 max = _UICanvasRect.rect.max;//new Vector2(_UICanvasRect.rect.x + _UICanvasRect.rect.width/2,	_UICanvasRect.rect.y + _UICanvasRect.rect.height/2);
+		
+		//scale the field by the canvas scale
+		min *= _UICanvas.scaleFactor;
+		max *= _UICanvas.scaleFactor;
+		
+		spos.x = Mathf.Clamp(spos.x, min.x, max.x);
+		spos.y = Mathf.Clamp(spos.y, min.y, max.y);
+		RectT.position = spos;
+	}
 	public Vector2 GetUIPosition(){return RectT.position;}
+	public Vector3 GetUIPosition3D(){return RectT.position;}
 
 
 	public UIObj this[int i]

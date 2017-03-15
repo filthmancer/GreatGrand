@@ -177,7 +177,7 @@ public class Bowls : Module {
 			Sway_Speed = Vector3.Distance(BalancePoint, 
 				MOB[1].pos)*(MoveSpeed_factor);
 
-			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.0f, Control_Speed * (0.05F + 0.02F * MoveSpeed_factor));
+			Sway_Speed = Mathf.Clamp(Sway_Speed, 0.0f, Control_Speed * (0.05F + 0.01F * MoveSpeed_factor));
 			
 			Sway_CurrentVelocity.y = 0.0F;
 			Sway_CurrentVelocity.z = 0.0F;
@@ -210,10 +210,10 @@ public class Bowls : Module {
 		Vector3 v = (Safeway.GetPoint3D01(DistanceAlongPath()+0.05F) - Safeway.GetPoint3D01(DistanceAlongPath())).normalized;
 		
 		float rotz = v.x*5;
-		float roty = v.y * 13;
+		float roty = 0.0F;//v.y * 13;
 
 		rotz += Sway_CurrentVelocity.x * Sway_Speed * 0.7F;
-		rotz += Sway_Extra;
+		//rotz += Sway_Extra;
 		rotz += Control_Velocity.x * 15;
 		rotz = Mathf.Clamp(rotz, -60, 60);
 

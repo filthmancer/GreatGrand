@@ -98,7 +98,7 @@ public class GreatGrand : GrumpObj {
 		{
 			Grumps[i].Destroy();
 		}
-		Destroy(Face.gameObject);
+		Destroy(TargetFace.gameObject);
 		Destroy(this.gameObject);
 	}
 

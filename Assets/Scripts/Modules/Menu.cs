@@ -35,13 +35,12 @@ public class Menu : Module {
 			StartCoroutine(GameManager.instance.LoadModule("Bowls"));
 		});
 		menuobj = MUI["back"];
-		TrayObj = menuobj[0];
-		//TrayObj.SetActive(GameManager.Data.Alert_Pigeonhole);
+		TrayObj = MOB["notices"] as FIRL;
 	}
 
 	public RectTransform ScrollTrack;
 	public UIObj menuobj;
-	private UIObj TrayObj;
+	private FIRL TrayObj;
 	private int lastgrumps = 0, lastsmiles = 0;
 	public override void ControlledUpdate()
 	{
@@ -58,7 +57,8 @@ public class Menu : Module {
 		if(ginfo != null && ginfo_target != null)
 		{
 			GameManager.UI.SetGrandInfoObj(ginfo, ginfo_target);
-
+			Vector3 pos = new Vector3(this.transform.position.x, ginfo_face.transform.position.y - 10, 0.0F);
+			ginfo.SetUIPositionFromWorld(pos);
 			//DOTween.To(()=> lastgrumps, x => lastgrumps = x, ginfo_target.Data.Grumps.Value, 0.3F);
 			//DOTween.To(()=> lastsmiles, x => lastsmiles = x, ginfo_target.Data.Smiles.Value, 0.3F);
 			if(lastsmiles < ginfo_target.Smiles.Value) lastsmiles++;
@@ -71,10 +71,10 @@ public class Menu : Module {
 		if(GameManager.instance.AlertsTotal > 0)
 		{
 			GameManager.Data.Alert_Pigeonhole = true;
-			Tweens.Bounce(TrayObj.Txt[0].transform);
-			TrayObj.Txt[0].text = "" + GameManager.instance.AlertsTotal;
+			Tweens.Bounce(TrayObj.Text[1].transform);
+			TrayObj.Text[1].text = "" + GameManager.instance.AlertsTotal;
 		}
-		else TrayObj.Txt[0].text = "";
+		else TrayObj.Text[1].text = "";
 	}
 
 	public override IEnumerator Load()
@@ -99,63 +99,66 @@ public class Menu : Module {
 			Frames[i].transform.SetParent(MOB[0].transform);
 			Frames[i].transform.position = MOB[0][i].transform.position;
 			Frames[i].transform.localScale = Vector3.one*0.15F;
-			//Frames[i].Svg[1].color = f.Info.C_Eye;
-			//Frames[i].Svg[0].color = GameManager.Generator.RandomSkin();
 
 			Faces[i] = GameManager.Generator.GenerateNewFace(f);
-			//Faces[i].transform.SetParent(Frames[i].transform);
 			Frames[i].Child[0].AddChild(Faces[i]);
-			//Frames[i].Txt[0].text = f.Info.Name.ToUpper();
 			Faces[i].transform.localPosition = Vector3.zero;
+			Frames[i].Text[0].text = f.Info.Name;
 			SetupFace(Faces[i], Frames[i], f);
-
-		//	allgrands.RemoveAt(num);
-
 			yield return null;
 		}
 
 		GameManager.instance.InitTimeChecks();
 
-			TrayObj.ClearActions();
-			TrayObj.AddAction(UIAction.MouseUp, () =>
+		
+		TrayObj.ClearActions();
+		TrayObj.AddAction(TouchAction.Up, () =>
+		{
+			if(!GameManager.Paused)
 			{
 				StartCoroutine(GameManager.instance.ShowAlerts());
-			});
+			Tweens.Bounce(MOB["notices"].transform);
+			}
+			
+		});
 
 		MOB["dinner"].AddAction(TouchAction.Up, ()=> 
-			{
-				StartCoroutine(GameManager.instance.LoadModule("Dinner"));
-				Tweens.Bounce(MOB["dinner"].transform);
-				});
+		{
+			StartCoroutine(GameManager.instance.LoadModule("Dinner"));
+			Tweens.Bounce(MOB["dinner"].transform);
+		});
 
 		MOB["garden"].AddAction(TouchAction.Up, ()=> 
-			{
-				StartCoroutine(GameManager.instance.LoadModule("bowls"));
-				Tweens.Bounce(MOB["garden"].transform);
-				});
+		{
+			StartCoroutine(GameManager.instance.LoadModule("bowls"));
+			Tweens.Bounce(MOB["garden"].transform);
+		});
 	
 	}
 
 	private UIObj ginfo;
 	private GrandData ginfo_target;
+	private Face ginfo_face;
 
 	public void SetupFace(Face f, FIRL frame, GrandData g)
 	{
-		frame.AddAction(TouchAction.Down, ()=>
+		f.AddAction(TouchAction.Up, ()=>
 		{
 			if(ginfo_target != g)
 			{
 				if(ginfo != null) ginfo.PoolDestroy();
+				ginfo_face = f;
 				ginfo_target = g;
 				ginfo = GameManager.UI.GrandInfo(g);
-				ginfo.SetParent(MUI["back"]);
-				ginfo.FitUIPosition(f.transform.position + Vector3.down*50, null, 1.0F);
+				Vector3 pos = new Vector3(this.transform.position.x, f.transform.position.y - 10, 0.0F);
+				ginfo.SetUIPositionFromWorld(pos);
+				ginfo.FitOnScreen();
 				ginfo.SetActive(false);
 				ginfo.TweenActive(true);
 
 				lastsmiles = g.Smiles.Value;
 				lastgrumps = g.Grumps.Value;
-				Tweens.Bounce(frame.transform);
+				Tweens.Bounce(f.transform);
 			}
 			else if(ginfo != null) 
 			{

@@ -32,7 +32,7 @@ public class InputController : MonoBehaviour {
 		Vector_nonnormal = (Position - Position_last);
 		Vector = Vector_nonnormal.normalized;
 		UpdateScroll();
-		if(GameManager.Paused || GameManager.IgnoreInput) return;
+		if(GameManager.IgnoreInput) return;
 		CheckInput();
 	}
 
@@ -40,7 +40,6 @@ public class InputController : MonoBehaviour {
 	{
 		if(Input.GetMouseButtonUp(0))
 		{
-
 			HasInput = false;
 			GameManager.OnRelease();
 			if(TObj != null) TObj.OnUp();
@@ -58,7 +57,6 @@ public class InputController : MonoBehaviour {
 
 		if(Input.GetMouseButtonDown(0))
 		{
-
 			HasInput = true;
 			InputRay = Camera.main.ScreenPointToRay(Position);
 			TObj = CheckCollision(InputRay);

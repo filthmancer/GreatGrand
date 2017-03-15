@@ -6,6 +6,7 @@ using Filthworks;
 
 public class Face : FOBJ {
 	public FaceGroup FaceParents, FaceChildren;
+	public Face_Obj Glasses_Left, Glasses_Right, Wrinkles;
 	public SVGRenderer Skin,Shadow;
 	public BoxCollider Collider;
 	public void Create(GrandInfo Info)
@@ -32,14 +33,20 @@ public class Face : FOBJ {
 		FaceChildren.Hair.Create(Info.Hair);
 		FaceChildren.Jaw.Create(Info.Jaw);
 		FaceChildren.Nose.Create(Info.Nose);
-		
+
 		FaceChildren.Left_Eye.Images[1].transform.localScale = Info.PupilScale;
 		FaceChildren.Right_Eye.Images[1].transform.localScale = Info.PupilScale;
 		FaceChildren.Left_Eye.Images[1].color = Info.C_Eye;
 		FaceChildren.Right_Eye.Images[1].color = Info.C_Eye;
 
-		//FaceChildren.Nose.Images[1].color = Info.C_Nose;
-
+		if(Info.Glasses != null) 
+		{
+			Glasses_Left.Setup(this, FaceParents.Left_Eye);
+			Glasses_Right.Setup(this, FaceParents.Right_Eye);
+			Glasses_Left.Create(Info.Glasses);
+			Glasses_Right.Create(Info.Glasses);
+		}
+		if(Info.Wrinkles != null) Wrinkles.Create(Info.Wrinkles);
 	}
 
 	

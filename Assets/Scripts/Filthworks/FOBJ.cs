@@ -158,6 +158,25 @@ namespace Filthworks
 			}
 		}
 
+		public void OnDestroy()
+		{
+			if(Log) print(this + ": Destroy - " + Actions_Destroy.Count + " actions");
+			foreach(InputAction child in Actions_Destroy)
+			{
+				child.Act();
+			}
+		}
+
+		public void ClearActions()
+		{
+			Actions_Over = new List<InputAction>();
+			Actions_Out = new List<InputAction>();
+			Actions_Up = new List<InputAction>();
+			Actions_Down = new List<InputAction>();
+			Actions_Click = new List<InputAction>();
+			Actions_Destroy = new List<InputAction>();
+		}
+
 
 		public void AddAction(TouchAction a, Action<Type[]> func, params Type [] t)
 		{
@@ -177,6 +196,9 @@ namespace Filthworks
 				break;
 				case TouchAction.Click:
 				Actions_Click.Add(new InputAction(func, t));
+				break;
+				case TouchAction.Destroy:
+				Actions_Destroy.Add(new InputAction(func, t));
 				break;
 			}
 		}
@@ -200,6 +222,9 @@ namespace Filthworks
 				case TouchAction.Click:
 				Actions_Click.Add(new InputAction(func));
 				break;
+				case TouchAction.Destroy:
+				Actions_Destroy.Add(new InputAction(func));
+				break;
 			}
 		}
 
@@ -208,6 +233,7 @@ namespace Filthworks
 		private List<InputAction> Actions_Up = new List<InputAction>();
 		private List<InputAction> Actions_Down = new List<InputAction>();
 		private List<InputAction> Actions_Click = new List<InputAction>();
+		private List<InputAction> Actions_Destroy = new List<InputAction>();
 
 		private class InputAction
 		{
@@ -232,7 +258,6 @@ namespace Filthworks
 			}
 		}
 
-
 		public void DestroyChildren()
 		{
 			for(int i = 0; i < Child.Length; i++)
@@ -250,6 +275,7 @@ namespace Filthworks
 		public void PoolDestroy()
 		{
 			if(Parent != null) Parent.RemoveChild(this);
+			OnDestroy();
 			if(poolref)
 			{
 				poolref.Unspawn();
@@ -277,6 +303,11 @@ namespace Filthworks
 				x++;
 			}
 			Child = newchild;
+		}
+
+		public void SetParent(FOBJ f)
+		{
+			f.AddChild(this);
 		}
 
 		public void RemoveChild(FOBJ c)
@@ -307,6 +338,7 @@ namespace Filthworks
 			}
 			Child = newchild;
 		}
+
 	}
-	public enum TouchAction {Click, Over, Out, Up, Down}
+	public enum TouchAction {Click, Over, Out, Up, Down, Destroy}
 }	

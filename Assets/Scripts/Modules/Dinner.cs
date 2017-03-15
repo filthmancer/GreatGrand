@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vectrosity;
@@ -49,7 +49,7 @@ public class Dinner : Module {
 
 	private UIObj timerobj;
 	private int last_sec = 0;
-
+	private List<GreatGrand> Guests;
 	private GreatGrand Target;
 	private bool isDragging;
 	private _Seat drag_targ;	
@@ -222,13 +222,20 @@ public class Dinner : Module {
 
 		_TableManager.SetupTable(Difficulty);
 		Faces = new Face[GGNum];
+
+		List<GrandData> hungry = GameManager.Data.SortResidentsBy(AlertType.Hunger);
+		Guests = new List<GreatGrand>();
 		for(int i = 0; i < GGNum; i++)
 		{
-			if(i < GameManager.instance.Grands.Length && GameManager.instance.Grands[i].Hunger.Current < 60)
-				Grands[i] = GameManager.instance.Grands[i].GrandObj;
-			else Grands[i] = GameManager.Generator.Generate(i);
-
-			Grands[i].gameObject.SetActive(true);
+			if(i < hungry.Count && hungry[i].Hunger.Current < 95)
+				Grands[i] = hungry[i].GrandObj;
+			else 
+			{
+				GreatGrand g = GameManager.Generator.GenerateGuest();
+				Guests.Add(g);
+				g.transform.SetParent(GameManager.Data.GuestParent.transform);
+				Grands[i] = g;
+			}
 
 			Faces[i] = GameManager.Generator.GenerateNewFace(Grands[i].Data);
 			fparent.AddChild(Faces[i]);
@@ -358,10 +365,10 @@ public class Dinner : Module {
 			Sprite s = targ_grumps >= 0 ? Alert_Right :  Alert_Wrong;
 
 			FOBJ a = Instantiate(GameManager.UI.Prefabs.GetObject("FOBJ_Default") as GameObject).GetComponent<FOBJ>();
+			(a as FIRL).IMG[0].sprite = s;
 			a.SetActive(false);
 			a.transform.position = grand.TargetFace.pos - Vector3.forward * 1;
-			a.transform.localScale = Vector3.one * 1.6F;
-			a.T.rotation = grand.TargetFace.rot;
+			a.transform.localScale = Vector3.one * 1.8F;
 			a.TweenActive(true);
 
 			if(targ_grumps >= 0) correct.Add(a);
@@ -370,16 +377,12 @@ public class Dinner : Module {
 			yield return new WaitForSeconds(0.12F);
 		}
 
-		UIObj info = MUI["kitchen"];//endgame[1];
-		//UIObj points = endgame[2];
+		UIObj info = MUI["kitchen"];
 		info.Txt[1].text = "HAPPY\nGRANDS";
 		info.Txt[0].text = FinalScore + "";
-		//info.Txt[0].color = Color.white;
 
 		Tweens.Bounce(info.transform);
-		info.TweenActive(true);
-		//points.TweenActive(true);
-	
+		info.TweenActive(true);	
 		yield return new WaitForSeconds(0.5F);
 
 		bool isCounting = true;
@@ -443,32 +446,42 @@ public class Dinner : Module {
 		yield return new WaitForSeconds(0.4F);
 		StartCoroutine(GameManager.UI.ResourceAlert(GameManager.WorldRes.Rep, rep));
 
-		int hungertotal = 10 + FinalScore * 5;
-
-		//FUTURE ANIMATION OF GRANDS EATING
-		/*
-		float feedtimer = 0.2F;
-		float hungerrate = (float)hungertotal * (feedtimer/Time.deltaTime);
-
-		while((feedtimer -= Time.deltaTime) > 0.0F)
-		{
-			
-			yield return null;
-		}*/
-
-
+		List<FIRL> alerts = new List<FIRL>();
 		for(int i = 0; i < _TableManager.Seat.Length; i++)
 		{
-			_TableManager.Seat[i].Target.Data.Hunger.Add(hungertotal);
-			UIAlert a = GameManager.UI.StringAlert(
-							"-" + hungertotal + "%\nHunger", 
-							_TableManager.Seat[i].transform.position, 1.4F);
-			a.Txt[0].color = Color.white;
-			a.Txt[0].fontSize = 65;
+			GrandData g = _TableManager.Seat[i].Target.Data;
+			FIRL a = GameManager.UI.MeterAlert(g, AlertType.Hunger);
+			alerts.Add(a);
 			Tweens.Bounce(a.transform);
-			yield return new WaitForSeconds(0.1F);
+			yield return null;
 		}
-		yield return new WaitForSeconds(0.7F);
+
+		//FUTURE ANIMATION OF GRANDS EATING
+		yield return new WaitForSeconds(0.3F);
+//$$$$$$$
+		int hungerticks = 10 + FinalScore * 10;
+		int ticks = 0;
+		float tickrate = 1;
+		while(true)
+		{
+			for(int i = 0; i < _TableManager.Seat.Length; i++)
+			{
+				GrandData g = _TableManager.Seat[i].Target.Data;
+				g.Hunger.Add((int)tickrate);
+				alerts[i][0].transform.localScale = new Vector3(g.Hunger.Ratio, 1.0F, 1.0f);
+			}
+			ticks += (int)tickrate;
+			tickrate *= 1.1F;
+			if(ticks >= hungerticks) break;
+			yield return null;
+		}
+		yield return new WaitForSeconds(0.3F);
+		for(int i = 0; i < alerts.Count; i++)
+		{
+			alerts[i].PoolDestroy();
+		}
+
+		yield return new WaitForSeconds(0.5F);
 		yield return StartCoroutine(FinishDinner());
 		
 		
@@ -498,13 +511,11 @@ public class Dinner : Module {
 	{
 		_TableManager.Clear();
 
-		for(int x = 0; x < Grands.Length; x++)
+		for(int x = 0; x < Guests.Count; x++)
 		{
-			/*for(int i = 0; i < Grands[x].Grumps.Length; i++)
-			{
-				Grands[x].Grumps[i].Destroy();
-			}*/
+			Guests[x].Destroy();
 		}
+		Guests.Clear();
 
 		for(int i = 0; i < Faces.Length; i++)
 		{
@@ -685,7 +696,10 @@ public class Dinner : Module {
 		alert.SetActive(false);
 		alert.T.position = MOB[0][0].T.position;
 		alert.T.localScale = Vector3.one * 4.0F;
-		alert[0].T.rotation = g.Parent.Seat.Rotation * Quaternion.Euler(50,0,180);
+
+
+		
+		//alert[0].T.rotation = g.Parent.Seat.Rotation * Quaternion.Euler(50,0,180);
 		alert.TweenActive(true);
 
 		float t = 0.0F;
@@ -698,7 +712,7 @@ public class Dinner : Module {
 			yield return null;
 		}
 
-		alert.TweenActive(false);
+		alert.SetActive(false);
 		yield return new WaitForSeconds(0.4F);
 		if(alert != null) alert.PoolDestroy();
 		yield return null;

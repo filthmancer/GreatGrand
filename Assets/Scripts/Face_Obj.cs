@@ -27,33 +27,36 @@ public class Face_Obj : MonoBehaviour {
 		//randomised_pos.y =  Mathf.Lerp(ele_rect.yMin, ele_rect.yMax, Element.GetComponent<RectTransform>().pivot.y + Info._Position.y);
 
 		//Element.transform.localPosition = randomised_pos;
+		
+		f._Position.z = 0;
+		transform.localPosition = f._Position;
 		transform.localRotation = Quaternion.Euler(f._Rotation);
 		transform.localScale = f._Scale;
 		
-			if(_Face != null)
-			{
-				Color final = Color.white;
+		if(_Face != null)
+		{
+			Color final = Color.white;
 	
-				switch(f.Colour)
-				{
-					case ColorType.Skin:
-						final = _Face.SkinCol;
-					break;
-					case ColorType.Hair:
-						final = _Face.HairCol;
-					break;
-					case ColorType.Offset:
-						final = _Face.OffsetCol;
-					break;
-					case ColorType.Nose:
-						final = _Face.NoseCol;
-					break;
-					case ColorType.Feature:
-						final = Color.black;
-					break;
-				}
-
-				Images[0].color = final;
+			switch(f.Colour)
+			{
+				case ColorType.Skin:
+					final = _Face.SkinCol;
+				break;
+				case ColorType.Hair:
+					final = _Face.HairCol;
+				break;
+				case ColorType.Offset:
+					final = _Face.OffsetCol;
+				break;
+				case ColorType.Nose:
+					final = _Face.NoseCol;
+				break;
+				case ColorType.Feature:
+					final = Color.black;
+				break;
 			}
+
+			Images[0].color = final;
+		}
 	}
 }
