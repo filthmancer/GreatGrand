@@ -198,22 +198,6 @@
 				"buffer_size": 17489,
 				"line_ending": "Windows"
 			}
-		},
-		{
-			"file": "Scripts/GameManager.cs",
-			"settings":
-			{
-				"buffer_size": 6924,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scripts/Filthworks/FOBJ.cs",
-			"settings":
-			{
-				"buffer_size": 7714,
-				"line_ending": "Windows"
-			}
 		}
 	],
 	"build_system": "",
@@ -252,6 +236,10 @@
 	},
 	"file_history":
 	[
+		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
+		"/C/Projects/greatgrand/Assets/Scripts/Filthworks/FOBJ.cs",
+		"/C/Users/Matt/Documents/Assassin's Creed IV Black Flag/Assassin4.ini",
+		"/C/Users/Matt/Documents/Assassin's Creed IV Black Flag/GFXSettings.AC4BFSP.xml",
 		"/C/Projects/deepspacefive/Deep Space Five/Assets/Scripts/PlayerControl.cs",
 		"/C/Projects/deepspacefive/Deep Space Five/Assets/Curve.shader",
 		"/C/Projects/deepspacefive/Deep Space Five/Assets/Scripts/GravityField.cs",
@@ -275,8 +263,6 @@
 		"/C/Projects/greatgrand/Assets/Scripts/Generator/Generator.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/GameData.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Modules/Menu.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/GameManager.cs",
-		"/C/Projects/greatgrand/Assets/Scripts/Filthworks/FOBJ.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/UI/UIManager.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/InputController.cs",
 		"/C/Projects/greatgrand/Assets/Scripts/Utilities/ObjectPooler.cs",
@@ -541,8 +527,8 @@
 						"selection":
 						[
 							[
-								11542,
-								11542
+								11052,
+								11052
 							]
 						],
 						"settings":
@@ -552,60 +538,6 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 8356.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "Scripts/GameManager.cs",
-					"settings":
-					{
-						"buffer_size": 6924,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4777,
-								4777
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3473.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Scripts/Filthworks/FOBJ.cs",
-					"settings":
-					{
-						"buffer_size": 7714,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5347,
-								5347
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3216.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
